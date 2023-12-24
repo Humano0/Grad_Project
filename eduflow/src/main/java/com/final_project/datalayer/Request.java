@@ -19,6 +19,9 @@ public class Request {
     @Column(name = "request_type_id")
     private Integer requestTypeId;
 
+    @Column(name = "information")
+    private String information;
+
     @Column(name = "addition")// this addition is for the additional files for some request types it can be null like pdf, docx, etc.
     private String addition;
 
