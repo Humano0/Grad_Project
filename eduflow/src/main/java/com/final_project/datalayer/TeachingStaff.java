@@ -38,6 +38,9 @@ public class TeachingStaff {
     @Column(name = "isViceDepartmentHead")
     private boolean isViceDepartmentHead;
 
+    @Column(name = "password")
+    private String password;
+
     public int getId() {
         return id;
     }

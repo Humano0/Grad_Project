@@ -25,6 +25,9 @@ public class Student {
     @Column(name = "adviser_id")
     private int adviserId;
 
+    @Column(name= "password")
+    private String password;
+
     // getters and setters
     // ...
     public int getStudentId() {
