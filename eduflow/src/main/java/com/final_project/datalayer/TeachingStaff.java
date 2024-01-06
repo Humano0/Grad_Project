@@ -11,8 +11,8 @@ public class TeachingStaff {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "staff_name")
-    private String staffName;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "surname")
     private String surname;
@@ -21,63 +21,22 @@ public class TeachingStaff {
     private String email;
 
     @Column(name = "department_id")
-    private int departmentId;
+    private Integer departmentId;
 
     @Column(name = "staff_role")
     private String staffRole;
 
-    @Column(name = "isDean")
-    private boolean isDean;
-
-    @Column(name = "isViceDean")
-    private boolean isViceDean;
-
-    @Column(name = "isDepartmentHead")
-    private boolean isDepartmentHead;
-
-    @Column(name = "isViceDepartmentHead")
-    private boolean isViceDepartmentHead;
-
     @Column(name = "password")
     private String password;
 
-    public int getId() {
-        return id;
-    }
-    
-    public void setId(int id) {
-        this.id = id;
-    }
-    
-    public String getStaffName() {
-        return staffName;
-    }
-    
-    public void setStaffName(String staffName) {
-        this.staffName = staffName;
-    }
-    
-    public String getSurname() {
-        return surname;
-    }
-    
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-    
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
-    public int getDepartmentId() {
+    @Column(name = "role")
+    private String role;
+
+    public Integer getDepartmentId() {
         return departmentId;
     }
     
-    public void setDepartmentId(int departmentId) {
+    public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
     }
     
@@ -89,35 +48,19 @@ public class TeachingStaff {
         this.staffRole = staffRole;
     }
     
-    public boolean isDean() {
-        return isDean;
+    public String getPassword() {
+        return password;
     }
     
-    public void setDean(boolean dean) {
-        isDean = dean;
+    public void setPassword(String password) {
+        this.password = password;
     }
     
-    public boolean isViceDean() {
-        return isViceDean;
+    public String getRole() {
+        return role;
     }
     
-    public void setViceDean(boolean viceDean) {
-        isViceDean = viceDean;
-    }
-    
-    public boolean isDepartmentHead() {
-        return isDepartmentHead;
-    }
-    
-    public void setDepartmentHead(boolean departmentHead) {
-        isDepartmentHead = departmentHead;
-    }
-    
-    public boolean isViceDepartmentHead() {
-        return isViceDepartmentHead;
-    }
-    
-    public void setViceDepartmentHead(boolean viceDepartmentHead) {
-        isViceDepartmentHead = viceDepartmentHead;
+    public void setRole(String role) {
+        this.role = role;
     }
 }
