@@ -1,11 +1,5 @@
 package com.final_project.DataAccess.Interfaces;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IGeneralRepository<T> {
-    T getById(int id);
-    List<T> getAll();
-    void add(T entity);
-    void update(T entity);
-    void delete(T entity);
-}
+public interface IGeneralRepository<T> extends JpaRepository<T, Long> { }
