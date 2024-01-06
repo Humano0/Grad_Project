@@ -2,7 +2,6 @@ package com.final_project.datalayer;
 
 import javax.persistence.*;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
