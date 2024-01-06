@@ -2,10 +2,12 @@ package com.final_project.jwt;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.AuthorizeHttpRequestsDsl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,8 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 public class SecurityConfig {
     
     @Bean
-     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+/*         http.
              csrf()
              .disable()
              .authorizeRequests()
@@ -42,7 +44,13 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+ */
 
+        http.csrf(AbstractHttpConfigurer::disable)
+            .sessionManagement(customizer->customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests((requests)->
+                requests.requestMatchers(HttpMethod.GET,"/Debug").permitAll()
+                    .anyRequest().authenticated());
         return http.build();
 
 
