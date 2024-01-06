@@ -1,13 +1,17 @@
 package com.final_project.jwt;
 
-import java.util.concurrent.TimeUnit;
 
+
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.stereotype.Component;
-
+import org.springframework.security.core.AuthenticationException;
 import com.final_project.datalayer.Dto.User;
+import jakarta.servlet.http.HttpServletRequest;
 
 import io.jsonwebtoken.*;
+
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 
 @Component
@@ -39,7 +43,46 @@ public class JwtUtil {
         //return Jwts.parser().setSigningKey(secret_key).parseClaimsJws(token).getBody();
     }
 
-    public Claims resolveClaims(String token){
-        return parseJwtClaims(token);
+    public Claims resolveClaims(HttpServletRequest request){
+        try{
+            String token = resolveToken(request);
+            if (token != null){
+                return parseJwtClaims(token);
+            }
+            return null;
+        }catch(ExpiredJwtException e){
+            request.setAttribute("expired", e.getMessage());
+            throw e;
+        }
+        catch(Exception e){
+            request.setAttribute("invalid", e.getMessage());
+            throw e;
+        }
     }
+    public String resolveToken(HttpServletRequest request) {
+
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring("Bearer ".length());
+        }
+        return null;
+    }
+
+    public boolean validateClaims(Claims claims) throws AuthenticationException {
+        try{
+            return claims.getExpiration().after(new Date());
+        }
+        catch(Exception e){
+            throw e;
+        }
+    }
+
+    public String extractUsername(String token) {
+        return parseJwtClaims(token).getSubject();
+    }
+    
+    public String extractUserRole(String token) {
+        return (String) parseJwtClaims(token).get("role");
+    }
+
 }
