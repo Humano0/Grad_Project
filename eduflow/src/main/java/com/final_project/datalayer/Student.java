@@ -7,8 +7,8 @@ import javax.persistence.*;
 public class Student {
 
     @Id
-    @Column(name = "student_id")
-    private int studentId;
+    @Column(name = "id")
+    private int id;
 
     @Column(name = "name")
     private String name;
@@ -20,40 +20,15 @@ public class Student {
     private String email;
 
     @Column(name = "department_id")
-    private int departmentId;
+    private Integer departmentId;
 
     @Column(name = "adviser_id")
-    private int adviserId;
+    private Integer adviserId;
 
-    @Column(name= "password")
+    @Column(name = "password")
     private String password;
 
     // getters and setters
-    // ...
-    public int getStudentId() {
-        return studentId;
-    }
-    
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public String getSurname() {
-        return surname;
-    }
-    
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-    
     public String getEmail() {
         return email;
     }
@@ -62,20 +37,27 @@ public class Student {
         this.email = email;
     }
     
-    public int getDepartmentId() {
+    public Integer getDepartmentId() {
         return departmentId;
     }
     
-    public void setDepartmentId(int departmentId) {
+    public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
     }
     
-    public int getAdviserId() {
+    public Integer getAdviserId() {
         return adviserId;
     }
     
-    public void setAdviserId(int adviserId) {
+    public void setAdviserId(Integer adviserId) {
         this.adviserId = adviserId;
     }
-
+    
+    public String getPassword() {
+        return password;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

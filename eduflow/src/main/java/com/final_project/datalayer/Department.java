@@ -2,28 +2,29 @@ package com.final_project.datalayer;
 
 import javax.persistence.*;
 
+
 @Entity
 @Table(name = "department")
 public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "department_id")
-    private int departmentId;
+    @Column(name = "id")
+    private int id;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "facultyid")
-    private int facultyId;
+    @Column(name = "faculty_id")
+    private Integer facultyId;
 
     // getters and setters
-    public int getDepartmentId() {
-        return departmentId;
+    public int getId() {
+        return id;
     }
 
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -34,11 +35,11 @@ public class Department {
         this.name = name;
     }
 
-    public int getFacultyId() {
+    public Integer getFacultyId() {
         return facultyId;
     }
 
-    public void setFacultyId(int facultyId) {
+    public void setFacultyId(Integer facultyId) {
         this.facultyId = facultyId;
     }
 }

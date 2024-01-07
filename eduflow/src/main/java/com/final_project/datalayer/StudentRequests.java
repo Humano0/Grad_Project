@@ -2,49 +2,35 @@ package com.final_project.datalayer;
 
 import javax.persistence.*;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "request")
-public class Request {
+@Table(name = "student_requests")
+public class StudentRequests {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long requestId;
-
-    @Column(name = "student_adviser_id")
-    private Integer studentAdviserId;
-
     @Column(name = "student_id")
-    private Integer studentId;
+    private int studentId;
 
+    @Id
     @Column(name = "request_type_id")
-    private Integer requestTypeId;
+    private int requestTypeId;
+
+    @Id
+    @Column(name = "when")
+    private LocalDateTime when;
 
     @Column(name = "information")
     private String information;
 
-    @Column(name = "addition")// this addition is for the additional files for some request types it can be null like pdf, docx, etc.
+    @Column(name = "addition")
     private String addition;
 
     @Column(name = "current_index")
     private Integer currentIndex;
 
-    // Getters and Setters
-
-    public Long getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(Long requestId) {
-        this.requestId = requestId;
-    }
-
-    public Integer getStudentAdviserId() {
-        return studentAdviserId;
-    }
-
-    public void setStudentAdviserId(Integer studentAdviserId) {
-        this.studentAdviserId = studentAdviserId;
-    }
+    // getters and setters
 
     public Integer getStudentId() {
         return studentId;
@@ -60,6 +46,14 @@ public class Request {
 
     public void setRequestTypeId(Integer requestTypeId) {
         this.requestTypeId = requestTypeId;
+    }
+
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
     }
 
     public String getAddition() {

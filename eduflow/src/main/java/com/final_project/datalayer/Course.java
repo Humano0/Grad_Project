@@ -7,38 +7,49 @@ import javax.persistence.*;
 public class Course {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "course_id")
-    private int courseId;
+    @Column(name = "code")
+    private String code;
 
-    @Column(name = "course_name")
-    private String courseName;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "course_code")
-    private String courseCode;
+    @Column(name = "department_id")
+    private Integer departmentId;
+
+    @Column(name = "type")
+    private String type;
 
     // getters and setters
-    public int getCourseId() {
-        return courseId;
+    public String getCode() {
+        return code;
     }
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public String getName() {
+        return name;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getCourseCode() {
-        return courseCode;
+    public Integer getDepartmentId() {
+        return departmentId;
     }
 
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
+
