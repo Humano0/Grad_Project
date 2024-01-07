@@ -15,16 +15,20 @@ public class StudentRepository implements IStudentRepository {
 
     @Override
     public Student getByEmail(String email) {
-        return null;
+        return entityManager.find(Student.class, email);
     }
 
     @Override
     public List<Student> getStudentsByDepartmentId(Long departmentId) {
-        return null;
+        return entityManager.createQuery("SELECT s FROM Student s WHERE s.departmentId = :departmentId", Student.class)
+                .setParameter("departmentId", departmentId)
+                .getResultList();
     }
 
     @Override
     public List<Student> getStudentsByAdviserId(Long adviserId) {
-        return null;
+        return entityManager.createQuery("SELECT s FROM Student s WHERE s.adviserId = :adviserId", Student.class)
+                .setParameter("adviserId", adviserId)
+                .getResultList();
     }
 }
