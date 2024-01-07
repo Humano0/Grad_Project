@@ -16,6 +16,18 @@ public class TeachingStaffRepository implements ITeachingStaffRepository {
     }
 
     @Override
+    public void updateTeachingStaff(TeachingStaff teachingStaff) {
+        entityManager.merge(teachingStaff);
+    }
+
+    @Override
+    public void deleteTeachingStaffById(Long id) {
+        TeachingStaff teachingStaff = entityManager.find(TeachingStaff.class, id);
+        if (teachingStaff != null)
+            entityManager.remove(teachingStaff);
+    }
+
+    @Override
     public TeachingStaff getTeachingStaffByEmail(String email) {
         return entityManager.find(TeachingStaff.class, email);
     }
@@ -34,6 +46,8 @@ public class TeachingStaffRepository implements ITeachingStaffRepository {
 
     @Override
     public TeachingStaff getTeachingStaffByStudentId(Long studentId) {
-        return null;
+        return entityManager.createQuery("SELECT t FROM TeachingStaff t WHERE t.id = (SELECT s.adviserId FROM Student s WHERE s.id = :studentId)", TeachingStaff.class)
+                .setParameter("studentId", studentId)
+                .getSingleResult();
     }
 }
