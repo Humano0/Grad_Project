@@ -14,8 +14,32 @@ public class StudentRepository implements IStudentRepository {
     private EntityManager entityManager;
 
     @Override
-    public Student getByEmail(String email) {
-        return entityManager.find(Student.class, email);
+    public void addStudent(Student student) {
+        entityManager.persist(student);
+    }
+
+    @Override
+    public void updateStudent(Student student) {
+        entityManager.merge(student);
+    }
+
+    @Override
+    public void deleteStudentById(Long id) {
+        Student student = entityManager.find(Student.class, id);
+        if(student != null)
+            entityManager.remove(student);
+    }
+
+    @Override
+    public Student getStudentById(Long id) {
+        return entityManager.find(Student.class, id);
+    }
+
+    @Override
+    public Student getStudentByEmail(String email) {
+        return entityManager.createQuery("SELECT s FROM Student s WHERE s.email = :email", Student.class)
+                .setParameter("email", email)
+                .getSingleResult();
     }
 
     @Override
