@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.final_project.eduflow.Data.DTO.UserLoginEntity;
+import com.final_project.eduflow.Data.DTO.User;
 import com.final_project.eduflow.DataAccess.TeachingStaffRepository;
 import com.final_project.eduflow.Services.Interfaces.IUserService;
 
@@ -24,7 +25,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> Login(@RequestBody LoginUser entity) {
+    public ResponseEntity<?> Login(@RequestBody UserLoginEntity entity) {
         try {
             User user = userService.findUser(entity); // Assuming userService has a login method
             return ResponseEntity.ok(user); // Return the User object with a 200 OK status
