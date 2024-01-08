@@ -45,3 +45,4 @@ out/
 
 
 .src\main\resources\application.properties
+./eduflow/src/main/resources/application.properties
