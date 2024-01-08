@@ -10,6 +10,10 @@ import java.util.List;
 public class TeachingStaffRepository implements ITeachingStaffRepository {
     @PersistenceContext
     private EntityManager entityManager;
+
+    public TeachingStaffRepository() {
+    }
+
     @Override
     public void addTeachingStaff(TeachingStaff teachingStaff) {
         entityManager.persist(teachingStaff);

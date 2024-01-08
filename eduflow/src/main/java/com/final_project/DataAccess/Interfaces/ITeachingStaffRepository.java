@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ITeachingStaffRepository {
+    
     void addTeachingStaff(TeachingStaff teachingStaff);
     void updateTeachingStaff(TeachingStaff teachingStaff);
     void deleteTeachingStaffById(Long id);

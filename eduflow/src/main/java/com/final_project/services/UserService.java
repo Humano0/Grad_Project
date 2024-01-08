@@ -1,22 +1,28 @@
 package com.final_project.services;
 
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.final_project.DataAccess.Interfaces.IStudentRepository;
 import com.final_project.DataAccess.Interfaces.ITeachingStaffRepository;
+import com.final_project.DataAccess.Repositories.StudentRepository;
+import com.final_project.DataAccess.Repositories.TeachingStaffRepository;
 import com.final_project.datalayer.Dto.LoginUser;
 import com.final_project.datalayer.Dto.User;
 import com.final_project.services.Interfaces.IUserService;
 
 @Service
+/* @ComponentScan({ "com.final_project.DataAccess"}) */
 public class UserService implements IUserService{
     
-    private final ITeachingStaffRepository teachingStaffRepository;
-    private final IStudentRepository studentRepository;
+    private final TeachingStaffRepository teachingStaffRepository;
+    private final StudentRepository studentRepository;
     
     @Autowired
-    public UserService(ITeachingStaffRepository teachingStaffRepository, IStudentRepository studentRepository) {
+    public UserService(TeachingStaffRepository teachingStaffRepository, StudentRepository studentRepository) {
         this.teachingStaffRepository = teachingStaffRepository;
         this.studentRepository = studentRepository;
     }
