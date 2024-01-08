@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "section")
+@IdClass(SectionId.class)
 public class Section {
 
     @Id

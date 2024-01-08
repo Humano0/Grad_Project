@@ -8,7 +8,8 @@ public class Faculty {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long facultyId;
+    @Column(name = "id")
+    private long id;
 
     @Column(nullable = false)
     private String name;
@@ -16,11 +17,11 @@ public class Faculty {
     // getters and setters
 
     public Long getFacultyId() {
-        return facultyId;
+        return id;
     }
 
     public void setFacultyId(Long facultyId) {
-        this.facultyId = facultyId;
+        this.id = facultyId;
     }
 
     public String getName() {
