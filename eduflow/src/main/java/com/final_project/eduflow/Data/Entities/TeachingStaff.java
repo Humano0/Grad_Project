@@ -1,4 +1,4 @@
-package com.final_project.eduflow.Data;
+package com.final_project.eduflow.Data.Entities;
 
 import jakarta.persistence.*;;
 

@@ -1,7 +1,7 @@
 package com.final_project.eduflow.Services.Interfaces;
 
-import com.final_project.eduflow.Data.Dto.LoginUser;
-import com.final_project.eduflow.Data.Dto.User;
+import com.final_project.eduflow.Data.DTO.UserLoginEntity;
+import com.final_project.eduflow.Data.DTO.User;
 
 public interface IUserService {
     
@@ -10,5 +10,5 @@ public interface IUserService {
 
     boolean isUser(String email, String password);
 
-    User findUser(LoginUser loginUser);
+    User findUser(UserLoginEntity userLoginEntity);
 }

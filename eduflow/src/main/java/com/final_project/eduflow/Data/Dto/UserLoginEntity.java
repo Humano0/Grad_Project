@@ -1,6 +1,6 @@
-package com.final_project.eduflow.Data.Dto;
+package com.final_project.eduflow.Data.DTO;
 
-public class LoginUser {
+public class UserLoginEntity {
     
     private String email;
 
