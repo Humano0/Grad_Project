@@ -31,7 +31,7 @@ public class LoginController {
             User user = userService.findUser(entity); // Assuming userService has a login method
             return ResponseEntity.ok(user); // Return the User object with a 200 OK status
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("User not exists"); // Return the error message with a 400 Bad Request status
+            return ResponseEntity.badRequest().body( e.getMessage()); // Return the error message with a 400 Bad Request status
         }
        
     }

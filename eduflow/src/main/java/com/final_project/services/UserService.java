@@ -34,6 +34,10 @@ public class UserService implements IUserService{
         return teachingStaffRepository.getTeachingStaffByEmail(email) != null;
     }
 
+/*     public boolean isStaff(String email){
+        return teachingStaffRepository.findByEmail(email) != null;
+    } */
+
     public boolean isUser(String email) {
         return isStudent(email) || isStaff(email);
     }
@@ -46,6 +50,8 @@ public class UserService implements IUserService{
         else if (isStaff(user.getEmail())) {
             var staff = teachingStaffRepository.getTeachingStaffByEmail(user.getEmail());
             return new User(staff.getFullName(), staff.getEmail(), staff.getPassword(), "staff", staff.getId());
+/*             var staff = teachingStaffRepository.findByEmail(user.getEmail());
+            return new User(staff.getFullName(), staff.getEmail(), staff.getPassword(), "staff", staff.getId()); */
         }
         return null;
     }

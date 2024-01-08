@@ -6,6 +6,7 @@ import com.final_project.datalayer.TeachingStaff;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,8 +16,6 @@ public class TeachingStaffRepository implements ITeachingStaffRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public TeachingStaffRepository() {
-    }
 
     @Override
     public void addTeachingStaff(TeachingStaff teachingStaff) {
@@ -59,3 +58,10 @@ public class TeachingStaffRepository implements ITeachingStaffRepository {
                 .getSingleResult();
     }
 }
+
+
+/* import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TeachingStaffRepository extends JpaRepository<TeachingStaff, Integer> {
+    TeachingStaff findByEmail(String email);
+} */

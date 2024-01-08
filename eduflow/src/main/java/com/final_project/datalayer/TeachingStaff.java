@@ -23,9 +23,6 @@ public class TeachingStaff {
     @Column(name = "department_id")
     private Integer departmentId;
 
-    @Column(name = "staff_role")
-    private String staffRole;
-
     @Column(name = "password")
     private String password;
 
@@ -38,14 +35,6 @@ public class TeachingStaff {
     
     public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
-    }
-    
-    public String getStaffRole() {
-        return staffRole;
-    }
-    
-    public void setStaffRole(String staffRole) {
-        this.staffRole = staffRole;
     }
     
     public String getPassword() {
