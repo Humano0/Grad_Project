@@ -1,4 +1,4 @@
-package com.final_project.eduflow;
+package com.final_project.eduflow.Presentation;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;

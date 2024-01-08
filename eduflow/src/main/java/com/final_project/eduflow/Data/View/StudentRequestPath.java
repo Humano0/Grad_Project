@@ -1,4 +1,4 @@
-package com.final_project.datalayer.View;
+package com.final_project.eduflow.Data.View;
 
 import javax.persistence.*;
 

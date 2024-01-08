@@ -1,13 +1,12 @@
-package com.final_project.eduflow;
+package com.final_project.eduflow.Presentation;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.final_project.DataAccess.Repositories.StaffRepository;
-import com.final_project.datalayer.Dto.LoginUser;
-import com.final_project.datalayer.Dto.User;
-import com.final_project.services.Interfaces.IUserService;
+import com.final_project.eduflow.Data.Dto.LoginUser;
+import com.final_project.eduflow.Data.Dto.User;
+import com.final_project.eduflow.DataAccess.TeachingStaffRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 public class LoginController {
     
-    private final StaffRepository staffRepository;
+    private final TeachingStaffRepository staffRepository;
 
     @Autowired
-    public LoginController(StaffRepository staffRepository) {
+    public LoginController(TeachingStaffRepository staffRepository) {
         this.staffRepository = staffRepository;
     }
 
