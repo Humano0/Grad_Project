@@ -3,6 +3,8 @@ package com.final_project.DataAccess.Repositories;
 import com.final_project.DataAccess.Interfaces.ITeachingStaffRepository;
 import com.final_project.datalayer.TeachingStaff;
 
+import jakarta.transaction.Transactional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -16,6 +18,10 @@ public class TeachingStaffRepository implements ITeachingStaffRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional
+    public void save(TeachingStaff teachingStaff) {
+        entityManager.persist(teachingStaff);
+    }
 
     @Override
     public void addTeachingStaff(TeachingStaff teachingStaff) {
@@ -35,8 +41,12 @@ public class TeachingStaffRepository implements ITeachingStaffRepository {
     }
 
     @Override
+    @Transactional
     public TeachingStaff getTeachingStaffByEmail(String email) {
-        return entityManager.find(TeachingStaff.class, email);
+        return entityManager.createQuery("SELECT t FROM teaching_staff t WHERE t.email = :email", TeachingStaff.class)
+                .setParameter("email", email)
+                .getSingleResult();
+        //return entityManager.find(TeachingStaff.class, email);
     }
 
     @Override

@@ -2,6 +2,9 @@ package com.final_project.DataAccess.Repositories;
 
 import com.final_project.DataAccess.Interfaces.IStudentRepository;
 import com.final_project.datalayer.Student;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -36,6 +39,7 @@ public class StudentRepository implements IStudentRepository {
     }
 
     @Override
+    @Transactional
     public Student getStudentByEmail(String email) {
         return entityManager.createQuery("SELECT s FROM Student s WHERE s.email = :email", Student.class)
                 .setParameter("email", email)
