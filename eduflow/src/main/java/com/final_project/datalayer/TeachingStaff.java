@@ -63,4 +63,14 @@ public class TeachingStaff {
     public void setRole(String role) {
         this.role = role;
     }
+    public String getEmail() {
+        return email;
+    }
+    public String getFullName(){
+        return name + " " + surname;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

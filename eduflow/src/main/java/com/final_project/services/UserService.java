@@ -1,12 +1,12 @@
 package com.final_project.services;
 
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.final_project.DataAccess.Interfaces.IStudentRepository;
 import com.final_project.DataAccess.Interfaces.ITeachingStaffRepository;
 import com.final_project.datalayer.Dto.LoginUser;
+import com.final_project.datalayer.Dto.User;
 import com.final_project.services.Interfaces.IUserService;
 
 @Service
@@ -33,13 +33,15 @@ public class UserService implements IUserService{
         return isStudent(email) || isStaff(email);
     }
 
-    public boolean isUser(LoginUser user) {
+    public User findUser(LoginUser user) {
         if (isStudent(user.getEmail() )) {
-            
+            var student = studentRepository.getStudentByEmail(user.getEmail());
+            return new User(student.getFullName(), student.getEmail(), student.getPassword(), "student", student.getId());
         }
         else if (isStaff(user.getEmail())) {
-            
+            var staff = teachingStaffRepository.getTeachingStaffByEmail(user.getEmail());
+            return new User(staff.getFullName(), staff.getEmail(), staff.getPassword(), "staff", staff.getId());
         }
-        return false;
+        return null;
     }
 }

@@ -32,6 +32,19 @@ public class Student {
     public String getEmail() {
         return email;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname(){
+        return surname;
+    }
+
+    public String getFullName(){
+
+        return name + " " + surname;
+    }
     
     public void setEmail(String email) {
         this.email = email;
@@ -59,5 +72,9 @@ public class Student {
     
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getId(){
+        return id;
     }
 }

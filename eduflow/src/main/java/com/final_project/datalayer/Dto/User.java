@@ -35,6 +35,14 @@ public class User {
         this.token = token;
     }
 
+    public User(String name, String email, String password, String role, int id) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.Id = id;
+    }
+
     public String getName(){
         return this.name;
     }
