@@ -7,7 +7,11 @@ import com.final_project.eduflow.Data.TeachingStaff;
 
 
 
-public interface StaffRepository extends CrudRepository<TeachingStaff, Integer>{
+public interface TeachingStaffRepository extends JpaRepository<TeachingStaff, Integer>{
     
     TeachingStaff findByEmail(String email);
+
+    TeachingStaff findById(Long id);
+
+    TeachingStaff findByEmailAndPassword( String email, String password);
 }

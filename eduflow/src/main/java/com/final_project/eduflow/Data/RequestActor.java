@@ -1,6 +1,6 @@
 package com.final_project.eduflow.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "request_actors")
@@ -8,7 +8,7 @@ public class RequestActor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(name = "request_type_id")
     private Integer requestTypeId;

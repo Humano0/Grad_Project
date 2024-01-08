@@ -1,6 +1,6 @@
 package com.final_project.eduflow.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 
 @Entity
@@ -10,7 +10,7 @@ public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Column(name = "name")
     private String name;
@@ -19,7 +19,7 @@ public class Department {
     private Integer facultyId;
 
     // getters and setters
-    public int getId() {
+    public long getId() {
         return id;
     }
 

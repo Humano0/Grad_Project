@@ -1,6 +1,6 @@
 package com.final_project.eduflow.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +10,7 @@ public class StudentRequests {
 
     @Id
     @Column(name = "student_id")
-    private int studentId;
+    private long studentId;
 
     @Id
     @Column(name = "request_type_id")
@@ -31,7 +31,7 @@ public class StudentRequests {
 
     // getters and setters
 
-    public Integer getStudentId() {
+    public long getStudentId() {
         return studentId;
     }
 

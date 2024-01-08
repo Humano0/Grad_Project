@@ -1,6 +1,6 @@
 package com.final_project.eduflow.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "section_records")
@@ -8,7 +8,7 @@ public class SectionRecords {
 
     @Id
     @Column(name = "student_id")
-    private int studentId;
+    private long studentId;
 
     @Id
     @Column(name = "course_code")

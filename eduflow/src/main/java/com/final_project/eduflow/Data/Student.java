@@ -1,6 +1,6 @@
 package com.final_project.eduflow.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "student")
@@ -8,7 +8,7 @@ public class Student {
 
     @Id
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Column(name = "name")
     private String name;
@@ -74,7 +74,7 @@ public class Student {
         this.password = password;
     }
 
-    public Integer getId(){
+    public long getId(){
         return id;
     }
 }

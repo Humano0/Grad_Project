@@ -1,6 +1,6 @@
 package com.final_project.eduflow.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "request_requirements")
@@ -8,7 +8,7 @@ public class RequestRequirement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long requiermentId;
+    private long requiermentId;
 
     @Column(name = "name")
     private String name;
