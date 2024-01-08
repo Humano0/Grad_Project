@@ -18,7 +18,7 @@ public class StudentRequests {
     private int requestTypeId;
 
     @Id
-    @Column(name = "when")
+    @Column(name = "\"when\"")
     private LocalDateTime when;
 
     @Column(name = "information")
@@ -30,6 +30,17 @@ public class StudentRequests {
     @Column(name = "current_index")
     private Integer currentIndex;
 
+    public StudentRequests(long studentId, int requestTypeId, String information, String addition) {
+        this.studentId = studentId;
+        this.requestTypeId = requestTypeId;
+        this.when = LocalDateTime.now();
+        this.information = information;
+        this.addition = addition;
+        this.currentIndex = 0;
+    }
+
+    public StudentRequests() {
+    }
     // getters and setters
 
     public long getStudentId() {

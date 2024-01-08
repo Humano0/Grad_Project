@@ -2,6 +2,8 @@ package com.final_project.eduflow.Presentation;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.final_project.eduflow.Data.DTO.NewRequestEntity;
+import com.final_project.eduflow.Data.DTO.NewRequestEntity;
 import com.final_project.eduflow.Data.Entities.RequestType;
 import com.final_project.eduflow.Data.Entities.StudentRequests;
 import com.final_project.eduflow.Data.View.RequestRequirementView;
@@ -48,16 +50,30 @@ public class RequestController {
 
     }
 
-    @GetMapping("/StudentRequest")
-    public void getStudentRequest(){
-
+    @GetMapping("/StudentRequests/{studentId}")
+    public ResponseEntity<List<StudentRequests>> getStudentRequest( @PathVariable int studentId){
+        List<StudentRequests> requests = studentRequestRepository.findByStudentId(studentId);
+        return ResponseEntity.ok(requests);
     }
 
     @PostMapping("/makeRequest")
-    public ResponseEntity<?> makeRequest(@RequestBody StudentRequests studentRequest){
-        var response  =studentRequestRepository.save( studentRequest);
+    public ResponseEntity<?> makeRequest(@RequestBody NewRequestEntity requestEntity){
+        var response  = studentRequestRepository.save( new StudentRequests(requestEntity.getStudentId(), requestEntity.getRequestTypeId(),
+        requestEntity.getInformation(),  "noAddition" ));
         return ResponseEntity.ok(response);
     }
+
+
+/*  
+ *     public StudentRequests(long studentId, int requestTypeId, String information, String addition) {
+        this.studentId = studentId;
+        this.requestTypeId = requestTypeId;
+        this.when = LocalDateTime.now();
+        this.information = information;
+        this.addition = addition;
+        this.currentIndex = 0;
+    }
+       */
     
     @PutMapping("path/{id}")
     public void updateRequest(@PathVariable String id){
