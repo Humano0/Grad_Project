@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.final_project.eduflow.Data.Entities.RequestType;
 import com.final_project.eduflow.Data.Entities.StudentRequests;
+import com.final_project.eduflow.Data.View.RequestRequirementView;
+import com.final_project.eduflow.DataAccess.RequestRequirementRepository;
 import com.final_project.eduflow.DataAccess.RequestTypeRepository;
 import com.final_project.eduflow.DataAccess.StudentRequestRepository;
 
@@ -26,11 +28,14 @@ public class RequestController {
     
     private final StudentRequestRepository studentRequestRepository;
     private final RequestTypeRepository requestTypeRepository;
+    private final RequestRequirementRepository requestRequirementRepository;
 
     @Autowired
-    public RequestController(StudentRequestRepository studentRequestRepository, RequestTypeRepository requestTypeRepository) {
+    public RequestController(StudentRequestRepository studentRequestRepository, RequestTypeRepository requestTypeRepository,
+     RequestRequirementRepository requestRequirementRepository) {
         this.studentRequestRepository = studentRequestRepository;
         this.requestTypeRepository = requestTypeRepository;
+        this.requestRequirementRepository = requestRequirementRepository;
     }
 
     @GetMapping("/RequestParams")
@@ -49,8 +54,9 @@ public class RequestController {
     }
 
     @PostMapping("/makeRequest")
-    public void makeRequest(@RequestBody StudentRequests studentRequest){
-        studentRequestRepository.save( studentRequest);
+    public ResponseEntity<?> makeRequest(@RequestBody StudentRequests studentRequest){
+        var response  =studentRequestRepository.save( studentRequest);
+        return ResponseEntity.ok(response);
     }
     
     @PutMapping("path/{id}")
@@ -63,4 +69,11 @@ public class RequestController {
         List<RequestType> requestTypes = requestTypeRepository.findAll();
         return ResponseEntity.ok(requestTypes);
     }
+
+    @GetMapping("/GetRequestParams/{requestTypeId}")
+    public ResponseEntity<List<RequestRequirementView>> getMethodName(@PathVariable int requestTypeId) {
+        List<RequestRequirementView> requestTypes = requestRequirementRepository.findByRequestId(requestTypeId);
+        return ResponseEntity.ok(requestTypes);
+    }
+    
 }
