@@ -2,26 +2,26 @@ package com.final_project.eduflow.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.final_project.eduflow.Data.Dto.LoginUser;
-import com.final_project.eduflow.Data.Dto.User;
+import com.final_project.eduflow.Data.DTO.UserLoginEntity;
+import com.final_project.eduflow.Data.DTO.User;
 import com.final_project.eduflow.DataAccess.StudentRepository;
 import com.final_project.eduflow.DataAccess.TeachingStaffRepository;
 import com.final_project.eduflow.Services.Interfaces.IUserService;
 
 public class UserService implements IUserService{
     
-    private final StudentRepository studentRepositoy;
+    private final StudentRepository studentRepository;
     private final TeachingStaffRepository teachingRepository;
 
     @Autowired
-    public UserService(StudentRepository studentRepositoy, TeachingStaffRepository teachingRepository) {
-        this.studentRepositoy = studentRepositoy;
+    public UserService(StudentRepository studentRepository, TeachingStaffRepository teachingRepository) {
+        this.studentRepository = studentRepository;
         this.teachingRepository = teachingRepository;
     }
 
     @Override
     public boolean isStudent(String email, String password) {
-        return studentRepositoy.findByEmailAndPassword(email, password) != null;
+        return studentRepository.findByEmailAndPassword(email, password) != null;
     }
 
     @Override
@@ -35,12 +35,12 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public User findUser(LoginUser loginUser) {
-        if(isStudent(loginUser.getEmail(), loginUser.getPassword())){
-            return studentRepositoy.findByEmailAndPassword(loginUser.getEmail(), loginUser.getPassword());
+    public User findUser(UserLoginEntity userLoginEntity) {
+        if(isStudent(userLoginEntity.getEmail(), userLoginEntity.getPassword())){
+            return studentRepository.findByEmailAndPassword(userLoginEntity.getEmail(), userLoginEntity.getPassword());
         }
-        else if(isStaff(loginUser.getEmail(), loginUser.getPassword())){
-            return teachingRepository.findByEmailAndPassword(  loginUser.getEmail(), loginUser.getPassword());
+        else if(isStaff(userLoginEntity.getEmail(), userLoginEntity.getPassword())){
+            return teachingRepository.findByEmailAndPassword(  userLoginEntity.getEmail(), userLoginEntity.getPassword());
         }
         return null;
     }

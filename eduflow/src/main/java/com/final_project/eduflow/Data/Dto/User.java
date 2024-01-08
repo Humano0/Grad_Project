@@ -1,4 +1,4 @@
-package com.final_project.eduflow.Data.Dto;
+package com.final_project.eduflow.Data.DTO;
 
 public class User {
     
