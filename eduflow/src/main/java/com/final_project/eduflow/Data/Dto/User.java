@@ -10,13 +10,13 @@ public class User {
 
     private String role;
 
-    private int Id;
+    private long Id;
 
     private String phone;
 
     private String token;
 
-    public User(String name, String email, String password, String role, int id, String phone, String token) {
+    public User(String name, String email, String password, String role, long id, String phone, String token) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -26,7 +26,7 @@ public class User {
         this.token = token;
     }
 
-    public User(String name, String email, String password, String role, int id, String token) {
+    public User(String name, String email, String password, String role, long id, String token) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -35,7 +35,7 @@ public class User {
         this.token = token;
     }
 
-    public User(String name, String email, String password, String role, int id) {
+    public User(String name, String email, String password, String role, long id) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -55,7 +55,7 @@ public class User {
     public String getRole(){
         return this.role;
     }
-    public int getId(){
+    public long getId(){
         return this.Id;
     }
     public String getPhone(){

@@ -1,13 +1,17 @@
 package com.final_project.eduflow.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.final_project.eduflow.Data.Student;
+import com.final_project.eduflow.Data.TeachingStaff;
 import com.final_project.eduflow.Data.Dto.LoginUser;
 import com.final_project.eduflow.Data.Dto.User;
 import com.final_project.eduflow.DataAccess.StudentRepository;
 import com.final_project.eduflow.DataAccess.TeachingStaffRepository;
 import com.final_project.eduflow.Services.Interfaces.IUserService;
 
+@Service
 public class UserService implements IUserService{
     
     private final StudentRepository studentRepositoy;
@@ -37,10 +41,12 @@ public class UserService implements IUserService{
     @Override
     public User findUser(LoginUser loginUser) {
         if(isStudent(loginUser.getEmail(), loginUser.getPassword())){
-            return studentRepositoy.findByEmailAndPassword(loginUser.getEmail(), loginUser.getPassword());
+            Student temp = studentRepositoy.findByEmailAndPassword(loginUser.getEmail(), loginUser.getPassword());
+            return new User(temp.getFullName(), temp.getEmail(), temp.getPassword(), "student", temp.getId());
         }
         else if(isStaff(loginUser.getEmail(), loginUser.getPassword())){
-            return teachingRepository.findByEmailAndPassword(  loginUser.getEmail(), loginUser.getPassword());
+            TeachingStaff temp=teachingRepository.findByEmailAndPassword(  loginUser.getEmail(), loginUser.getPassword());
+            return new User(temp.getFullName(), temp.getEmail(), temp.getPassword(), temp.getRole(), temp.getId());
         }
         return null;
     }
