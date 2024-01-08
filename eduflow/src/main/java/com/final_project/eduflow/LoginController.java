@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.final_project.datalayer.Dto.LoginUser;
+import com.final_project.services.Interfaces.IUserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -13,6 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 public class LoginController {
     
+    private final IUserService userService;
+
+    @Autowired
+    public LoginController(IUserService userService) {
+        this.userService = userService;
+    }
+
     @PostMapping("/login")
     public LoginUser Login(@RequestBody LoginUser entity) {
         

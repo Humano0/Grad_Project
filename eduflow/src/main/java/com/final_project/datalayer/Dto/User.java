@@ -10,11 +10,30 @@ public class User {
 
     private String role;
 
-    private int studentId;
+    private int Id;
 
     private String phone;
 
     private String token;
+
+    public User(String name, String email, String password, String role, int id, String phone, String token) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.Id = id;
+        this.phone = phone;
+        this.token = token;
+    }
+
+    public User(String name, String email, String password, String role, int id, String token) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.Id = id;
+        this.token = token;
+    }
 
     public String getName(){
         return this.name;
@@ -28,8 +47,8 @@ public class User {
     public String getRole(){
         return this.role;
     }
-    public int getStudentId(){
-        return this.studentId;
+    public int getId(){
+        return this.Id;
     }
     public String getPhone(){
         return this.phone;
