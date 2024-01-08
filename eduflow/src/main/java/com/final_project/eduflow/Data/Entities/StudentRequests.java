@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "student_requests")
+@IdClass(StudentRequestsId.class)
 public class StudentRequests {
 
     @Id
@@ -71,3 +72,4 @@ public class StudentRequests {
         this.currentIndex = currentIndex;
     }
 }
+

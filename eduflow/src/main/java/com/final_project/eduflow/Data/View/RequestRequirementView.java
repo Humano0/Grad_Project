@@ -1,9 +1,9 @@
 package com.final_project.eduflow.Data.View;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "requestRequirements")
+@Table(name = "requestrequirements")
 public class RequestRequirementView {
 
     @Id
