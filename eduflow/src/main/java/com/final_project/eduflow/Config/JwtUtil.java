@@ -96,13 +96,13 @@ public class JwtUtil {
         }
     }
 
-    // Gets the email from the claims
-    public String getEmail(Claims claims) {
-        return claims.getSubject();
-    }
-
     // Gets the ID from the claims
     public Long getId(Claims claims) {
         return ((Number) claims.get("id")).longValue();
+    }
+
+    // Gets the role from the claims
+    public String getRole(Claims claims) {
+        return claims.getSubject();
     }
 }
