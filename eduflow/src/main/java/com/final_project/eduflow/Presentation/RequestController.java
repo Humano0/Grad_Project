@@ -1,8 +1,8 @@
 package com.final_project.eduflow.Presentation;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.final_project.eduflow.Data.DTO.NewRequestEntity;
 import com.final_project.eduflow.Data.DTO.NewRequestEntity;
 import com.final_project.eduflow.Data.Entities.RequestType;
 import com.final_project.eduflow.Data.Entities.StudentRequests;
@@ -16,7 +16,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -40,9 +39,10 @@ public class RequestController {
         this.requestRequirementRepository = requestRequirementRepository;
     }
 
+    @PreAuthorize("hasAuthority('Adviser')")
     @GetMapping("/RequestParams")
-    public void getRequestParams(){
-
+    public ResponseEntity<String> getRequestParams(){
+        return ResponseEntity.ok("hello");
     }
 
     @GetMapping("/AdviserRequest")
@@ -64,7 +64,7 @@ public class RequestController {
     }
 
 
-/*  
+/*
  *     public StudentRequests(long studentId, int requestTypeId, String information, String addition) {
         this.studentId = studentId;
         this.requestTypeId = requestTypeId;
@@ -74,7 +74,7 @@ public class RequestController {
         this.currentIndex = 0;
     }
        */
-    
+
     @PutMapping("path/{id}")
     public void updateRequest(@PathVariable String id){
 
@@ -91,5 +91,5 @@ public class RequestController {
         List<RequestRequirementView> requestTypes = requestRequirementRepository.findByRequestId(requestTypeId);
         return ResponseEntity.ok(requestTypes);
     }
-    
+
 }
