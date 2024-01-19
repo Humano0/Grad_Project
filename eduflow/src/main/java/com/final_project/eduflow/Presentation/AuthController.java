@@ -12,12 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 public class AuthController {
 
     private final UserService userService;
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     public AuthController(UserService userService) {
@@ -31,11 +33,11 @@ public class AuthController {
             if(user != null) {
                 String token = JwtUtil.createToken(user);
                 Cookie cookie = new Cookie("token", token);
-                cookie.setHttpOnly(true);
+                cookie.setHttpOnly(false);
                 response.addCookie(cookie);
                 return ResponseEntity.ok("Logged in successfully");
             } else {
-                return ResponseEntity.badRequest().body("Invalid credentials");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An error occurred: " + e.getMessage());

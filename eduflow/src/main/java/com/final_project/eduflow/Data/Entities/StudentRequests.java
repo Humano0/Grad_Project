@@ -3,6 +3,7 @@ package com.final_project.eduflow.Data.Entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "student_requests")
@@ -81,6 +82,10 @@ public class StudentRequests {
 
     public void setCurrentIndex(Integer currentIndex) {
         this.currentIndex = currentIndex;
+    }
+
+    public LocalDateTime getWhen() {
+        return when;
     }
 }
 

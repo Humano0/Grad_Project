@@ -42,7 +42,7 @@ public class UserService implements IUserService{
     public User findUser(UserLoginEntity loginUser) {
         if(isStudent(loginUser.getEmail(), loginUser.getPassword())){
             Student temp = studentRepository.findByEmailAndPassword(loginUser.getEmail(), loginUser.getPassword());
-            return new User(temp.getFullName(), temp.getEmail(), temp.getPassword(), "student", temp.getId());
+            return new User(temp.getFullName(), temp.getEmail(), temp.getPassword(), "Student", temp.getId());
         }
         else if(isStaff(loginUser.getEmail(), loginUser.getPassword())){
             TeachingStaff temp=teachingRepository.findByEmailAndPassword(  loginUser.getEmail(), loginUser.getPassword());

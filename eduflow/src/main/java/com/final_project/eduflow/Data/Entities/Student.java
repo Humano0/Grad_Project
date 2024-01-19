@@ -77,4 +77,8 @@ public class Student {
     public long getId(){
         return id;
     }
+
+    public Long getAdvisorId() {
+        return adviserId.longValue();
+    }
 }
