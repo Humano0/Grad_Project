@@ -6,7 +6,7 @@ public class NewRequestEntity {
     
     private long studentId;
 
-    private int requestTypeId;
+    private long requestTypeId;
 
     private String information;
 
@@ -18,7 +18,7 @@ public class NewRequestEntity {
         return studentId;
     }
     
-    public int getRequestTypeId() {
+    public long getRequestTypeId() {
         return requestTypeId;
     }
     

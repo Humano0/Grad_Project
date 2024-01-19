@@ -2,13 +2,14 @@ package com.final_project.eduflow.Config;
 
 import com.final_project.eduflow.Data.DTO.User;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
-import javax.naming.AuthenticationException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -20,17 +21,10 @@ public class JwtUtil {
     // Expiration time for the JWT in milliseconds (1 hour)
     private static long accessTokenExpiration = 1000 * 60 * 60;
 
-    private final JwtParser jwtParser;
-
     // Header where the JWT is found in the HTTP request
     private final String TOKEN_HEADER = "Authorization";
     // Prefix for the JWT in the HTTP header
     private final String TOKEN_PREFIX = "Bearer ";
-
-    // Constructor that initializes the JWT parser
-    public JwtUtil() {
-        this.jwtParser = Jwts.parser().setSigningKey(SECRET_KEY);
-    }
 
     // Creates a JWT for a given user
     public static String createToken(User user) {
@@ -45,33 +39,27 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setIssuedAt(tokenCreateTime)
                 .setExpiration(tokenValidity)
-                .signWith(io.jsonwebtoken.SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
     // Parses the claims from a JWT
-    private Claims parseJwtClaims(String token) {
-        return jwtParser.parseClaimsJws(token).getBody();
+    private static Claims parseJwtClaims(String token) {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
     // Resolves the claims from a JWT in an HTTP request
-    public Claims resolveClaims(HttpServletRequest req) {
-        try {
-            // Get the JWT from the request and parse the claims
-            String token = resolveToken(req);
-            if (token != null) {
-                return parseJwtClaims(token);
-            }
-            return null;
-        } catch (Exception e) {
-            // If an error occurs, set an attribute in the request and rethrow the exception
-            req.setAttribute("invalid", e.getMessage());
-            throw e;
+    public static Claims resolveClaims(HttpServletRequest req) {
+        // Get the JWT from the request and parse the claims
+        String token = resolveToken(req);
+        if (token != null) {
+            return parseJwtClaims(token);
         }
+        return null;
     }
 
     // Resolves the JWT from an HTTP request
-    public String resolveToken(HttpServletRequest req) {
+    public static String resolveToken(HttpServletRequest req) {
         // Get the cookies from the request
         Cookie[] cookies = req.getCookies();
         if (cookies != null) {
@@ -92,12 +80,12 @@ public class JwtUtil {
             return claims.getExpiration().after(new Date());
         } catch (Exception e) {
             // If an error occurs, throw an AuthenticationException
-            throw new AuthenticationException("Invalid token");
+            throw new BadCredentialsException("Invalid token", e);
         }
     }
 
     // Gets the ID from the claims
-    public Long getId(Claims claims) {
+    public static Long getId(Claims claims) {
         return ((Number) claims.get("id")).longValue();
     }
 

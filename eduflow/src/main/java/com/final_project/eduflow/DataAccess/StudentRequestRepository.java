@@ -9,7 +9,7 @@ import com.final_project.eduflow.Data.Entities.StudentRequestsId;
 public interface StudentRequestRepository  extends JpaRepository<StudentRequests, StudentRequestsId>{
 
 
-    List<StudentRequests> findByStudentId(int studentId);
+    List<StudentRequests> findByStudentId(long studentId);
 
 
 } 
