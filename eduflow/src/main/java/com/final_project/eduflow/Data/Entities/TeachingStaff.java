@@ -1,6 +1,6 @@
 package com.final_project.eduflow.Data.Entities;
 
-import jakarta.persistence.*;;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "teaching_staff")
@@ -21,7 +21,7 @@ public class TeachingStaff {
     private String email;
 
     @Column(name = "department_id")
-    private Integer departmentId;
+    private long departmentId;
 
     @Column(name = "password")
     private String password;
@@ -29,11 +29,11 @@ public class TeachingStaff {
     @Column(name = "role")
     private String role;
 
-    public Integer getDepartmentId() {
+    public long getDepartmentId() {
         return departmentId;
     }
     
-    public void setDepartmentId(Integer departmentId) {
+    public void setDepartmentId(long departmentId) {
         this.departmentId = departmentId;
     }
     
@@ -62,4 +62,12 @@ public class TeachingStaff {
     public long getId() {
         return id;
     }
+
+    public String getFirstname() {
+        return name;
+    }
+    public String getLastname() {
+        return surname;
+    }
+
 }

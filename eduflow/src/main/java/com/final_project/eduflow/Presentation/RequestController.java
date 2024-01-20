@@ -20,6 +20,7 @@ import com.final_project.eduflow.Data.Entities.StudentRequests;
 import com.final_project.eduflow.Data.View.RequestRequirementView;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 
-@CrossOrigin(origins = "http://localhost:8081", allowCredentials = "true")
 @RestController
 public class RequestController {
     
@@ -53,7 +53,7 @@ public class RequestController {
     }
 
     @PreAuthorize("hasAuthority('Adviser')")
-    @GetMapping("/RequestParams")
+    @GetMapping("/authCheck")
     public ResponseEntity<String> getRequestParams(){
         return ResponseEntity.ok("hello");
     }
@@ -63,14 +63,17 @@ public class RequestController {
     public ResponseEntity<List<ListRequestsEntity>> getStudentRequest(HttpServletRequest request){
         Claims claims = JwtUtil.resolveClaims(request);
         if (claims == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // return 401 status
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long id = JwtUtil.getId(claims);
         List<StudentRequests> studentRequests = studentRequestRepository.findByStudentId(id);
+        if(studentRequests.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         List<ListRequestsEntity> requests = studentRequests.stream().map(studentRequest -> {
             ListRequestsEntity entity = new ListRequestsEntity();
             entity.setTitle(studentRequest.getInformation());
-            entity.setDate(studentRequest.getWhen().toLocalDate()); // Convert LocalDateTime to LocalDate
+            entity.setDate(studentRequest.getWhen().toLocalDate());
             entity.setStatus("Onaylandi");
             return entity;
         }).collect(Collectors.toList());
@@ -82,22 +85,17 @@ public class RequestController {
     public ResponseEntity<TeachingStaff> getAdvisor(HttpServletRequest request){
         Claims claims = JwtUtil.resolveClaims(request);
         if (claims == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // return 401 status
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long id = JwtUtil.getId(claims);
-        Student student = studentRepository.findById(id).orElse(null);
-        if(student != null) {
-            Long advisorId = student.getAdvisorId();
-            TeachingStaff advisor = teachingStaffRepository.findById(advisorId);
-
-            if(advisor == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-            else
-                return ResponseEntity.ok(advisor);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Optional<Student> studentOptional = studentRepository.findById(id);
+        if(studentOptional.isPresent()) {
+            Long advisorId = studentOptional.get().getAdvisorId();
+            Optional<TeachingStaff> advisorOptional = teachingStaffRepository.findById(advisorId);
+            if(advisorOptional.isPresent())
+                return ResponseEntity.ok(advisorOptional.get());
         }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PreAuthorize("hasAuthority('Student')")

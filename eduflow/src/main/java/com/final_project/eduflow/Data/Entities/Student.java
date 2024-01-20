@@ -81,4 +81,12 @@ public class Student {
     public Long getAdvisorId() {
         return adviserId.longValue();
     }
+
+    public String getFirstname() {
+        return name;
+    }
+
+    public String getLastname() {
+        return surname;
+    }
 }
