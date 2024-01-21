@@ -1,63 +1,35 @@
 package com.final_project.eduflow.Presentation;
 
 import com.final_project.eduflow.Data.DTO.ListRequestsEntity;
+import com.final_project.eduflow.Data.DTO.RequestTypesEntity;
 import com.final_project.eduflow.Data.Entities.Student;
 import com.final_project.eduflow.Data.Entities.TeachingStaff;
 import com.final_project.eduflow.DataAccess.*;
 import io.jsonwebtoken.Claims;
 import com.final_project.eduflow.Config.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-
-import com.final_project.eduflow.Data.DTO.NewRequestEntity;
 import com.final_project.eduflow.Data.Entities.RequestType;
 import com.final_project.eduflow.Data.Entities.StudentRequests;
-import com.final_project.eduflow.Data.View.RequestRequirementView;
-
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
 
 @RestController
 public class RequestController {
     
     private final StudentRequestRepository studentRequestRepository;
-    private final RequestTypeRepository requestTypeRepository;
-    private final RequestRequirementRepository requestRequirementRepository;
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
-    private final StudentRepository studentRepository;
-    private final TeachingStaffRepository teachingStaffRepository;
-
 
     @Autowired
-    public RequestController(StudentRequestRepository studentRequestRepository, RequestTypeRepository requestTypeRepository,
-     RequestRequirementRepository requestRequirementRepository,
-                             StudentRepository studentRepository,
-                             TeachingStaffRepository teachingStaffRepository) {
+    public RequestController(StudentRequestRepository studentRequestRepository) {
         this.studentRequestRepository = studentRequestRepository;
-        this.requestTypeRepository = requestTypeRepository;
-        this.requestRequirementRepository = requestRequirementRepository;
-        this.studentRepository = studentRepository;
-        this.teachingStaffRepository = teachingStaffRepository;
     }
 
-    @PreAuthorize("hasAuthority('Adviser')")
-    @GetMapping("/authCheck")
-    public ResponseEntity<String> getRequestParams(){
-        return ResponseEntity.ok("hello");
-    }
-
+    // List student requests for student
     @PreAuthorize("hasAuthority('Student')")
     @GetMapping("/StudentRequests")
     public ResponseEntity<List<ListRequestsEntity>> getStudentRequest(HttpServletRequest request){
@@ -80,69 +52,24 @@ public class RequestController {
         return ResponseEntity.ok(requests);
     }
 
-    @PreAuthorize("hasAuthority('Student')")
-    @GetMapping("/getAdvisor")
-    public ResponseEntity<TeachingStaff> getAdvisor(HttpServletRequest request){
+    // List student requests for advisor
+    @PreAuthorize("hasAuthority('Advisor')")
+    @GetMapping("/advisorRequests")
+    public ResponseEntity<List<RequestTypesEntity>> getAdvisorRequests(HttpServletRequest request){
         Claims claims = JwtUtil.resolveClaims(request);
         if (claims == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long id = JwtUtil.getId(claims);
-        Optional<Student> studentOptional = studentRepository.findById(id);
-        if(studentOptional.isPresent()) {
-            Long advisorId = studentOptional.get().getAdvisorId();
-            Optional<TeachingStaff> advisorOptional = teachingStaffRepository.findById(advisorId);
-            if(advisorOptional.isPresent())
-                return ResponseEntity.ok(advisorOptional.get());
-        }
+
+        // TODO: view all requests of students that are assigned to this advisor
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
-    @PreAuthorize("hasAuthority('Student')")
-    @GetMapping("/returnToken")
-    public ResponseEntity<String> getToken(HttpServletRequest request) {
-        String token = JwtUtil.resolveToken(request);
-        return ResponseEntity.ok(token);
-    }
-
-//    @GetMapping("/AdviserRequest")
-//    public void getAdviserRequest(){
-//
-//    }
 //    @PostMapping("/makeRequest")
 //    public ResponseEntity<?> makeRequest(@RequestBody NewRequestEntity requestEntity){
 //        var response  = studentRequestRepository.save( new StudentRequests(requestEntity.getStudentId(), requestEntity.getRequestTypeId(),
 //        requestEntity.getInformation(),  "noAddition" ));
 //        return ResponseEntity.ok(response);
 //    }
-
-
-/*
- *     public StudentRequests(long studentId, int requestTypeId, String information, String addition) {
-        this.studentId = studentId;
-        this.requestTypeId = requestTypeId;
-        this.when = LocalDateTime.now();
-        this.information = information;
-        this.addition = addition;
-        this.currentIndex = 0;
-    }
-       */
-
-//    @PutMapping("path/{id}")
-//    public void updateRequest(@PathVariable String id){
-//
-//    }
-//
-//    @GetMapping("/GetAllRequestTypes")
-//    public ResponseEntity<List<RequestType>> getAllRequestTypes(){
-//        List<RequestType> requestTypes = requestTypeRepository.findAll();
-//        return ResponseEntity.ok(requestTypes);
-//    }
-//
-//    @GetMapping("/GetRequestParams/{requestTypeId}")
-//    public ResponseEntity<List<RequestRequirementView>> getMethodName(@PathVariable int requestTypeId) {
-//        List<RequestRequirementView> requestTypes = requestRequirementRepository.findByRequestId(requestTypeId);
-//        return ResponseEntity.ok(requestTypes);
-//    }
-
 }

@@ -18,6 +18,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 public class UserController {
     private final StudentRepository studentRepository;
@@ -31,6 +33,7 @@ public class UserController {
         this.departmentRepository = departmentRepository;
     }
 
+    // Sidebar student info
     @PreAuthorize("hasAuthority('Student')")
     @GetMapping("/studentInfo")
     public ResponseEntity<StudentSideBarInfoEntity> getStudentInfo(HttpServletRequest request){
@@ -44,6 +47,7 @@ public class UserController {
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
+    // Dashboard advisor info
     @PreAuthorize("hasAuthority('Student')")
     @GetMapping("/advisorInfo")
     public ResponseEntity<AdvisorDashboardInfoEntity> getAdvisorInfo(HttpServletRequest request) {
@@ -66,5 +70,25 @@ public class UserController {
                                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()))
                         .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()))
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    // IDK why this exists
+    // might come in handy later (prob not)
+    @PreAuthorize("hasAuthority('Student')")
+    @GetMapping("/getAdvisor")
+    public ResponseEntity<TeachingStaff> getAdvisor(HttpServletRequest request){
+        Claims claims = JwtUtil.resolveClaims(request);
+        if (claims == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Long id = JwtUtil.getId(claims);
+        Optional<Student> studentOptional = studentRepository.findById(id);
+        if(studentOptional.isPresent()) {
+            Long advisorId = studentOptional.get().getAdvisorId();
+            Optional<TeachingStaff> advisorOptional = teachingStaffRepository.findById(advisorId);
+            if(advisorOptional.isPresent())
+                return ResponseEntity.ok(advisorOptional.get());
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
