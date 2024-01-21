@@ -1,8 +1,10 @@
 package com.final_project.eduflow.Data.View;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Immutable;
 
 @Entity
+@Immutable
 @Table(name = "requestrequirements")
 public class RequestRequirementView {
 
