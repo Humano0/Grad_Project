@@ -9,5 +9,4 @@ import com.final_project.eduflow.Data.View.RequestRequirementView;
 public interface RequestRequirementRepository  extends JpaRepository<RequestRequirementView, Long>{
 
     List<RequestRequirementView> findByRequestId(int requestid);
-    
-} 
+}

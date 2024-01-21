@@ -29,6 +29,7 @@ public class RequestTypesController {
             List<RequestTypesEntity> requestTypesEntities = requestTypes.stream().map(requestType -> {
                 RequestTypesEntity requestTypesEntity = new RequestTypesEntity();
                 requestTypesEntity.setRequestName(requestType.getRequestName());
+                requestTypesEntity.setId(requestType.getId());
                 return requestTypesEntity;
             }).collect(Collectors.toList());
             return ResponseEntity.ok(requestTypesEntities);
