@@ -4,6 +4,7 @@ import com.final_project.eduflow.Data.DTO.ListRequestsEntity;
 import com.final_project.eduflow.Data.DTO.RequestTypesEntity;
 import com.final_project.eduflow.Data.Entities.Student;
 import com.final_project.eduflow.Data.Entities.TeachingStaff;
+import com.final_project.eduflow.Data.View.RequestRequirementView;
 import com.final_project.eduflow.DataAccess.*;
 import io.jsonwebtoken.Claims;
 import com.final_project.eduflow.Config.JwtUtil;
@@ -23,10 +24,12 @@ import org.springframework.http.ResponseEntity;
 public class RequestController {
     
     private final StudentRequestRepository studentRequestRepository;
+    private final RequestRequirementRepository requestRequirementRepository;
 
     @Autowired
-    public RequestController(StudentRequestRepository studentRequestRepository) {
+    public RequestController(StudentRequestRepository studentRequestRepository , RequestRequirementRepository requestRequirementRepository) {
         this.studentRequestRepository = studentRequestRepository;
+        this.requestRequirementRepository = requestRequirementRepository;
     }
 
     // List student requests for student
@@ -72,4 +75,5 @@ public class RequestController {
 //        requestEntity.getInformation(),  "noAddition" ));
 //        return ResponseEntity.ok(response);
 //    }
+
 }

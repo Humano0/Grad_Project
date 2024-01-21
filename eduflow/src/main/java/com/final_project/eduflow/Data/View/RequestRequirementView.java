@@ -6,6 +6,7 @@ import org.hibernate.annotations.Immutable;
 @Entity
 @Immutable
 @Table(name = "requestrequirements")
+@IdClass(RequestRequirmentViewId.class)
 public class RequestRequirementView {
 
     @Id
@@ -21,6 +22,7 @@ public class RequestRequirementView {
     @Column(name = "type")
     private String type;
 
+    @Id
     @Column(name = "index")
     private Integer index;
 
