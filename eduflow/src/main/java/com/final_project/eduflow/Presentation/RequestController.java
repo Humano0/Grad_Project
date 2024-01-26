@@ -5,7 +5,10 @@ import com.final_project.eduflow.Data.DTO.RequestTypesEntity;
 import com.final_project.eduflow.Data.Entities.Student;
 import com.final_project.eduflow.Data.Entities.TeachingStaff;
 import com.final_project.eduflow.Data.View.RequestRequirementView;
+import com.final_project.eduflow.Data.View.StudentRequestsListingView;
 import com.final_project.eduflow.DataAccess.*;
+import com.final_project.eduflow.Services.RequestService;
+import com.final_project.eduflow.Services.UserService;
 import io.jsonwebtoken.Claims;
 import com.final_project.eduflow.Config.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,51 +27,50 @@ import org.springframework.http.ResponseEntity;
 public class RequestController {
     
     private final StudentRequestRepository studentRequestRepository;
-    private final RequestRequirementRepository requestRequirementRepository;
+    private final RequestRequirementViewRepository requestRequirementViewRepository;
+    private final RequestService requestService;
 
     @Autowired
-    public RequestController(StudentRequestRepository studentRequestRepository , RequestRequirementRepository requestRequirementRepository) {
+    public RequestController(StudentRequestRepository studentRequestRepository, RequestRequirementViewRepository requestRequirementViewRepository, RequestService requestService) {
         this.studentRequestRepository = studentRequestRepository;
-        this.requestRequirementRepository = requestRequirementRepository;
+        this.requestRequirementViewRepository = requestRequirementViewRepository;
+        this.requestService = requestService;
     }
 
     // List student requests for student
     @PreAuthorize("hasAuthority('Student')")
-    @GetMapping("/StudentRequests")
-    public ResponseEntity<List<ListRequestsEntity>> getStudentRequest(HttpServletRequest request){
+    @GetMapping("/studentRequests")
+    public ResponseEntity<List<StudentRequestsListingView>> getStudentRequest(HttpServletRequest request){
         Claims claims = JwtUtil.resolveClaims(request);
         if (claims == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long id = JwtUtil.getId(claims);
-        List<StudentRequests> studentRequests = studentRequestRepository.findByStudentId(id);
-        if(studentRequests.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.ok(requestService.getStudentRequestsById(id));
+    }
+
+    @PreAuthorize("hasAuthority('Student')")
+    @GetMapping("/requestRequirements/{id}")
+    public ResponseEntity<List<RequestRequirementView>> getRequestRequirements(@PathVariable("id") Long id) {
+        List<RequestRequirementView> requestRequirementViews = requestRequirementViewRepository.findByRequestId(id);
+        if (requestRequirementViews.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
-        List<ListRequestsEntity> requests = studentRequests.stream().map(studentRequest -> {
-            ListRequestsEntity entity = new ListRequestsEntity();
-            entity.setTitle(studentRequest.getInformation());
-            entity.setDate(studentRequest.getWhen().toLocalDate());
-            entity.setStatus("Onaylandi");
-            return entity;
-        }).collect(Collectors.toList());
-        return ResponseEntity.ok(requests);
+        return ResponseEntity.ok(requestRequirementViews);
     }
 
     // List student requests for advisor
-    @PreAuthorize("hasAuthority('Advisor')")
-    @GetMapping("/advisorRequests")
-    public ResponseEntity<List<RequestTypesEntity>> getAdvisorRequests(HttpServletRequest request){
-        Claims claims = JwtUtil.resolveClaims(request);
-        if (claims == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        Long id = JwtUtil.getId(claims);
-
-        // TODO: view all requests of students that are assigned to this advisor
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
+    // TODO: view all requests of students that are assigned to this advisor
+//    @PreAuthorize("hasAuthority('Advisor')")
+//    @GetMapping("/advisorRequests")
+//    public ResponseEntity<List<RequestTypesEntity>> getAdvisorRequests(HttpServletRequest request){
+//        Claims claims = JwtUtil.resolveClaims(request);
+//        if (claims == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//        Long id = JwtUtil.getId(claims);
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//    }
 //    @PostMapping("/makeRequest")
 //    public ResponseEntity<?> makeRequest(@RequestBody NewRequestEntity requestEntity){
 //        var response  = studentRequestRepository.save( new StudentRequests(requestEntity.getStudentId(), requestEntity.getRequestTypeId(),

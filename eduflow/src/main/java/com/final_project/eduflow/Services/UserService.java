@@ -1,5 +1,6 @@
 package com.final_project.eduflow.Services;
 
+import com.final_project.eduflow.Data.DTO.StudentSideBarInfoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,13 @@ public class UserService implements IUserService{
             return new User(temp.getFullName(), temp.getEmail(), temp.getPassword(), temp.getRole(), temp.getId());
         }
         return null;
+    }
+
+    @Override
+    public StudentSideBarInfoEntity getStudentSideBarInfo(long studentId) {
+        return studentRepository.findById(studentId)
+                .map(s -> new StudentSideBarInfoEntity(s.getFirstname(), s.getLastname(), s.getId()))
+                .orElse(null);
     }
 
 }

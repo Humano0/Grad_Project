@@ -29,6 +29,12 @@ public class TeachingStaff {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "web")
+    private String web;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     public long getDepartmentId() {
         return departmentId;
     }
@@ -70,4 +76,19 @@ public class TeachingStaff {
         return surname;
     }
 
+    public String getWeb() {
+        return web;
+    }
+
+    public void setWeb(String web) {
+        this.web = web;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }

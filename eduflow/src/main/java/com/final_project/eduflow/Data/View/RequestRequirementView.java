@@ -1,5 +1,6 @@
 package com.final_project.eduflow.Data.View;
 
+import com.final_project.eduflow.Data.View.IdClasses.RequestRequirmentViewId;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Immutable;
 

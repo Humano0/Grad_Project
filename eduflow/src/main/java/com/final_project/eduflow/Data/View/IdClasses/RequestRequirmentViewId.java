@@ -1,4 +1,4 @@
-package com.final_project.eduflow.Data.View;
+package com.final_project.eduflow.Data.View.IdClasses;
 
 public class RequestRequirmentViewId {
     
