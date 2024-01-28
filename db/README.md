@@ -25,62 +25,77 @@ CREATE TABLE department (
 ## Teaching Staff Table
 
 ```sql
-CREATE TABLE teaching_staff (
-    id SERIAL PRIMARY KEY,
-    staff_name TEXT,
-    surname TEXT,
-    email TEXT,
-    department_id INT,
-    role TEXT,
-    isDean BOOLEAN,
-    isViceDean BOOLEAN,
-    isDepartmentHead BOOLEAN,
-    isViceDepartmentHead BOOLEAN,
-    password TEXT,
-    CONSTRAINT fk_bolumid
-        FOREIGN KEY (department_id)
-            REFERENCES department(department_id)
+CREATE TABLE public.teaching_staff (
+	id serial4 NOT NULL,
+	"name" text NULL,
+	surname text NULL,
+	email text NULL,
+	department_id int4 NULL,
+	"password" text NULL,
+	"role" varchar NOT NULL,
+	web varchar(255) NULL,
+	phone_number varchar(20) NULL,
+	CONSTRAINT teaching_staff_pkey PRIMARY KEY (id)
 );
+
+
+-- public.teaching_staff foreign keys
+
+ALTER TABLE public.teaching_staff ADD CONSTRAINT fk_bolumid FOREIGN KEY (department_id) REFERENCES public.department(id);
 ```
 
 ## Course Table
 
 ```sql
-CREATE TABLE course (
-    course_id SERIAL PRIMARY KEY,
-    course_name TEXT,
-    course_code TEXT
+CREATE TABLE public.course (
+	"name" text NULL,
+	code text NOT NULL,
+	department_id int4 NULL,
+	"type" varchar NOT NULL,
+	CONSTRAINT course_pk PRIMARY KEY (code)
 );
+
+
+-- public.course foreign keys
+
+ALTER TABLE public.course ADD CONSTRAINT course_fk FOREIGN KEY (department_id) REFERENCES public.department(id);
 ```
 
-## Branch Table
+## Section Table
 
 ```sql
-CREATE TABLE branch (
-    branch_id SERIAL PRIMARY KEY,
-    branch_number INT,
-    course_id INT,
-    instructor_id INT,
-    assistant_id INT,
-    quota INT
+CREATE TABLE public."section" (
+	section_number int4 NOT NULL,
+	instructor_id int4 NULL,
+	assistant_id int4 NULL,
+	course_code varchar NOT NULL,
+	CONSTRAINT section_pk PRIMARY KEY (section_number, course_code)
 );
+
+
+-- public."section" foreign keys
+
+ALTER TABLE public."section" ADD CONSTRAINT fk_assistant_id FOREIGN KEY (assistant_id) REFERENCES public.teaching_staff(id);
+ALTER TABLE public."section" ADD CONSTRAINT fk_instructor_id FOREIGN KEY (instructor_id) REFERENCES public.teaching_staff(id);
+ALTER TABLE public."section" ADD CONSTRAINT section_fk FOREIGN KEY (course_code) REFERENCES public.course(code);
 ```
 
-## Branch Records Table
+## Section Records Table
 
 ```sql
-CREATE TABLE branch_records (
-    record_id SERIAL PRIMARY KEY,
-    branch_id INT,
-    student_id INT,
-    current_status TEXT,
-    CONSTRAINT fk_branch_id
-        FOREIGN KEY(branch_id)
-            REFERENCES branch(branch_id),
-    CONSTRAINT fk_student_id
-        FOREIGN KEY(student_id)
-            REFERENCES student(student_id)
+CREATE TABLE public.section_records (
+	student_id int4 NOT NULL,
+	course_code varchar NOT NULL,
+	section_number int4 NOT NULL,
+	term varchar NOT NULL,
+	CONSTRAINT section_records_pk PRIMARY KEY (student_id, course_code, section_number, term)
 );
+
+
+-- public.section_records foreign keys
+
+ALTER TABLE public.section_records ADD CONSTRAINT fk_student_id FOREIGN KEY (student_id) REFERENCES public.student(id);
+ALTER TABLE public.section_records ADD CONSTRAINT section_records_fk FOREIGN KEY (section_number,course_code) REFERENCES public."section"(section_number,course_code);
 ```
 
 ## Student Table
@@ -103,24 +118,22 @@ CREATE TABLE student (
 ## Request Table
 
 ```sql
-CREATE TABLE request (
-    request_id SERIAL PRIMARY KEY,
-    student_adviser_id INT,
-    student_id INT,
-    request_type_id INT,
-    information TEXT,
-    addition TEXT,
-    current_index INT,
-    CONSTRAINT fk_type
-        FOREIGN KEY (request_type_id)
-            REFERENCES request_types(id),
-    CONSTRAINT fk_studentid
-        FOREIGN KEY (student_id)
-            REFERENCES student(student_id),
-    CONSTRAINT fk_adviser
-        FOREIGN KEY (student_adviser_id)
-            REFERENCES teaching_staff(id)
+CREATE TABLE public.student_requests (
+	student_id int4 NOT NULL,
+	request_type_id int4 NOT NULL,
+	information text NULL,
+	addition text NULL,
+	current_index int4 NULL,
+	when_created timestamptz NOT NULL,
+	student_comment text NULL,
+	CONSTRAINT student_requests_pk PRIMARY KEY (when_created, student_id, request_type_id)
 );
+
+
+-- public.student_requests foreign keys
+
+ALTER TABLE public.student_requests ADD CONSTRAINT fk_studentid FOREIGN KEY (student_id) REFERENCES public.student(id);
+ALTER TABLE public.student_requests ADD CONSTRAINT fk_type FOREIGN KEY (request_type_id) REFERENCES public.request_types(id);
 ```
 
 ## Request Types Table
@@ -136,25 +149,55 @@ CREATE TABLE request_types (
 ## Request Actors Table
 
 ```sql
-CREATE TABLE request_actors (
-    id SERIAL PRIMARY KEY,
-    request_type_id INT,
-    staff_id INT,
-    index INT
+CREATE TABLE public.request_actors (
+	request_type_id int4 NOT NULL,
+	staff_id int4 NOT NULL,
+	"index" int4 NOT NULL,
+	CONSTRAINT request_actors_pk PRIMARY KEY (request_type_id, staff_id)
 );
+
+
+-- public.request_actors foreign keys
+
+ALTER TABLE public.request_actors ADD CONSTRAINT fk_staff FOREIGN KEY (staff_id) REFERENCES public.teaching_staff(id);
+ALTER TABLE public.request_actors ADD CONSTRAINT fk_type FOREIGN KEY (request_type_id) REFERENCES public.request_types(id);
 ```
 
 ## Request Requirements Table
 
 ```sql
-CREATE TABLE request_requirements (
-    requirement_id SERIAL PRIMARY KEY,
-    name TEXT,
-    type TEXT,
-    request_type_id INT,
-    index INT
+CREATE TABLE public.request_requirements (
+	id int4 NOT NULL DEFAULT nextval('request_requirements_requierment_id_seq'::regclass),
+	"name" text NULL,
+	"type" text NULL,
+	request_type_id int4 NULL,
+	"index" int4 NULL,
+	CONSTRAINT request_requirements_pkey PRIMARY KEY (id)
 );
+
+
+-- public.request_requirements foreign keys
+
+ALTER TABLE public.request_requirements ADD CONSTRAINT fk_type FOREIGN KEY (request_type_id) REFERENCES public.request_types(id);
 ```
+## Request Requirements Table
+
+```sql
+CREATE TABLE public.staff_comments (
+	requester_id int4 NOT NULL,
+	request_date timestamptz NOT NULL,
+	request_type_id int4 NOT NULL,
+	staff_id int4 NOT NULL,
+	"comment" text NULL,
+	CONSTRAINT staff_comments_pk PRIMARY KEY (requester_id, request_date, request_type_id, staff_id)
+);
+
+
+-- public.staff_comments foreign keys
+
+ALTER TABLE public.staff_comments ADD CONSTRAINT fk_requeste FOREIGN KEY (requester_id,request_date,request_type_id) REFERENCES <?>();
+ALTER TABLE public.staff_comments ADD CONSTRAINT fk_staff_id FOREIGN KEY (staff_id) REFERENCES public.teaching_staff(id);
+
 
 # Database Views
 
@@ -173,48 +216,56 @@ CREATE VIEW requestsActors AS
 
 ```sql
 -- View to show request requirements
-CREATE VIEW requestRequirements AS
-    SELECT rt.id AS requestid, rt.request_name, rr.name, rr.type, rr.index
-    FROM request_types rt
-    JOIN request_requirements rr ON rt.id = rr.request_type_id;
+CREATE OR REPLACE VIEW public.requestrequirements
+AS SELECT rt.id AS requestid,
+    rt.request_name,
+    rr.name,
+    rr.type,
+    rr.index
+   FROM request_types rt
+     JOIN request_requirements rr ON rt.id = rr.request_type_id;
 ```
 
 ## Student Request Path View
 
 ```sql
 -- View to show student request path
-CREATE VIEW studentRequestPath AS
-    SELECT s.name AS student_name, s.student_id AS student_id, rt.request_name AS request_name,
-        ts.staff_name AS adviser_name, ts.id AS adviser_id, ts2.id AS actor_id,
-        ts2.staff_name AS actor_name, ra.index AS actor_index
-    FROM request r
-    JOIN student s ON r.student_id = s.student_id
-    JOIN teaching_staff ts ON s.adviser_id = ts.id
-    JOIN request_types rt ON rt.id = r.request_type_id
-    JOIN request_actors ra ON ra.request_type_id = rt.id
-    JOIN teaching_staff ts2 ON ra.staff_id = ts2.id
-    ORDER BY s.student_id, ra.index;
+CREATE OR REPLACE VIEW public.studentrequestpath
+AS SELECT s.name AS student_name,
+    s.id AS student_id,
+    rt.request_name,
+    ts.name AS adviser_name,
+    ts.id AS adviser_id,
+    ts2.id AS actor_id,
+    ts2.name AS actor_name,
+    ra.index AS actor_index
+   FROM student_requests r
+     JOIN student s ON r.student_id = s.id
+     JOIN teaching_staff ts ON s.adviser_id = ts.id
+     JOIN request_types rt ON rt.id = r.request_type_id
+     JOIN request_actors ra ON ra.request_type_id = rt.id
+     JOIN teaching_staff ts2 ON ra.staff_id = ts.id
+  ORDER BY s.id, ra.index;
 ```
 
 ## Course, Branch, and Student List View
-
 ```sql
--- View to show course, branch, and student list
-CREATE VIEW courseBranchStudentList AS
-    SELECT c.course_code, b.branch_number, s.student_id, s.surname, s.name
-    FROM branch b
-    JOIN course c ON b.course_id = c.course_id
-    JOIN branch_records br ON br.branch_id = b.branch_id
-    JOIN student s ON s.student_id = br.student_id
-    ORDER BY b.branch_id;
+
 ```
 
-## Users View
-
-```sql
--- View to show users
-CREATE VIEW Users AS
-    SELECT ts.staff_name, ts.id, ts.role AS staff_role, s.name, s.student_id
-    FROM student s
-    FULL OUTER JOIN teaching_staff ts ON s.email = ts.email;
+## Adviser_info View
+```
+DROP VIEW IF EXISTS advisor_info;
+CREATE OR REPLACE VIEW advisor_info AS
+SELECT s.id AS student_id,
+       ts.id AS advisor_id,
+       ts.name AS advisor_firstname,
+       ts.surname AS advisor_lastname,
+       d.name AS department_name,
+       ts.web AS advisor_web,
+       ts.phone_number AS advisor_phone_number
+FROM student s
+JOIN teaching_staff ts ON s.adviser_id = ts.id
+JOIN department d ON ts.department_id = d.id;
+		
 ```
