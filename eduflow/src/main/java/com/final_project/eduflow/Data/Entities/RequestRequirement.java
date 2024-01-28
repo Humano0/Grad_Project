@@ -8,7 +8,8 @@ public class RequestRequirement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long requiermentId;
+    @Column(name = "id")
+    private long id;
 
     @Column(name = "name")
     private String name;
@@ -25,11 +26,11 @@ public class RequestRequirement {
     // Getters and Setters
 
     public Long getRequiermentId() {
-        return requiermentId;
+        return id;
     }
 
     public void setRequiermentId(Long requiermentId) {
-        this.requiermentId = requiermentId;
+        this.id = requiermentId;
     }
 
     public String getName() {

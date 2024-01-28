@@ -19,7 +19,7 @@ public class StudentRequests {
     private int requestTypeId;
 
     @Id
-    @Column(name = "\"when\"")
+    @Column(name = "when_created")
     private LocalDateTime when;
 
     @Column(name = "information")
@@ -30,6 +30,9 @@ public class StudentRequests {
 
     @Column(name = "current_index")
     private Integer currentIndex;
+
+    @Column(name = "student_comment")
+    private String studentComment;
 
     public StudentRequests(long studentId, int requestTypeId, String information, String addition) {
         this.studentId = studentId;
@@ -86,6 +89,18 @@ public class StudentRequests {
 
     public LocalDateTime getWhen() {
         return when;
+    }
+
+    public void setWhen(LocalDateTime when) {
+        this.when = when;
+    }
+
+    public String getStudentComment() {
+        return studentComment;
+    }
+
+    public void setStudentComment(String studentComment) {
+        this.studentComment = studentComment;
     }
 }
 
