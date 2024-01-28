@@ -61,7 +61,7 @@ ALTER TABLE public.student_requests RENAME COLUMN "when" TO when_created;
 ```
 
 
-New table staff_comments added for make teaching staff comment on the student_requests
+New table staff_comments added for make teaching staff able to comment on the student_requests
 ```
 CREATE TABLE staff_comments(
 	requester_id int ,
