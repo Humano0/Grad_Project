@@ -50,3 +50,13 @@ JOIN request_requirements rr ON sr.request_type_id = rr.request_type_id
 GROUP BY sr.student_id, sr.current_index, sr.information, sr.when;
 
 ```
+
+
+changed when attribute to when_created because when is a keyword obv
+student_comment added to the student_request table
+```
+ALTER TABLE public.student_requests ADD student_comment text NULL;
+ALTER TABLE public.student_requests RENAME COLUMN "when" TO when_created;
+
+```
+
