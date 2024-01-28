@@ -60,3 +60,23 @@ ALTER TABLE public.student_requests RENAME COLUMN "when" TO when_created;
 
 ```
 
+
+New table staff_comments added for make teaching staff comment on the student_requests
+```
+CREATE TABLE staff_comments(
+	requester_id int ,
+	request_date timestamptz ,
+	request_type_id int,
+	staff_id int ,
+	comment text,
+	CONSTRAINT staff_comments_pk PRIMARY KEY (requester_id, request_date, request_type_id, staff_id),
+	CONSTRAINT fk_requeste
+		foreign key (requester_id, request_date, request_type_id)
+			references student_requests(student_id, when_created, request_type_id),
+	CONSTRAINT fk_staff_id
+		foreign key (staff_id)
+			references teaching_staff(id)
+	);	
+
+```
+
