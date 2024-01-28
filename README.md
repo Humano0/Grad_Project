@@ -50,3 +50,33 @@ JOIN request_requirements rr ON sr.request_type_id = rr.request_type_id
 GROUP BY sr.student_id, sr.current_index, sr.information, sr.when;
 
 ```
+
+
+changed when attribute to when_created because when is a keyword obv
+student_comment added to the student_request table
+```
+ALTER TABLE public.student_requests ADD student_comment text NULL;
+ALTER TABLE public.student_requests RENAME COLUMN "when" TO when_created;
+
+```
+
+
+New table staff_comments added for make teaching staff able to comment on the student_requests
+```
+CREATE TABLE staff_comments(
+	requester_id int ,
+	request_date timestamptz ,
+	request_type_id int,
+	staff_id int ,
+	comment text,
+	CONSTRAINT staff_comments_pk PRIMARY KEY (requester_id, request_date, request_type_id, staff_id),
+	CONSTRAINT fk_requeste
+		foreign key (requester_id, request_date, request_type_id)
+			references student_requests(student_id, when_created, request_type_id),
+	CONSTRAINT fk_staff_id
+		foreign key (staff_id)
+			references teaching_staff(id)
+	);	
+
+```
+
