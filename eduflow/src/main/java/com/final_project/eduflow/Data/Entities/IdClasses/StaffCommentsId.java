@@ -2,7 +2,7 @@ package com.final_project.eduflow.Data.Entities.IdClasses;
 
 import java.time.LocalDateTime;
 
-public class StaffComments {
+public class StaffCommentsId {
     
     private long requesterId;
 
