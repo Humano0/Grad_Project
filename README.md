@@ -80,3 +80,16 @@ CREATE TABLE staff_comments(
 
 ```
 
+Added department references to request_types +++ added pretext column to the request_requirements 
+```
+ALTER TABLE public.request_types ADD department_id int NOT NULL;
+ALTER TABLE public.request_types ADD CONSTRAINT request_types_fk FOREIGN KEY (department_id) REFERENCES public.department(id);
+ALTER TABLE public.request_types ALTER COLUMN department_id SET NOT NULL;
+
+ALTER TABLE public.request_requirements ADD prtext text NULL;
+ALTER TABLE public.request_requirements ALTER COLUMN pretext SET NOT NULL;
+
+
+```
+
+
