@@ -139,11 +139,18 @@ ALTER TABLE public.student_requests ADD CONSTRAINT fk_type FOREIGN KEY (request_
 ## Request Types Table
 
 ```sql
-CREATE TABLE request_types (
-    id SERIAL PRIMARY KEY,
-    info TEXT,
-    request_name TEXT
+CREATE TABLE public.request_types (
+	id serial4 NOT NULL,
+	info text NULL,
+	request_name text NULL,
+	department_id int4 NOT NULL,
+	CONSTRAINT request_types_pkey PRIMARY KEY (id)
 );
+
+
+-- public.request_types foreign keys
+
+ALTER TABLE public.request_types ADD CONSTRAINT request_types_fk FOREIGN KEY (department_id) REFERENCES public.department(id);
 ```
 
 ## Request Actors Table
@@ -172,6 +179,7 @@ CREATE TABLE public.request_requirements (
 	"type" text NULL,
 	request_type_id int4 NULL,
 	"index" int4 NULL,
+	pretext text NULL,
 	CONSTRAINT request_requirements_pkey PRIMARY KEY (id)
 );
 
