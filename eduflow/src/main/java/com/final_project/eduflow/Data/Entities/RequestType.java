@@ -16,6 +16,9 @@ public class RequestType {
     @Column(name = "request_name")
     private String requestName;
 
+    @Column(name ="department_id")
+    private Integer departmentId;
+
     // Getters and Setters
 
     public Long getId() {

@@ -59,6 +59,15 @@ public class RequestController {
         return ResponseEntity.ok(requestRequirementViews);
     }
 
+    @PreAuthorize("hasAuthority('Student')")
+    @PostMapping("/makeRequest")
+    public ResponseEntity<?> makeRequest(@RequestBody StudentRequests newRequest){
+
+        var response  = studentRequestRepository.save(newRequest);
+        return ResponseEntity.ok(response);
+        
+    }
+
     // List student requests for advisor
     // TODO: view all requests of students that are assigned to this advisor
 //    @PreAuthorize("hasAuthority('Advisor')")

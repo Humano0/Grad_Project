@@ -23,6 +23,8 @@ public class RequestRequirement {
     @Column(name = "index")
     private Integer index;
 
+    @Column(name = "pretext")
+    private String pretext;
     // Getters and Setters
 
     public Long getRequiermentId() {
@@ -64,4 +66,6 @@ public class RequestRequirement {
     public void setIndex(Integer index) {
         this.index = index;
     }
+
+    
 }
