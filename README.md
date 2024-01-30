@@ -92,4 +92,34 @@ ALTER TABLE public.request_requirements ALTER COLUMN pretext SET NOT NULL;
 
 ```
 
+```sql
+CREATE OR REPLACE VIEW staff_waiting_requests_view AS
+SELECT sr.student_id,
+       sr.current_index,
+       sr.information,
+       sr.when_created,
+       sr.student_comment
+FROM student_requests sr
+JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
+WHERE ra.index = sr.current_index
+ORDER BY sr.when_created;
+
+
+```
+
+```sql
+
+CREATE OR REPLACE VIEW advisor_waiting_requests_view AS
+SELECT sr.student_id,
+       sr.current_index,
+       sr.information,
+       sr.when_created,
+       sr.student_comment
+FROM student_requests sr
+JOIN student s ON s.id = sr.student_id
+JOIN teaching_staff ts ON s.adviser_id= ts.id 
+WHERE sr.current_index=0
+ORDER BY sr.when_created;
+
+```
 
