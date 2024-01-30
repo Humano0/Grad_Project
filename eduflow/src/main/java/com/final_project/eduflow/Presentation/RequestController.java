@@ -61,11 +61,16 @@ public class RequestController {
 
     @PreAuthorize("hasAuthority('Student')")
     @PostMapping("/makeRequest")
-    public ResponseEntity<?> makeRequest(@RequestBody StudentRequests newRequest){
-
-        var response  = studentRequestRepository.save(newRequest);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> makeRequest(@RequestBody StudentRequests newRequests, HttpServletRequest request){
+        Claims claims = JwtUtil.resolveClaims(request);
+        if (claims == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Long id = JwtUtil.getId(claims);
         
+        var response = studentRequestRepository.save(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
+
+        return ResponseEntity.ok(response);
     }
 
     // List student requests for advisor
