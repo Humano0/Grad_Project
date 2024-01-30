@@ -63,9 +63,9 @@ public class RequestController {
     @PostMapping("/makeRequest")
     public ResponseEntity<?> makeRequest(@RequestBody StudentRequests newRequests, HttpServletRequest request){
         Claims claims = JwtUtil.resolveClaims(request);
-        if (claims == null) {
+/*         if (claims == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        } */
         Long id = JwtUtil.getId(claims);
         
         var response = studentRequestRepository.save(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
