@@ -38,16 +38,16 @@ CREATE VIEW student_requests_listing_view AS
 SELECT sr.student_id,
        sr.current_index,
        sr.information,
-       sr.when,
+       sr.when_created,
        CASE
-           WHEN sr.current_index > MAX(rr.index) THEN 'accepted'
-           WHEN sr.current_index BETWEEN 0 AND MAX(rr.index) THEN 'waiting'
+           WHEN sr.current_index > MAX(ra.index) THEN 'accepted'
+           WHEN sr.current_index BETWEEN 0 AND MAX(ra.index) THEN 'waiting'
            WHEN sr.current_index = -1 THEN 'rejected'
            ELSE 'unknown'
        END AS status
 FROM student_requests sr
-JOIN request_requirements rr ON sr.request_type_id = rr.request_type_id
-GROUP BY sr.student_id, sr.current_index, sr.information, sr.when;
+JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
+GROUP BY sr.student_id, sr.current_index, sr.information, sr.when_created;
 
 ```
 
