@@ -98,7 +98,8 @@ SELECT sr.student_id,
        sr.current_index,
        sr.information,
        sr.when_created,
-       sr.student_comment
+       sr.student_comment,
+       ra.staff_id as current_actor_id
 FROM student_requests sr
 JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
 WHERE ra.index = sr.current_index
@@ -114,12 +115,23 @@ SELECT sr.student_id,
        sr.current_index,
        sr.information,
        sr.when_created,
-       sr.student_comment
+       sr.student_comment,
+       ts.id as current_actor_id
 FROM student_requests sr
 JOIN student s ON s.id = sr.student_id
 JOIN teaching_staff ts ON s.adviser_id= ts.id 
 WHERE sr.current_index=0
 ORDER BY sr.when_created;
+
+
+```
+
+```sql
+
+CREATE OR REPLACE VIEW waiting_requests_unioned_view AS
+SELECT * FROM advisor_waiting_requests_view
+UNION 
+SELECT * FROM advisor_waiting_requests_view;
 
 ```
 
