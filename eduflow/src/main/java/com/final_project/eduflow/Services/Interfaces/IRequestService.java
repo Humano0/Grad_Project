@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IRequestService {
     List<StudentRequestsListingView> getStudentRequestsById(Long id);
-    void acceptRequest(StudentRequests studentRequests);
+    Long acceptRequest(StudentRequests studentRequests);
     void rejectRequest(StudentRequests studentRequests);
     boolean checkIfNextActorIsTheOneAcceptingTheRequest(Long staffId, Long request_type_id, Integer current_index);
 }
