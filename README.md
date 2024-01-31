@@ -135,7 +135,7 @@ ORDER BY sr.when_created;
 ```sql
 
 CREATE OR REPLACE VIEW waiting_requests_unioned_view AS
-SELECT * FROM advisor_waiting_requests_view
+SELECT * FROM staff_waiting_requests_view
 UNION 
 SELECT * FROM advisor_waiting_requests_view;
 
