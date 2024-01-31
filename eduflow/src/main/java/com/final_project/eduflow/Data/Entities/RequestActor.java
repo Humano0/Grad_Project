@@ -11,10 +11,10 @@ public class RequestActor {
     private long id;
 
     @Column(name = "request_type_id")
-    private Integer requestTypeId;
+    private Long requestTypeId;
 
     @Column(name = "staff_id")
-    private Integer staffId;
+    private Long staffId;
 
     @Column(name = "index")
     private Integer index;
@@ -29,19 +29,19 @@ public class RequestActor {
         this.id = id;
     }
 
-    public Integer getRequestTypeId() {
+    public Long getRequestTypeId() {
         return requestTypeId;
     }
 
-    public void setRequestTypeId(Integer requestTypeId) {
+    public void setRequestTypeId(Long requestTypeId) {
         this.requestTypeId = requestTypeId;
     }
 
-    public Integer getStaffId() {
+    public Long getStaffId() {
         return staffId;
     }
 
-    public void setStaffId(Integer staffId) {
+    public void setStaffId(Long staffId) {
         this.staffId = staffId;
     }
 

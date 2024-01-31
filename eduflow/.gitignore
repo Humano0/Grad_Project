@@ -43,6 +43,4 @@ out/
 /application.properties
 
 
-
-.src\main\resources\application.properties
-./eduflow/src/main/resources/application.properties
+eduflow/src/main/resources/application.properties
