@@ -38,7 +38,7 @@ public class RequestService implements IRequestService {
     // Increases the index by 1
     @Override
     public void acceptRequest(StudentRequests studentRequests) {
-        StudentRequests request = studentRequestRepository.findByStudentIdAndRequestTypeIdAndWhenCreated(
+        StudentRequests request = studentRequestRepository.findByStudentIdAndRequestTypeIdAndWhen(
                 studentRequests.getStudentId(),
                 studentRequests.getRequestTypeId(),
                 studentRequests.getWhen()
@@ -53,7 +53,7 @@ public class RequestService implements IRequestService {
     // if current_index > 0, then search in request_actors table for current_index == index && request_type_id == request_type_id
     @Override
     public void rejectRequest(StudentRequests studentRequests) {
-        StudentRequests request = studentRequestRepository.findByStudentIdAndRequestTypeIdAndWhenCreated(
+        StudentRequests request = studentRequestRepository.findByStudentIdAndRequestTypeIdAndWhen(
                 studentRequests.getStudentId(),
                 studentRequests.getRequestTypeId(),
                 studentRequests.getWhen()
