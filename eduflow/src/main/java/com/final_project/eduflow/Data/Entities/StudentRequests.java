@@ -1,5 +1,6 @@
 package com.final_project.eduflow.Data.Entities;
 
+import com.final_project.eduflow.Data.Entities.IdClasses.StudentRequestsId;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
