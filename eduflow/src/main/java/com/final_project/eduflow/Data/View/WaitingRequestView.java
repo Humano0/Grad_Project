@@ -2,9 +2,6 @@ package com.final_project.eduflow.Data.View;
 
 import java.time.LocalDateTime;
 
-import org.checkerframework.checker.units.qual.C;
-import org.springframework.cglib.core.Local;
-
 import com.final_project.eduflow.Data.View.IdClasses.WaitinRequestsViewId;
 
 import jakarta.persistence.*;

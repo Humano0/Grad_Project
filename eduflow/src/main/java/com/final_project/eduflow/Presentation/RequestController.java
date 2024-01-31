@@ -7,6 +7,7 @@ import com.final_project.eduflow.Data.Entities.TeachingStaff;
 import com.final_project.eduflow.Data.View.RequestRequirementView;
 import com.final_project.eduflow.Data.View.StudentRequestsListingView;
 import com.final_project.eduflow.DataAccess.*;
+import com.final_project.eduflow.Presentation.ResponseClasses.AcceptRequestResponseMessage;
 import com.final_project.eduflow.Services.RequestService;
 import com.final_project.eduflow.Services.UserService;
 import io.jsonwebtoken.Claims;
@@ -71,6 +72,43 @@ public class RequestController {
         var response = studentRequestRepository.save(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
 
         return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    @GetMapping("/acceptRequest")
+    public ResponseEntity<AcceptRequestResponseMessage> acceptRequest(@RequestBody StudentRequests studentRequest, HttpServletRequest request){
+        Claims claims = JwtUtil.resolveClaims(request);
+        if (claims == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Long staffId = JwtUtil.getId(claims);
+
+        if(requestService.checkIfNextActorIsTheOneAcceptingTheRequest(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex())) {
+            // frontend
+            // TODO: some notification pops up to display the message if status == "back_to_back_same_actor"
+            // TODO: If they accept, then call /acceptRequestForBackToBackSameActors
+            return ResponseEntity.ok(new AcceptRequestResponseMessage("back_to_back_same_actor", "You are the next actor, do you want to accept the request?"));
+        } else {
+            requestService.acceptRequest(studentRequest);
+            // TODO: notify the next actor ? maybe do it in the service layer since we use acceptRequest in both cases
+            return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted", "Request accepted"));
+        }
+    }
+
+    @PreAuthorize("hasAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    @GetMapping("/acceptRequestForBackToBackSameActors")
+    public ResponseEntity<String> acceptRequestForBackToBackSameActors(@RequestBody StudentRequests studentRequest, HttpServletRequest request){
+        requestService.acceptRequest(studentRequest);
+        // TODO: notify the next actor
+        return ResponseEntity.ok("Request accepted");
+    }
+
+    @PreAuthorize("hasAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    @GetMapping("/rejectRequest")
+    public ResponseEntity<String> rejectRequest(@RequestBody StudentRequests studentRequest, HttpServletRequest request) {
+        requestService.rejectRequest(studentRequest);
+        // TODO: notify the student
+        return ResponseEntity.ok("Request rejected");
     }
 
     // List student requests for advisor

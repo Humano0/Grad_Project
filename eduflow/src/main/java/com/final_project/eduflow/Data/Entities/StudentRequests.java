@@ -16,11 +16,11 @@ public class StudentRequests {
 
     @Id
     @Column(name = "request_type_id")
-    private int requestTypeId;
+    private long requestTypeId;
 
     @Id
     @Column(name = "when_created")
-    private LocalDateTime when;
+    private OffsetDateTime when;
 
     @Column(name = "information")
     private String information;
@@ -34,10 +34,10 @@ public class StudentRequests {
     @Column(name = "student_comment")
     private String studentComment;
 
-    public StudentRequests(long studentId, int requestTypeId, String information, String addition) {
+    public StudentRequests(long studentId, long requestTypeId, String information, String addition) {
         this.studentId = studentId;
         this.requestTypeId = requestTypeId;
-        this.when = LocalDateTime.now();
+        this.when = OffsetDateTime.from(LocalDateTime.now());
         this.information = information;
         this.addition = addition;
         this.currentIndex = 0;
@@ -55,7 +55,7 @@ public class StudentRequests {
         this.studentId = studentId;
     }
 
-    public Integer getRequestTypeId() {
+    public long getRequestTypeId() {
         return requestTypeId;
     }
 
@@ -87,11 +87,11 @@ public class StudentRequests {
         this.currentIndex = currentIndex;
     }
 
-    public LocalDateTime getWhen() {
+    public OffsetDateTime getWhen() {
         return when;
     }
 
-    public void setWhen(LocalDateTime when) {
+    public void setWhen(OffsetDateTime when) {
         this.when = when;
     }
 
