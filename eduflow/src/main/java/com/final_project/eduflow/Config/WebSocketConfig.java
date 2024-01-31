@@ -1,4 +1,2 @@
-package com.final_project.eduflow.Config;
-
-public class WebSocketConfig {
+package com.final_project.eduflow.Config;public class WebSocketConfig {
 }
