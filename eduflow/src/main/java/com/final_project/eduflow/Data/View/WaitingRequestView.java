@@ -18,7 +18,7 @@ public class WaitingRequestView {
     @Column(name = "request_type_id")
     private int requestTypeId;
 
-    @Column(name = "request_type_name")
+    @Column(name = "request_name")
     private String requestTypeName;
 
     @Column(name = "current_index")

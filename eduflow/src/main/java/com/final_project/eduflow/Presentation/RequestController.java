@@ -76,8 +76,7 @@ public class RequestController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO: move notification sending to requestService
-    @PreAuthorize("hasAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
     @GetMapping("/acceptRequest")
     public ResponseEntity<AcceptRequestResponseMessage> acceptRequest(@RequestBody StudentRequests studentRequest, HttpServletRequest request){
         Claims claims = JwtUtil.resolveClaims(request);
@@ -102,40 +101,27 @@ public class RequestController {
         }
     }
 
-    @PreAuthorize("hasAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
     @GetMapping("/acceptRequestForBackToBackSameActors")
-    public ResponseEntity<String> acceptRequestForBackToBackSameActors(@RequestBody StudentRequests studentRequest, HttpServletRequest request){
+    public ResponseEntity<AcceptRequestResponseMessage> acceptRequestForBackToBackSameActors(@RequestBody StudentRequests studentRequest, HttpServletRequest request){
         Long subId = requestService.acceptRequest(studentRequest);
-        // TODO: notify the next actor
-        return ResponseEntity.ok("Request accepted");
+        if(subId == studentRequest.getStudentId()) {
+            notificationController.sendNotification(subId, "your request has been accepted");
+        } else {
+            notificationController.sendNotification(subId, "new request waiting for your approval");
+        }
+        return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted", "done and done"));
     }
 
-    // TODO: move notification sending to requestService
-    @PreAuthorize("hasAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
     @GetMapping("/rejectRequest")
-    public ResponseEntity<String> rejectRequest(@RequestBody StudentRequests studentRequest, HttpServletRequest request) {
+    public ResponseEntity<AcceptRequestResponseMessage> rejectRequest(@RequestBody StudentRequests studentRequest, @RequestBody String rejectionReason, HttpServletRequest request) {
         requestService.rejectRequest(studentRequest);
         notificationController.sendNotification(studentRequest.getStudentId(), "your request has been rejected");
-        return ResponseEntity.ok("Request rejected");
+        return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted" ,"Request is rejected successfully"));
     }
-
-    // List student requests for advisor
-    // TODO: view all requests of students that are assigned to this advisor
-//    @PreAuthorize("hasAuthority('Advisor')")
-//    @GetMapping("/advisorRequests")
-//    public ResponseEntity<List<RequestTypesEntity>> getAdvisorRequests(HttpServletRequest request){
-//        Claims claims = JwtUtil.resolveClaims(request);
-//        if (claims == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//        Long id = JwtUtil.getId(claims);
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//    }
-//    @PostMapping("/makeRequest")
-//    public ResponseEntity<?> makeRequest(@RequestBody NewRequestEntity requestEntity){
-//        var response  = studentRequestRepository.save( new StudentRequests(requestEntity.getStudentId(), requestEntity.getRequestTypeId(),
-//        requestEntity.getInformation(),  "noAddition" ));
-//        return ResponseEntity.ok(response);
-//    }
-
 }
+
+//bildirilen kisi id
+//olusturulma tarihi
+//        bildirim okundu mu

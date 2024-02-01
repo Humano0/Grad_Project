@@ -38,7 +38,6 @@ public class RequestService implements IRequestService {
     // Increases the index by 1
     // returns the next actor's id
     // if all actors have accepted the request, returns the student's id
-    // TODO: move the logic of notifying the next actor to this method
     @Override
     public Long acceptRequest(StudentRequests studentRequests) {
         StudentRequests request = studentRequestRepository.findByStudentIdAndRequestTypeIdAndWhen(
@@ -60,7 +59,6 @@ public class RequestService implements IRequestService {
     // So we can find who rejected by calling Math.abs(current_index) + 1
     // If current_index = 0, then the request is rejected by the advisor
     // if current_index > 0, then search in request_actors table for current_index == index && request_type_id == request_type_id
-    // TODO: notify student that their request is rejected
     @Override
     public void rejectRequest(StudentRequests studentRequests) {
         StudentRequests request = studentRequestRepository.findByStudentIdAndRequestTypeIdAndWhen(
