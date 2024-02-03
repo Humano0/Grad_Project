@@ -39,6 +39,12 @@ public class RequestTypesController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+    @PreAuthorize("hasAuthority('Admin')")
+    @PostMapping("/requestTypes")
+    public ResponseEntity<RequestType> addNewRequestType(@RequestBody RequestType requestType){
+        RequestType newRequestType = requestTypeRepository.save(requestType);
+        return ResponseEntity.ok(newRequestType);
+    }
 
 /*     @PreAuthorize("hasAuthority('Admnin')")
     @PostMapping("/newRequestType")
