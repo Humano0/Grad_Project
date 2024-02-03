@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +45,17 @@ public class RequestTypesController {
     public ResponseEntity<RequestType> addNewRequestType(@RequestBody RequestType requestType){
         RequestType newRequestType = requestTypeRepository.save(requestType);
         return ResponseEntity.ok(newRequestType);
+    }
+
+    @PreAuthorize("hasAuthority('Admin')")
+    @DeleteMapping("/requestTypes/{id}")
+    public ResponseEntity<RequestType> deleteRequestType(@PathVariable Long id){
+/*         Optional<RequestType> requestType = requestTypeRepository.findById(id);
+        if(requestType.isPresent()){
+            requestTypeRepository.delete(requestType.get());
+            return ResponseEntity.ok().build();
+        } */
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 /*     @PreAuthorize("hasAuthority('Admnin')")
