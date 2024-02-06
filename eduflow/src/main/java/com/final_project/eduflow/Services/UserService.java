@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import com.final_project.eduflow.Data.DTO.UserLoginEntity;
 import com.final_project.eduflow.Data.Entities.Student;
 import com.final_project.eduflow.Data.Entities.TeachingStaff;
+import com.final_project.eduflow.Data.View.UsersView;
 import com.final_project.eduflow.Data.DTO.User;
 import com.final_project.eduflow.DataAccess.StudentRepository;
 import com.final_project.eduflow.DataAccess.TeachingStaffRepository;
+import com.final_project.eduflow.DataAccess.UsersViewRepository;
 import com.final_project.eduflow.Services.Interfaces.IUserService;
 
 @Service
@@ -17,11 +19,13 @@ public class UserService implements IUserService{
     
     private final StudentRepository studentRepository;
     private final TeachingStaffRepository teachingRepository;
+    private final UsersViewRepository usersViewRepository;
 
     @Autowired
-    public UserService(StudentRepository studentRepository, TeachingStaffRepository teachingRepository) {
+    public UserService(StudentRepository studentRepository, TeachingStaffRepository teachingRepository, UsersViewRepository usersViewRepository) {
         this.studentRepository = studentRepository;
         this.teachingRepository = teachingRepository;
+        this.usersViewRepository = usersViewRepository;
     }
 
     @Override
@@ -41,15 +45,22 @@ public class UserService implements IUserService{
 
     @Override
     public User findUser(UserLoginEntity loginUser) {
-        if(isStudent(loginUser.getEmail(), loginUser.getPassword())){
+/*         if(isStudent(loginUser.getEmail(), loginUser.getPassword())){
             Student temp = studentRepository.findByEmailAndPassword(loginUser.getEmail(), loginUser.getPassword());
             return new User(temp.getFullName(), temp.getEmail(), temp.getPassword(), "Student", temp.getId());
         }
         else if(isStaff(loginUser.getEmail(), loginUser.getPassword())){
             TeachingStaff temp=teachingRepository.findByEmailAndPassword(  loginUser.getEmail(), loginUser.getPassword());
             return new User(temp.getFullName(), temp.getEmail(), temp.getPassword(), temp.getRole(), temp.getId());
+        } */
+
+        try{
+            UsersView tempUser = usersViewRepository.findByEmailAndPassword(loginUser.getEmail(), loginUser.getPassword());
+            return new User(tempUser.getFullName(), tempUser.getEmail(), tempUser.getPassword(), tempUser.getRole(), tempUser.getId());
         }
-        return null;
+        catch(Exception e){
+            return e.getMessage().equals("No value present") ? null : null;
+        }
     }
 
     @Override
