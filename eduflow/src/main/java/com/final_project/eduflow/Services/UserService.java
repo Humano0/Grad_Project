@@ -52,15 +52,18 @@ public class UserService implements IUserService{
         else if(isStaff(loginUser.getEmail(), loginUser.getPassword())){
             TeachingStaff temp=teachingRepository.findByEmailAndPassword(  loginUser.getEmail(), loginUser.getPassword());
             return new User(temp.getFullName(), temp.getEmail(), temp.getPassword(), temp.getRole(), temp.getId());
-        } */
+        }
+        return null; */
 
         try{
             UsersView tempUser = usersViewRepository.findByEmailAndPassword(loginUser.getEmail(), loginUser.getPassword());
             return new User(tempUser.getFullName(), tempUser.getEmail(), tempUser.getPassword(), tempUser.getRole(), tempUser.getId());
         }
         catch(Exception e){
+            System.out.println(e.getMessage());
             return e.getMessage().equals("No value present") ? null : null;
         }
+        
     }
 
     @Override
