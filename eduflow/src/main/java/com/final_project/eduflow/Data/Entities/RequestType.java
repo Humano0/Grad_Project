@@ -17,7 +17,13 @@ public class RequestType {
     private String requestName;
 
     @Column(name ="department_id")
-    private Integer departmentId;
+    private int departmentId;
+
+    public RequestType(String info, String requestName, int departmentId) {
+        this.info = info;
+        this.requestName = requestName;
+        this.departmentId = departmentId;
+    }
 
     // Getters and Setters
 
@@ -43,5 +49,13 @@ public class RequestType {
 
     public void setRequestName(String requestName) {
         this.requestName = requestName;
+    }
+
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 }

@@ -1,18 +1,20 @@
 package com.final_project.eduflow.Data.Entities;
 
+import com.final_project.eduflow.Data.Entities.IdClasses.RequestActorId;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "request_actors")
+@IdClass(RequestActorId.class)
 public class RequestActor {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
+    @Id
     @Column(name = "request_type_id")
     private Long requestTypeId;
 
+    @Id
     @Column(name = "staff_id")
     private Long staffId;
 
@@ -20,14 +22,6 @@ public class RequestActor {
     private Integer index;
 
     // Getters and Setters
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getRequestTypeId() {
         return requestTypeId;
