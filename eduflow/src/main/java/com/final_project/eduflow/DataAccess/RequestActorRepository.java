@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface RequestActorRepository extends JpaRepository<RequestActor, RequestActorId> {
     Optional<RequestActor> findByRequestTypeIdAndIndex(Long requestTypeId, Integer index);
+    void deleteByRequestTypeId(Long requestTypeId);
 }

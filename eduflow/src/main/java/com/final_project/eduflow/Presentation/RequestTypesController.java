@@ -2,6 +2,8 @@ package com.final_project.eduflow.Presentation;
 
 import com.final_project.eduflow.Data.DTO.RequestTypesEntity;
 import com.final_project.eduflow.Data.Entities.RequestType;
+import com.final_project.eduflow.DataAccess.RequestActorRepository;
+import com.final_project.eduflow.DataAccess.RequestRequirementRepository;
 import com.final_project.eduflow.DataAccess.RequestTypeRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -15,14 +17,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 public class RequestTypesController {
     private final RequestTypeRepository requestTypeRepository;
+    private final RequestActorRepository requestActorRepository;
+    private final RequestRequirementRepository  requestRequirementRepository;
 
-    public RequestTypesController(RequestTypeRepository requestTypeRepository) {
+    public RequestTypesController(RequestTypeRepository requestTypeRepository, RequestActorRepository requestActorRepository, RequestRequirementRepository requestRequirementRepository) {
         this.requestTypeRepository = requestTypeRepository;
+        this.requestActorRepository = requestActorRepository;
+        this.requestRequirementRepository = requestRequirementRepository;
     }
 
     @PreAuthorize("hasAuthority('Student')")
@@ -55,6 +62,13 @@ public class RequestTypesController {
             requestTypeRepository.delete(requestType.get());
             return ResponseEntity.ok().build();
         } */
+        Optional<RequestType> requestType = requestTypeRepository.findById(id);
+        if(requestType.isPresent()){
+            requestActorRepository.deleteByRequestTypeId(id);
+            requestRequirementRepository.deleteByRequestTypeId(id);
+            requestTypeRepository.delete(requestType.get());
+            return ResponseEntity.ok().build();
+        }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
