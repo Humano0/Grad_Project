@@ -5,4 +5,6 @@ public class RequestActorId {
     private long requestTypeId;
 
     private long staffId;
+
+    private int index;
 }

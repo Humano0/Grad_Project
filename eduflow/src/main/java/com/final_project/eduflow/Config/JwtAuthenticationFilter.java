@@ -1,6 +1,6 @@
 package com.final_project.eduflow.Config;
 
-import com.final_project.eduflow.Services.UserService;
+
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.naming.AuthenticationException;
 import java.io.IOException;
 import java.util.List;
 

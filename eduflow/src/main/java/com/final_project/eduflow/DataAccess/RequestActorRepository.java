@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface RequestActorRepository extends JpaRepository<RequestActor, RequestActorId> {
-    Optional<RequestActor> findByRequestTypeIdAndIndex(Long requestTypeId, Integer index);
+    Optional<RequestActor> findByRequestTypeIdAndIndex(Long requestTypeId, int index);
+    RequestActor findByRequestTypeIdAndStaffId(Long requestTypeId, Long staffId);
+    Optional<RequestActor> findByRequestTypeIdAndStaffIdAndIndex(Long requestTypeId, Long staffId, int index);
     void deleteByRequestTypeId(Long requestTypeId);
 }

@@ -18,6 +18,7 @@ public class RequestActor {
     @Column(name = "staff_id")
     private Long staffId;
 
+    @Id
     @Column(name = "index")
     private Integer index;
 

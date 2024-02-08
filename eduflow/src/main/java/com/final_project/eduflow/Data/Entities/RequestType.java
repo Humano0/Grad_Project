@@ -19,6 +19,10 @@ public class RequestType {
     @Column(name ="department_id")
     private int departmentId;
 
+
+    public RequestType() {
+    }
+
     public RequestType(String info, String requestName, int departmentId) {
         this.info = info;
         this.requestName = requestName;
