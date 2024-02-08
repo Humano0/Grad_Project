@@ -173,20 +173,19 @@ ALTER TABLE public.request_actors ADD CONSTRAINT fk_type FOREIGN KEY (request_ty
 ## Request Requirements Table
 
 ```sql
-CREATE TABLE public.request_requirements (
-	id int4 NOT NULL DEFAULT nextval('request_requirements_requierment_id_seq'::regclass),
-	"name" text NULL,
-	"type" text NULL,
-	request_type_id int4 NULL,
-	"index" int4 NULL,
-	pretext text NULL,
-	CONSTRAINT request_requirements_pkey PRIMARY KEY (id)
+
+CREATE TABLE request_requirements (
+	request_type_id int,
+	index int,
+	name text, 
+	type text, 
+	pretext text,
+	CONSTRAINT pk_request_requirements PRIMARY KEY (request_type_id, index),
+	CONSTRAINT fk_request_requirements
+		foreign key (request_type_id)
+			references request_types(id)
 );
 
-
--- public.request_requirements foreign keys
-
-ALTER TABLE public.request_requirements ADD CONSTRAINT fk_type FOREIGN KEY (request_type_id) REFERENCES public.request_types(id);
 ```
 ## Request Requirements Table
 
@@ -223,15 +222,18 @@ CREATE VIEW requestsActors AS
 ## Request Requirements View
 
 ```sql
--- View to show request requirements
-CREATE OR REPLACE VIEW public.requestrequirements
+
+CREATE OR REPLACE VIEW public.request_requirements_view
 AS SELECT rt.id AS requestid,
     rt.request_name,
     rr.name,
     rr.type,
-    rr.index
+    rr.index,
+    rr.pretext
    FROM request_types rt
      JOIN request_requirements rr ON rt.id = rr.request_type_id;
+
+
 ```
 
 ## Student Request Path View
