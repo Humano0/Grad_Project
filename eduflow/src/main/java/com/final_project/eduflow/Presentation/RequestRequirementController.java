@@ -33,10 +33,10 @@ public class RequestRequirementController {
     }
 
     @PreAuthorize("hasAuthority('Admin')")
-    @DeleteMapping("/deleteRequirement/{id}")
-    public ResponseEntity<String> deleteRequestRequirement(@PathVariable int id){
+    @DeleteMapping("/deleteRequirement/{requestTypeId}/{index}")
+    public ResponseEntity<String> deleteRequestRequirement(@PathVariable long requestTypeId, @PathVariable int index){
 
-        Optional <RequestRequirement> requestRequirement = requestRequirementRepository.findById(id);
+        Optional <RequestRequirement> requestRequirement = requestRequirementRepository.findByRequestTypeIdAndIndex(requestTypeId,index);
 
         if(requestRequirement.isPresent()){
             requestRequirementRepository.delete(requestRequirement.get());

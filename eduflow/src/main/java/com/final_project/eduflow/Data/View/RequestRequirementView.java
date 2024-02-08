@@ -23,9 +23,13 @@ public class RequestRequirementView {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "pretext")
+    private String pretext;
+
     @Id
     @Column(name = "index")
     private Integer index;
+    
 
     // Getters
 

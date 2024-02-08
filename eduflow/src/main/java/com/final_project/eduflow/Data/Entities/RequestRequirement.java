@@ -1,15 +1,22 @@
 package com.final_project.eduflow.Data.Entities;
 
+import com.final_project.eduflow.Data.Entities.IdClasses.RequestRequirementId;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "request_requirements")
+@IdClass(RequestRequirementId.class)
 public class RequestRequirement {
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    @Column(name = "request_type_id")
+    private long requestTypeId;
+
+    @Id
+    @Column(name = "index")
+    private long index;
 
     @Column(name = "name")
     private String name;
@@ -17,23 +24,25 @@ public class RequestRequirement {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "request_type_id")
-    private Integer requestTypeId;
-
-    @Column(name = "index")
-    private Integer index;
-
     @Column(name = "pretext")
     private String pretext;
+
+
+    public RequestRequirement() {
+    }
+
     // Getters and Setters
 
-    public Long getRequiermentId() {
-        return id;
+
+
+    public String getPretext() {
+        return pretext;
     }
 
-    public void setRequiermentId(Long requiermentId) {
-        this.id = requiermentId;
+    public void setPretext(String pretext) {
+        this.pretext = pretext;
     }
+
 
     public String getName() {
         return name;
@@ -51,15 +60,15 @@ public class RequestRequirement {
         this.type = type;
     }
 
-    public Integer getRequestTypeId() {
+    public long getRequestTypeId() {
         return requestTypeId;
     }
 
-    public void setRequestTypeId(Integer requestTypeId) {
+    public void setRequestTypeId(long requestTypeId) {
         this.requestTypeId = requestTypeId;
     }
 
-    public Integer getIndex() {
+    public long getIndex() {
         return index;
     }
 
