@@ -4,6 +4,7 @@ import com.final_project.eduflow.Config.JwtUtil;
 import com.final_project.eduflow.Data.DTO.User;
 import com.final_project.eduflow.Data.DTO.UserLoginEntity;
 import com.final_project.eduflow.Presentation.ResponseClasses.LoginResponse;
+import com.final_project.eduflow.Presentation.ResponseClasses.LogoutResponse;
 import com.final_project.eduflow.Services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,5 +44,12 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An error occurred: " + e.getMessage());
         }
+    }
+    @PostMapping("/logout")
+    public ResponseEntity<LogoutResponse> logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return ResponseEntity.ok(new LogoutResponse("success", "Logout successful"));
     }
 }
