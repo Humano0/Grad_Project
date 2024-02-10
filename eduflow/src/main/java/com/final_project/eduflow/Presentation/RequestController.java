@@ -71,9 +71,9 @@ public class RequestController {
         }
         Long id = JwtUtil.getId(claims);
         
-        var response = studentRequestRepository.save(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
+        studentRequestRepository.save(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok("Request is made successfully");
     }
 
     @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
