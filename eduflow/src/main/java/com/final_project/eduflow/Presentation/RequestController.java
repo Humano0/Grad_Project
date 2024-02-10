@@ -84,20 +84,23 @@ public class RequestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long staffId = JwtUtil.getId(claims);
-
-        if(requestService.checkIfNextActorIsTheOneAcceptingTheRequest(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex())) {
-            // frontend
-            // TODO: some notification pops up to display the message if status == "back_to_back_same_actor"
-            // TODO: If they accept, then call /acceptRequestForBackToBackSameActors
-            return ResponseEntity.ok(new AcceptRequestResponseMessage("back_to_back_same_actor", "You are the next actor, do you want to accept the request?"));
-        } else {
-            Long subId = requestService.acceptRequest(studentRequest);
-            if(subId == studentRequest.getStudentId()) {
-                notificationController.sendNotification(subId, "your request has been accepted");
+        if(requestService.checkIfRequestActorIsTrue(staffId, staffId, studentRequest.getCurrentIndex())){
+            if(requestService.checkIfNextActorIsTheOneAcceptingTheRequest(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex())) {
+                // frontend
+                // TODO: some notification pops up to display the message if status == "back_to_back_same_actor"
+                // TODO: If they accept, then call /acceptRequestForBackToBackSameActors
+                return ResponseEntity.ok(new AcceptRequestResponseMessage("back_to_back_same_actor", "You are the next actor, do you want to accept the request?"));
             } else {
-                notificationController.sendNotification(subId, "new request waiting for your approval");
+                Long subId = requestService.acceptRequest(studentRequest);
+                if(subId == studentRequest.getStudentId()) {
+                    notificationController.sendNotification(subId, "your request has been accepted");
+                } else {
+                    notificationController.sendNotification(subId, "new request waiting for your approval");
+                }
+                return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted", "done and done"));
             }
-            return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted", "done and done"));
+        }else{
+            return ResponseEntity.ok(new AcceptRequestResponseMessage("not_authorized", "You are not authorized to accept this request"));
         }
     }
 

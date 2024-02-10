@@ -12,4 +12,6 @@ public interface IRequestService {
     Long acceptRequest(StudentRequests studentRequests);
     void rejectRequest(StudentRequests studentRequests);
     boolean checkIfNextActorIsTheOneAcceptingTheRequest(Long staffId, Long request_type_id, Integer current_index);
+
+    boolean checkIfRequestActorIsTrue(Long staffId, Long requestTypeId, int index);
 }

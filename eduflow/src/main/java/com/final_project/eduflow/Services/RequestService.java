@@ -77,4 +77,16 @@ public class RequestService implements IRequestService {
         Optional<RequestActor> requestActor = requestActorRepository.findByRequestTypeIdAndIndex(request_type_id, current_index + 1);
         return requestActor.map(actor -> Objects.equals(actor.getStaffId(), staffId)).orElse(false);
     }
+
+    @Override
+    public boolean checkIfRequestActorIsTrue(Long staffId, Long requestTypeId, int index) {
+        Optional<RequestActor> requestActor = requestActorRepository.findByRequestTypeIdAndIndex(requestTypeId, index);
+
+        if(requestActor.isPresent()) {
+            return requestActor.get().getStaffId() == staffId;
+        } else {
+            return false;
+        }
+
+    }
 }
