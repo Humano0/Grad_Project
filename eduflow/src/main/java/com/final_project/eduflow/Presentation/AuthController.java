@@ -3,6 +3,7 @@ package com.final_project.eduflow.Presentation;
 import com.final_project.eduflow.Config.JwtUtil;
 import com.final_project.eduflow.Data.DTO.User;
 import com.final_project.eduflow.Data.DTO.UserLoginEntity;
+import com.final_project.eduflow.Presentation.ResponseClasses.LoginResponse;
 import com.final_project.eduflow.Services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserLoginEntity entity, HttpServletResponse response) {
+    public ResponseEntity<LoginResponse> login(@RequestBody UserLoginEntity entity, HttpServletResponse response) {
         try {
             User user = userService.findUser(entity);
             if(user != null) {
@@ -35,9 +36,9 @@ public class AuthController {
                 Cookie cookie = new Cookie("token", token);
                 cookie.setHttpOnly(false);
                 response.addCookie(cookie);
-                return ResponseEntity.ok("Logged in successfully");
+                return ResponseEntity.ok(new LoginResponse("success", "Login successful", user.getRole()));
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse("unauthorized","Invalid credentials", null));
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An error occurred: " + e.getMessage());
