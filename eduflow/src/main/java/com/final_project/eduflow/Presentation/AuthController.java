@@ -42,7 +42,7 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse("unauthorized","Invalid credentials", null));
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse("error", e.getMessage(), null));
         }
     }
     @PostMapping("/logout")
