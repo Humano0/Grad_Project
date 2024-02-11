@@ -187,7 +187,7 @@ CREATE TABLE request_requirements (
 );
 
 ```
-## Request Requirements Table
+## Request Staff Comments Table
 
 ```sql
 CREATE TABLE public.staff_comments (
@@ -204,7 +204,7 @@ CREATE TABLE public.staff_comments (
 
 ALTER TABLE public.staff_comments ADD CONSTRAINT fk_requeste FOREIGN KEY (requester_id,request_date,request_type_id) REFERENCES <?>();
 ALTER TABLE public.staff_comments ADD CONSTRAINT fk_staff_id FOREIGN KEY (staff_id) REFERENCES public.teaching_staff(id);
-
+```
 
 # Database Views
 
@@ -264,7 +264,7 @@ AS SELECT s.name AS student_name,
 ```
 
 ## Adviser_info View
-```
+```sql
 DROP VIEW IF EXISTS advisor_info;
 CREATE OR REPLACE VIEW advisor_info AS
 SELECT s.id AS student_id,
@@ -302,3 +302,100 @@ JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
 GROUP BY sr.student_id, sr.current_index, sr.information, sr.when_created;
 
 ```
+
+## Waiting Requests Views
+
+```sql
+DROP VIEW IF EXISTS staff_waiting_requests_view;
+CREATE OR REPLACE VIEW staff_waiting_requests_view AS
+SELECT sr.student_id,
+	   sr.request_type_id,
+	   rt.request_name,
+       sr.current_index,
+       sr.information,
+       sr.when_created,
+       sr.student_comment,
+       ra.staff_id as current_actor_id
+FROM student_requests sr
+JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
+JOIN request_types rt ON rt.id = sr.request_type_id
+WHERE ra.index = sr.current_index
+ORDER BY sr.when_created;
+```
+
+```sql
+
+DROP VIEW IF EXISTS advisor_waiting_requests_view;
+CREATE OR REPLACE VIEW advisor_waiting_requests_view AS
+SELECT sr.student_id,
+	   sr.request_type_id,
+	   rt.request_name,
+       sr.current_index,
+       sr.information,
+       sr.when_created,
+       sr.student_comment,
+       ts.id as current_actor_id
+FROM student_requests sr
+JOIN student s ON s.id = sr.student_id
+JOIN teaching_staff ts ON s.adviser_id= ts.id 
+JOIN request_types rt ON rt.id = sr.request_type_id
+WHERE sr.current_index=0
+ORDER BY sr.when_created;
+
+
+```
+
+```sql
+
+CREATE OR REPLACE VIEW waiting_requests_unioned_view AS
+SELECT * FROM staff_waiting_requests_view
+UNION 
+SELECT * FROM advisor_waiting_requests_view;
+
+```
+
+## Users View
+
+```sql
+CREATE OR REPLACE VIEW public.users_view
+AS SELECT ar.id,
+    ar.email,
+    'Admin'::text AS full_name,
+    ar.password,
+    'Admin'::text AS role
+   FROM admin_user ar
+UNION
+ SELECT s.id,
+    s.email,
+    concat(s.name, ' ', s.surname) AS full_name,
+    s.password,
+    'Student'::text AS role
+   FROM student s
+UNION
+ SELECT ts.id,
+    ts.email,
+    concat(ts.name, ' ', ts.surname) AS full_name,
+    ts.password,
+    ts.role
+   FROM teaching_staff ts;
+
+```
+
+## Advisor Info View
+
+```sql
+
+CREATE OR REPLACE VIEW public.advisor_info
+AS SELECT s.id AS student_id,
+    ts.id AS advisor_id,
+    ts.name AS advisor_firstname,
+    ts.surname AS advisor_lastname,
+    d.name AS department_name,
+    ts.web AS advisor_web,
+    ts.phone_number AS advisor_phone_number
+   FROM student s
+     JOIN teaching_staff ts ON s.adviser_id = ts.id
+     JOIN department d ON ts.department_id = d.id;
+
+```
+
