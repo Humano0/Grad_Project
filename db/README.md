@@ -187,7 +187,7 @@ CREATE TABLE request_requirements (
 );
 
 ```
-## Request Requirements Table
+## Request Staff Comments Table
 
 ```sql
 CREATE TABLE public.staff_comments (
@@ -303,6 +303,7 @@ GROUP BY sr.student_id, sr.current_index, sr.information, sr.when_created;
 
 ```
 
+## Waiting Requests Views
 
 ```sql
 DROP VIEW IF EXISTS staff_waiting_requests_view;
@@ -352,3 +353,49 @@ UNION
 SELECT * FROM advisor_waiting_requests_view;
 
 ```
+
+## Users View
+
+```sql
+CREATE OR REPLACE VIEW public.users_view
+AS SELECT ar.id,
+    ar.email,
+    'Admin'::text AS full_name,
+    ar.password,
+    'Admin'::text AS role
+   FROM admin_user ar
+UNION
+ SELECT s.id,
+    s.email,
+    concat(s.name, ' ', s.surname) AS full_name,
+    s.password,
+    'Student'::text AS role
+   FROM student s
+UNION
+ SELECT ts.id,
+    ts.email,
+    concat(ts.name, ' ', ts.surname) AS full_name,
+    ts.password,
+    ts.role
+   FROM teaching_staff ts;
+
+```
+
+## Advisor Info View
+
+```sql
+
+CREATE OR REPLACE VIEW public.advisor_info
+AS SELECT s.id AS student_id,
+    ts.id AS advisor_id,
+    ts.name AS advisor_firstname,
+    ts.surname AS advisor_lastname,
+    d.name AS department_name,
+    ts.web AS advisor_web,
+    ts.phone_number AS advisor_phone_number
+   FROM student s
+     JOIN teaching_staff ts ON s.adviser_id = ts.id
+     JOIN department d ON ts.department_id = d.id;
+
+```
+
