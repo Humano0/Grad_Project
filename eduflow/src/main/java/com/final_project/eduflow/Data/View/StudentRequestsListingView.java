@@ -26,7 +26,7 @@ public class StudentRequestsListingView {
     private String status;
 
     @Id
-    @Column(name = "when")
+    @Column(name = "when_created")
     private Timestamp when;
 
     // Getters and Setters

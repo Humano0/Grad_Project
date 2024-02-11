@@ -10,4 +10,5 @@ import java.util.List;
 public interface WaitingRequestsViewRepository extends JpaRepository<WaitingRequestView, WaitinRequestsViewId>{
     List<WaitingRequestView> findByStudentIdAndCurrentActorId(Long studentId, Long currentActorId);
     List<WaitingRequestView> findByCurrentActorId(Long currentActorId);
+    List<WaitingRequestView> findByStudentId(Long studentId);
 }

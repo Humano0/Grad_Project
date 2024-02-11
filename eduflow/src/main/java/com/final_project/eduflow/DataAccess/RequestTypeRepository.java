@@ -12,4 +12,5 @@ import java.util.List;
 @Transactional
 public interface RequestTypeRepository extends JpaRepository<RequestType, Long>{
 
+    List<RequestType> findByDepartmentId(long departmentId);
 }
