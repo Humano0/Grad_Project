@@ -6,6 +6,7 @@ import com.final_project.eduflow.Data.Entities.StudentRequests;
 import com.final_project.eduflow.Data.View.StudentRequestsListingView;
 import com.final_project.eduflow.Data.View.WaitingRequestView;
 import com.final_project.eduflow.DataAccess.*;
+import com.final_project.eduflow.Presentation.ResponseClasses.ListRequestTypes;
 import com.final_project.eduflow.Services.Interfaces.IRequestService;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RequestService implements IRequestService {
@@ -20,13 +22,16 @@ public class RequestService implements IRequestService {
     private final StudentRequestsListingViewRepository studentRequestsListingViewRepository;
     private final StudentRequestRepository studentRequestRepository;
     private final RequestActorRepository requestActorRepository;
+    private final RequestTypeRepository requestTypeRepository;
 
     public RequestService(StudentRequestsListingViewRepository studentRequestsListingViewRepository,
                           StudentRequestRepository studentRequestRepository,
-                          RequestActorRepository requestActorRepository, WaitingRequestsViewRepository waitingRequestsViewRepository) {
+                          RequestActorRepository requestActorRepository, WaitingRequestsViewRepository waitingRequestsViewRepository,
+                          RequestTypeRepository requestTypeRepository) {
         this.studentRequestsListingViewRepository = studentRequestsListingViewRepository;
         this.studentRequestRepository = studentRequestRepository;
         this.requestActorRepository = requestActorRepository;
+        this.requestTypeRepository = requestTypeRepository;
     }
 
     @Override
@@ -86,5 +91,19 @@ public class RequestService implements IRequestService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public List<ListRequestTypes> getAllRequestTypes() {
+        return requestTypeRepository.findAll().stream()
+                .map(requestType -> new ListRequestTypes(requestType.getId(), requestType.getRequestName()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ListRequestTypes> getAllRequestTypesByDepartmentId(Long departmentId) {
+        return requestTypeRepository.findByDepartmentId(departmentId).stream()
+                .map(requestType -> new ListRequestTypes(requestType.getId(), requestType.getRequestName()))
+                .collect(Collectors.toList());
     }
 }
