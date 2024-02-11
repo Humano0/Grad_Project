@@ -6,6 +6,7 @@ import com.final_project.eduflow.Data.Entities.Student;
 import com.final_project.eduflow.Data.Entities.TeachingStaff;
 import com.final_project.eduflow.Data.View.RequestRequirementView;
 import com.final_project.eduflow.Data.View.StudentRequestsListingView;
+import com.final_project.eduflow.Data.View.WaitingRequestView;
 import com.final_project.eduflow.DataAccess.*;
 import com.final_project.eduflow.Presentation.ResponseClasses.AcceptRequestResponseMessage;
 import com.final_project.eduflow.Services.RequestService;
@@ -41,6 +42,7 @@ public class RequestController {
     }
 
     // List student requests for student
+    // needs
     @PreAuthorize("hasAuthority('Student')")
     @GetMapping("/studentRequests")
     public ResponseEntity<List<StudentRequestsListingView>> getStudentRequest(HttpServletRequest request){
@@ -124,7 +126,3 @@ public class RequestController {
         return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted" ,"Request is rejected successfully"));
     }
 }
-
-//bildirilen kisi id
-//olusturulma tarihi
-//        bildirim okundu mu

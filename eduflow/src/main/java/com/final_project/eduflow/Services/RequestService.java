@@ -4,10 +4,8 @@ import com.final_project.eduflow.Data.DTO.ListRequestsEntity;
 import com.final_project.eduflow.Data.Entities.RequestActor;
 import com.final_project.eduflow.Data.Entities.StudentRequests;
 import com.final_project.eduflow.Data.View.StudentRequestsListingView;
-import com.final_project.eduflow.DataAccess.RequestActorRepository;
-import com.final_project.eduflow.DataAccess.RequestTypeRepository;
-import com.final_project.eduflow.DataAccess.StudentRequestRepository;
-import com.final_project.eduflow.DataAccess.StudentRequestsListingViewRepository;
+import com.final_project.eduflow.Data.View.WaitingRequestView;
+import com.final_project.eduflow.DataAccess.*;
 import com.final_project.eduflow.Services.Interfaces.IRequestService;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +23,12 @@ public class RequestService implements IRequestService {
 
     public RequestService(StudentRequestsListingViewRepository studentRequestsListingViewRepository,
                           StudentRequestRepository studentRequestRepository,
-                          RequestActorRepository requestActorRepository) {
+                          RequestActorRepository requestActorRepository, WaitingRequestsViewRepository waitingRequestsViewRepository) {
         this.studentRequestsListingViewRepository = studentRequestsListingViewRepository;
         this.studentRequestRepository = studentRequestRepository;
         this.requestActorRepository = requestActorRepository;
     }
+
     @Override
     public List<StudentRequestsListingView> getStudentRequestsById(Long id) {
         return studentRequestsListingViewRepository.findStudentRequestsListingViewByStudentId(id);
@@ -81,12 +80,10 @@ public class RequestService implements IRequestService {
     @Override
     public boolean checkIfRequestActorIsTrue(Long staffId, Long requestTypeId, int index) {
         Optional<RequestActor> requestActor = requestActorRepository.findByRequestTypeIdAndIndex(requestTypeId, index);
-
         if(requestActor.isPresent()) {
             return requestActor.get().getStaffId() == staffId;
         } else {
             return false;
         }
-
     }
 }

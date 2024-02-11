@@ -1,10 +1,14 @@
 package com.final_project.eduflow.Presentation;
 
+import com.final_project.eduflow.Config.JwtUtil;
 import com.final_project.eduflow.Data.DTO.RequestTypesEntity;
 import com.final_project.eduflow.Data.Entities.RequestType;
+import com.final_project.eduflow.Data.Entities.Student;
 import com.final_project.eduflow.DataAccess.RequestActorRepository;
 import com.final_project.eduflow.DataAccess.RequestRequirementRepository;
 import com.final_project.eduflow.DataAccess.RequestTypeRepository;
+import com.final_project.eduflow.DataAccess.StudentRepository;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,17 +31,31 @@ public class RequestTypesController {
     private final RequestTypeRepository requestTypeRepository;
     private final RequestActorRepository requestActorRepository;
     private final RequestRequirementRepository  requestRequirementRepository;
+    private final StudentRepository studentRepository;
 
-    public RequestTypesController(RequestTypeRepository requestTypeRepository, RequestActorRepository requestActorRepository, RequestRequirementRepository requestRequirementRepository) {
+    public RequestTypesController(RequestTypeRepository requestTypeRepository, RequestActorRepository requestActorRepository, RequestRequirementRepository requestRequirementRepository, StudentRepository studentRepository) {
         this.requestTypeRepository = requestTypeRepository;
         this.requestActorRepository = requestActorRepository;
         this.requestRequirementRepository = requestRequirementRepository;
+        this.studentRepository = studentRepository;
     }
 
     @PreAuthorize("hasAuthority('Student')")
     @GetMapping("/requestTypes")
     public ResponseEntity<List<RequestTypesEntity>> getRequestTypes(HttpServletRequest request){
-        List<RequestType> requestTypes = requestTypeRepository.findAll();
+        Claims claims = JwtUtil.resolveClaims(request);
+        if (claims == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Long id = JwtUtil.getId(claims);
+        Optional<Student> studentOptional = studentRepository.findById(id);
+        if(!studentOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        long departmentId = studentOptional.get().getDepartmentId();
+
+        List<RequestType> requestTypes = requestTypeRepository.findByDepartmentId(departmentId);
         if(!requestTypes.isEmpty()) {
             List<RequestTypesEntity> requestTypesEntities = requestTypes.stream().map(requestType -> {
                 RequestTypesEntity requestTypesEntity = new RequestTypesEntity();
