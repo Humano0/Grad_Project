@@ -16,11 +16,11 @@ public class Faculty {
 
     // getters and setters
 
-    public Long getFacultyId() {
+    public Long getId() {
         return id;
     }
 
-    public void setFacultyId(Long facultyId) {
+    public void setId(Long facultyId) {
         this.id = facultyId;
     }
 

@@ -8,6 +8,8 @@ import com.final_project.eduflow.DataAccess.RequestActorRepository;
 import com.final_project.eduflow.DataAccess.RequestRequirementRepository;
 import com.final_project.eduflow.DataAccess.RequestTypeRepository;
 import com.final_project.eduflow.DataAccess.StudentRepository;
+import com.final_project.eduflow.Presentation.ResponseClasses.ListRequestTypes;
+import com.final_project.eduflow.Services.RequestService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -32,12 +34,14 @@ public class RequestTypesController {
     private final RequestActorRepository requestActorRepository;
     private final RequestRequirementRepository  requestRequirementRepository;
     private final StudentRepository studentRepository;
+    private final RequestService requestService;
 
-    public RequestTypesController(RequestTypeRepository requestTypeRepository, RequestActorRepository requestActorRepository, RequestRequirementRepository requestRequirementRepository, StudentRepository studentRepository) {
+    public RequestTypesController(RequestTypeRepository requestTypeRepository, RequestActorRepository requestActorRepository, RequestRequirementRepository requestRequirementRepository, StudentRepository studentRepository, RequestService requestService) {
         this.requestTypeRepository = requestTypeRepository;
         this.requestActorRepository = requestActorRepository;
         this.requestRequirementRepository = requestRequirementRepository;
         this.studentRepository = studentRepository;
+        this.requestService = requestService;
     }
 
     @PreAuthorize("hasAuthority('Student')")
@@ -68,14 +72,14 @@ public class RequestTypesController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @PreAuthorize("hasAuthority('Admin')")
-    @PostMapping("/requestTypes")
+    @PostMapping("/createNewRequestType")
     public ResponseEntity<RequestType> addNewRequestType(@RequestBody RequestType requestType){
         RequestType newRequestType = requestTypeRepository.save(requestType);
         return ResponseEntity.ok(newRequestType);
     }
 
     @PreAuthorize("hasAuthority('Admin')")
-    @DeleteMapping("/requestTypes/{id}")
+    @DeleteMapping("/deleteRequestType/{id}")
     public ResponseEntity<RequestType> deleteRequestType(@PathVariable Long id){
 /*         Optional<RequestType> requestType = requestTypeRepository.findById(id);
         if(requestType.isPresent()){
@@ -91,6 +95,19 @@ public class RequestTypesController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    @PreAuthorize("hasAuthority('Admin')")
+    @GetMapping("/getAllRequestTypes")
+    public ResponseEntity<List<ListRequestTypes>> getAllRequestTypes(){
+        return ResponseEntity.ok(requestService.getAllRequestTypes());
+    }
+
+    @PreAuthorize("hasAuthority('Admin')")
+    @GetMapping("/getAllRequestTypesByDepartmentId/{departmentId}")
+    public ResponseEntity<List<ListRequestTypes>> getAllRequestTypesByDepartmentId(@PathVariable Long departmentId){
+        return ResponseEntity.ok(requestService.getAllRequestTypesByDepartmentId(departmentId));
+    }
+
 
 /*     @PreAuthorize("hasAuthority('Admnin')")
     @PostMapping("/newRequestType")
