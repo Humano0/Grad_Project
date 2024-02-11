@@ -77,6 +77,7 @@ public class RequestService implements IRequestService {
         return requestActor.map(actor -> Objects.equals(actor.getStaffId(), staffId)).orElse(false);
     }
 
+    //this methods checks if the request actor is the one who is accepting the request
     @Override
     public boolean checkIfRequestActorIsTrue(Long staffId, Long requestTypeId, int index) {
         Optional<RequestActor> requestActor = requestActorRepository.findByRequestTypeIdAndIndex(requestTypeId, index);
