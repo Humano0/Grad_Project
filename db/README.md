@@ -102,7 +102,7 @@ ALTER TABLE public.section_records ADD CONSTRAINT section_records_fk FOREIGN KEY
 
 ```sql
 CREATE TABLE student (
-    student_id INT PRIMARY KEY,
+    id INT PRIMARY KEY,
     name TEXT,
     surname TEXT,
     email TEXT,
