@@ -202,8 +202,9 @@ CREATE TABLE public.staff_comments (
 
 -- public.staff_comments foreign keys
 
-ALTER TABLE public.staff_comments ADD CONSTRAINT fk_requeste FOREIGN KEY (requester_id,request_date,request_type_id) REFERENCES <?>();
+ALTER TABLE public.staff_comments ADD CONSTRAINT fk_requeste FOREIGN KEY (requester_id,request_date,request_type_id) REFERENCES student_requests(student_id,when_created,request_type_id);
 ALTER TABLE public.staff_comments ADD CONSTRAINT fk_staff_id FOREIGN KEY (staff_id) REFERENCES public.teaching_staff(id);
+
 ```
 
 # Database Views
