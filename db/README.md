@@ -1,5 +1,16 @@
 # Database Schema
 
+## Admin_user
+
+```sql
+CREATE TABLE admin_user(
+    id serial PRIMARY KEY,
+    email text,
+    password text
+);
+```
+
+
 ## Faculty Table
 
 ```sql
