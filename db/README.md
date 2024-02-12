@@ -4,7 +4,7 @@
 
 ```sql
 CREATE TABLE faculty (
-    faculty_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name TEXT
 );
 ```
@@ -13,7 +13,7 @@ CREATE TABLE faculty (
 
 ```sql
 CREATE TABLE department (
-    department_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name TEXT,
     faculty_id INT,
     CONSTRAINT fk_facultyid
