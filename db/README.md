@@ -213,11 +213,13 @@ ALTER TABLE public.staff_comments ADD CONSTRAINT fk_staff_id FOREIGN KEY (staff_
 
 ```sql
 -- View to show request actors
+
 CREATE VIEW requestsActors AS
-    SELECT rt.id AS requestid, rt.request_name, ts.id, ts.staff_name
+    SELECT rt.id AS requestid, rt.request_name, ts.id, concat(ts."name",' ',ts.surname) as staff_name 
     FROM request_types rt
     JOIN request_actors ra ON ra.request_type_id = rt.id
     JOIN teaching_staff ts ON ra.staff_id = ts.id;
+
 ```
 
 ## Request Requirements View
@@ -382,21 +384,4 @@ UNION
 
 ```
 
-## Advisor Info View
-
-```sql
-
-CREATE OR REPLACE VIEW public.advisor_info
-AS SELECT s.id AS student_id,
-    ts.id AS advisor_id,
-    ts.name AS advisor_firstname,
-    ts.surname AS advisor_lastname,
-    d.name AS department_name,
-    ts.web AS advisor_web,
-    ts.phone_number AS advisor_phone_number
-   FROM student s
-     JOIN teaching_staff ts ON s.adviser_id = ts.id
-     JOIN department d ON ts.department_id = d.id;
-
-```
 
