@@ -91,4 +91,28 @@ public class TeachingStaff {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public void getDepartmentId(long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setFirstname(String name) {
+        this.name = name;
+    }
+
+    public void setLastname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
+    }
 }
