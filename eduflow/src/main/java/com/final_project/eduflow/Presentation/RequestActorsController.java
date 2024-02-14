@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,14 @@ public class RequestActorsController {
         this.requestActorsRepository = requestActorsRepository;
     }
 
+    @GetMapping("/GetRequestActors/{requestTypeId}")
+    @PreAuthorize("hasAuthority('Admin')")
+    public ResponseEntity<List<RequestActor>> getRequestActors(@PathVariable("requestTypeId") Long requestTypeId){
+        List<RequestActor> requestActors = requestActorsRepository.findByRequestTypeId(requestTypeId);
+
+        return ResponseEntity.ok(requestActors);
+    }
+
     @PostMapping("/AddNewRequestActor")
     @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<RequestActor> addNewRequestActor(@RequestBody RequestActor requestActor){
@@ -34,6 +43,7 @@ public class RequestActorsController {
     
         return ResponseEntity.ok(newActor);
     }
+
 
     @DeleteMapping("/DeleteRequestActor/{requestTypeId}/{staffId}/{index}")
     @PreAuthorize("hasAuthority('Admin')")
