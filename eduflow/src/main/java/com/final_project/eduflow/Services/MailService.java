@@ -30,5 +30,6 @@ public class MailService implements IMailService {
 
         mailSender.send(simpleMailMessage);
     }
+    
 }
 
