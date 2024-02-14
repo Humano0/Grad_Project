@@ -23,6 +23,7 @@ public class RequestService implements IRequestService {
     private final StudentRequestRepository studentRequestRepository;
     private final RequestActorRepository requestActorRepository;
     private final RequestTypeRepository requestTypeRepository;
+    private final WaitingRequestsViewRepository waitingRequestsViewRepository;
 
     public RequestService(StudentRequestsListingViewRepository studentRequestsListingViewRepository,
                           StudentRequestRepository studentRequestRepository,
@@ -32,6 +33,7 @@ public class RequestService implements IRequestService {
         this.studentRequestRepository = studentRequestRepository;
         this.requestActorRepository = requestActorRepository;
         this.requestTypeRepository = requestTypeRepository;
+        this.waitingRequestsViewRepository = waitingRequestsViewRepository;
     }
 
     @Override
@@ -106,4 +108,6 @@ public class RequestService implements IRequestService {
                 .map(requestType -> new ListRequestTypes(requestType.getId(), requestType.getRequestName()))
                 .collect(Collectors.toList());
     }
+
+
 }

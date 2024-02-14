@@ -33,8 +33,5 @@ public class TeachingStaffController {
         return ResponseEntity.ok(staffInfoForAdmin);
     }
     
-
-
-
     
 }

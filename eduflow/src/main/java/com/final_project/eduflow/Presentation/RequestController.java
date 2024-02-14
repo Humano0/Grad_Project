@@ -64,6 +64,8 @@ public class RequestController {
         return ResponseEntity.ok(requestRequirementViews);
     }
 
+
+
     @PreAuthorize("hasAuthority('Student')")
     @PostMapping("/makeRequest")
     public ResponseEntity<?> makeRequest(@RequestBody StudentRequests newRequests, HttpServletRequest request){
@@ -77,6 +79,7 @@ public class RequestController {
 
         return ResponseEntity.ok("Request is made successfully");
     }
+
 
     @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
     @GetMapping("/acceptRequest")
