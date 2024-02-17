@@ -1,6 +1,7 @@
 package com.final_project.eduflow.Presentation;
 
 
+import com.final_project.eduflow.Data.Entities.TeachingStaff;
 import com.final_project.eduflow.Presentation.ResponseClasses.StaffInfoForAdmin;
 import com.final_project.eduflow.Services.TeachingStaffService;
 
@@ -9,11 +10,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import org.springframework.web.bind.annotation.RestController;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -32,6 +34,14 @@ public class TeachingStaffController {
         List<StaffInfoForAdmin> staffInfoForAdmin = teachingStaffService.getStaffInfoForAdmin();
         return ResponseEntity.ok(staffInfoForAdmin);
     }
+
+    @PostMapping("/addStaff")
+    @PreAuthorize("hasAuthority('Admin')")
+    public ResponseEntity<?> addStaff(@RequestBody TeachingStaff newTeachingStaff) {
+        var result =teachingStaffService.addStaff(newTeachingStaff);
+        return ResponseEntity.ok().body(result);
+    }
+    
     
     
 }

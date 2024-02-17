@@ -1,12 +1,12 @@
 package com.final_project.eduflow.Services.Interfaces;
 
-import com.final_project.eduflow.Data.DTO.ListRequestsEntity;
+
 import com.final_project.eduflow.Data.Entities.StudentRequests;
 import com.final_project.eduflow.Data.View.StudentRequestsListingView;
-import com.final_project.eduflow.Data.View.WaitingRequestView;
+
 import com.final_project.eduflow.Presentation.ResponseClasses.ListRequestTypes;
 
-import java.sql.Timestamp;
+
 import java.util.List;
 
 public interface IRequestService {

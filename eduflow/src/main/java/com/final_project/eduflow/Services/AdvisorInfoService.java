@@ -3,8 +3,7 @@ package com.final_project.eduflow.Services;
 import com.final_project.eduflow.Data.DTO.AdvisorDashboardInfoEntity;
 import com.final_project.eduflow.DataAccess.AdvisorInfoViewRepository;
 import com.final_project.eduflow.Services.Interfaces.IAdvisorInfoService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
 @Service
