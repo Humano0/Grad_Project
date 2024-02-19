@@ -112,7 +112,4 @@ public class TeachingStaff {
         this.email = email;
     }
 
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
-    }
 }

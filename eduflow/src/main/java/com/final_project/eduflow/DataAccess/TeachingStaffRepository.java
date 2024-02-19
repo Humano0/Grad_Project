@@ -1,12 +1,9 @@
 package com.final_project.eduflow.DataAccess;
 
-import org.aspectj.weaver.ast.Var;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.final_project.eduflow.Data.Entities.TeachingStaff;
-import com.final_project.eduflow.Presentation.ResponseClasses.StaffInfoForAdmin;
-import com.final_project.eduflow.Data.DTO.StaffWithDepartmentsDTO;
 
 import java.util.List;
 

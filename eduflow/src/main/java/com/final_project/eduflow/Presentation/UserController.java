@@ -3,9 +3,6 @@ package com.final_project.eduflow.Presentation;
 import com.final_project.eduflow.Config.JwtUtil;
 import com.final_project.eduflow.Data.DTO.AdvisorDashboardInfoEntity;
 import com.final_project.eduflow.Data.DTO.StudentSideBarInfoEntity;
-import com.final_project.eduflow.Data.Entities.Department;
-import com.final_project.eduflow.Data.Entities.Student;
-import com.final_project.eduflow.Data.Entities.TeachingStaff;
 import com.final_project.eduflow.DataAccess.AdvisorInfoViewRepository;
 import com.final_project.eduflow.DataAccess.DepartmentRepository;
 import com.final_project.eduflow.DataAccess.StudentRepository;
@@ -21,12 +18,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+
 
 @RestController
 public class UserController {
+    @SuppressWarnings("unused")
     private final StudentRepository studentRepository;
+    @SuppressWarnings("unused")
     private final TeachingStaffRepository teachingStaffRepository;
+    @SuppressWarnings("unused")
     private final DepartmentRepository departmentRepository;
     private final AdvisorInfoService advisorInfoService;
     private final UserService userService;

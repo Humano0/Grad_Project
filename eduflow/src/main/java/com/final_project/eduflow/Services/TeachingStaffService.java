@@ -2,13 +2,13 @@ package com.final_project.eduflow.Services;
 
 import org.springframework.stereotype.Service;
 
-import com.final_project.eduflow.DataAccess.DepartmentRepository;
+
 import com.final_project.eduflow.DataAccess.TeachingStaffRepository;
 import com.final_project.eduflow.Services.Interfaces.ITeachingStaffService;
 import com.final_project.eduflow.Presentation.ResponseClasses.StaffInfoForAdmin;
-import com.final_project.eduflow.Data.DTO.StaffWithDepartmentsDTO;
-import com.final_project.eduflow.Data.Entities.Department;
+
 import com.final_project.eduflow.Data.Entities.TeachingStaff;
+
 
 import java.util.*;
 
@@ -33,5 +33,10 @@ public class TeachingStaffService implements ITeachingStaffService{
             //staffInfoForAdmin.add(new StaffInfoForAdmin(teachingStaff.getId(), teachingStaff.getEmail(), teachingStaff.getFullName(), teachingStaff.getRole(), teachingStaff.getDepartment()));
         }
         return staffInfoForAdmin;
+    }
+
+    public TeachingStaff addStaff(TeachingStaff newTeachingStaff) {
+        var result= teachingStaffRepository.save(newTeachingStaff);
+        return result;
     }
 }

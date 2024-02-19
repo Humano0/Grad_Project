@@ -1,6 +1,5 @@
 package com.final_project.eduflow.Presentation;
 
-import org.hibernate.internal.util.collections.ConcurrentReferenceHashMap.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.final_project.eduflow.Data.Entities.RequestActor;
 import com.final_project.eduflow.DataAccess.RequestActorRepository;
 
-import jakarta.websocket.server.PathParam;
 
 import java.util.*;
 
@@ -45,6 +43,7 @@ public class RequestActorsController {
     }
 
 
+    @SuppressWarnings("null")
     @DeleteMapping("/DeleteRequestActor/{requestTypeId}/{staffId}/{index}")
     @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<RequestActor> deleteRequestActor(@PathVariable("requestTypeId") Long requestTypeId, @PathVariable("staffId") Long staffId,@PathVariable("index") int index){

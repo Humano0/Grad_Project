@@ -1,26 +1,22 @@
 package com.final_project.eduflow.Presentation;
 
-import com.final_project.eduflow.Data.DTO.ListRequestsEntity;
-import com.final_project.eduflow.Data.DTO.RequestTypesEntity;
-import com.final_project.eduflow.Data.Entities.Student;
-import com.final_project.eduflow.Data.Entities.TeachingStaff;
+
 import com.final_project.eduflow.Data.View.RequestRequirementView;
 import com.final_project.eduflow.Data.View.StudentRequestsListingView;
-import com.final_project.eduflow.Data.View.WaitingRequestView;
+
 import com.final_project.eduflow.DataAccess.*;
 import com.final_project.eduflow.Presentation.ResponseClasses.AcceptRequestResponseMessage;
 import com.final_project.eduflow.Services.RequestService;
-import com.final_project.eduflow.Services.UserService;
+
 import io.jsonwebtoken.Claims;
 import com.final_project.eduflow.Config.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.final_project.eduflow.Data.Entities.RequestType;
+
 import com.final_project.eduflow.Data.Entities.StudentRequests;
-import java.util.Optional;
-import java.util.stream.Collectors;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
