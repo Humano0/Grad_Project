@@ -66,7 +66,7 @@ public class RequestRequirementController {
         }
         try{
             Optional <RequestRequirement> requestRequirementWithSameIndex = requestRequirementRepository.findByRequestTypeIdAndIndex(requestTypeId,entity.getIndex());
-            if(requestRequirementWithSameIndex.isPresent() ){
+            if(requestRequirementWithSameIndex.isPresent() && requestRequirementWithSameIndex.get().getIndex() != index){
                 return ResponseEntity.badRequest().body("Index already exists");
             }
             requestRequirementRepository.delete(requestRequirement.get());
