@@ -6,6 +6,9 @@ import com.final_project.eduflow.Data.DTO.MailEntity;
 public interface IMailService {
      void sendMail(String mail, MailEntity mailEntity);
 
+
+     //TODO: BRO Implement these shits already
+
 /*      void sendRequestAcceptedMail(Student student, StudentRequests studentRequest);
 
      void sendRequestRejectedMail(Student student, StudentRequests studentRequest);
@@ -14,6 +17,6 @@ public interface IMailService {
 
      void sendRequestWaitingMailToNextActor(Student student, StudentRequests studentRequest, String nextActorMail);
 
-     void sendRequestWaitingMailToAdvisor(Student student, StudentRequests studentRequest, String advisorMail);
- */
+     void sendRequestWaitingMailToAdvisor(Student student, StudentRequests studentRequest, String advisorMail); */
+
 }
