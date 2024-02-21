@@ -38,6 +38,7 @@ public class TeachingStaffController {
     @PostMapping("/addStaff")
     @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<?> addStaff(@RequestBody TeachingStaff newTeachingStaff) {
+
         var result =teachingStaffService.addStaff(newTeachingStaff);
         return ResponseEntity.ok().body(result);
     }

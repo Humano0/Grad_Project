@@ -1,5 +1,6 @@
 package com.final_project.eduflow.Services;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -22,6 +23,16 @@ public class TeachingStaffService implements ITeachingStaffService{
         this.teachingStaffRepository = teachingStaffRepository;
     }
 
+    public boolean isDuplicateRole(long departmentId, String role) {
+        if (role == "Faculty"){
+            return teachingStaffRepository.existsByRole(role);
+        }else{
+            return teachingStaffRepository.existsByDepartmentIdAndRole((int)departmentId, role);
+        }
+    }
+
+
+
     //TODO make this method work with DTO
     public List<StaffInfoForAdmin> getStaffInfoForAdmin() {
         List<Object[]> staff = teachingStaffRepository.findAllWithDepartments();
@@ -36,6 +47,11 @@ public class TeachingStaffService implements ITeachingStaffService{
     }
 
     public TeachingStaff addStaff(TeachingStaff newTeachingStaff) {
+        if (newTeachingStaff.getRole() == "Department" || newTeachingStaff.getRole() == "Faculty") {
+            if (isDuplicateRole(newTeachingStaff.getDepartmentId(), newTeachingStaff.getRole() )) {
+                return null;
+            }
+        }
         var result= teachingStaffRepository.save(newTeachingStaff);
         return result;
     }

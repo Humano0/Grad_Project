@@ -14,4 +14,8 @@ public interface TeachingStaffRepository extends JpaRepository<TeachingStaff, Lo
     //TODO make this method work with DTO
     @Query(value="SELECT ts.id ,ts.email, ts.name, ts.surname, ts.department_id, ts.role, d.name From teaching_staff ts JOIN department d ON ts.department_id = d.id",nativeQuery = true)
     List<Object[]> findAllWithDepartments();
+
+    boolean existsByDepartmentIdAndRole(int departmentId, String role);
+
+    boolean existsByRole(String role);
 }
