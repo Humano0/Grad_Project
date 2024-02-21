@@ -69,10 +69,10 @@ public class TeachingStaff {
         return id;
     }
 
-    public String getFirstname() {
+    public String getName() {
         return name;
     }
-    public String getLastname() {
+    public String getSurname() {
         return surname;
     }
 
@@ -100,11 +100,11 @@ public class TeachingStaff {
         this.id = id;
     }
 
-    public void setFirstname(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setLastname(String surname) {
+    public void setSurname(String surname) {
         this.surname = surname;
     }
 
