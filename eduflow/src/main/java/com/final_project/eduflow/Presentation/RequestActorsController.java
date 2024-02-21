@@ -15,6 +15,8 @@ import com.final_project.eduflow.DataAccess.RequestActorRepository;
 
 
 import java.util.*;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 public class RequestActorsController {
@@ -56,6 +58,28 @@ public class RequestActorsController {
         }
 
         return ResponseEntity.notFound().build();
+
+    }
+
+    @PreAuthorize("hasAuthority('Admin')")
+    @PutMapping("updateRequestActor/{requestTypeId}/{staffId} /{index}")
+    public ResponseEntity<?> updateRequestActor(@PathVariable long id,@PathVariable long staffId, @PathVariable int index, @RequestBody RequestActor entity) {
+
+        Optional <RequestActor> requestActor = requestActorsRepository.findByRequestTypeIdAndStaffIdAndIndex(id,staffId,index);
+        if(!requestActor.isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+        try{
+            Optional <RequestActor> requestActorWithSameIndex = requestActorsRepository.findByRequestTypeIdAndIndex(entity.getStaffId(),(int) entity.getIndex());
+            if(requestActorWithSameIndex.isPresent() && requestActorWithSameIndex.get().getStaffId() != index){
+                return ResponseEntity.badRequest().build();
+            }
+            requestActorsRepository.delete(requestActor.get());
+            requestActorsRepository.save(entity);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
 
     }
 }
