@@ -16,7 +16,7 @@ public class RequestRequirement {
 
     @Id
     @Column(name = "index")
-    private long index;
+    private int index;
 
     @Column(name = "name")
     private String name;
@@ -68,7 +68,7 @@ public class RequestRequirement {
         this.requestTypeId = requestTypeId;
     }
 
-    public long getIndex() {
+    public int getIndex() {
         return index;
     }
 

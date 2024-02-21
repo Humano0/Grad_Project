@@ -2,6 +2,7 @@ package com.final_project.eduflow.Presentation;
 
 import java.util.Optional;
 
+import org.apache.catalina.connector.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.final_project.eduflow.DataAccess.RequestRequirementRepository;
 import com.final_project.eduflow.Data.Entities.RequestRequirement;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 public class RequestRequirementController {
@@ -50,5 +53,28 @@ public class RequestRequirementController {
             return ResponseEntity.ok("Requirement "+requestRequirement.get()+ " deleted");
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PreAuthorize("hasAuthority('Admin')")
+    @PutMapping("updateRequestRequirement/{requestTypeId}/{index}")
+    public ResponseEntity<?> updateRequestRequirment(@PathVariable long requestTypeId, @PathVariable int index, @RequestBody RequestRequirement entity) {
+        //TODO: process PUT request
+        
+        Optional <RequestRequirement> requestRequirement = requestRequirementRepository.findByRequestTypeIdAndIndex(requestTypeId,index);
+        if(!requestRequirement.isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+        try{
+            Optional <RequestRequirement> requestRequirementWithSameIndex = requestRequirementRepository.findByRequestTypeIdAndIndex(requestTypeId,entity.getIndex());
+            if(requestRequirementWithSameIndex.isPresent() ){
+                return ResponseEntity.badRequest().body("Index already exists");
+            }
+            requestRequirementRepository.delete(requestRequirement.get());
+            RequestRequirement result =requestRequirementRepository.save(entity);
+
+            return ResponseEntity.ok().body(result);
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
