@@ -1,5 +1,6 @@
 package com.final_project.eduflow.Presentation;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.catalina.connector.Request;
@@ -33,6 +34,14 @@ public class RequestRequirementController {
     public ResponseEntity<RequestRequirement> addNewRequestRequirement(@RequestBody RequestRequirement requestRequirement){
         RequestRequirement newRequestRequirement = requestRequirementRepository.save(requestRequirement);
         return ResponseEntity.ok(newRequestRequirement);
+    }
+
+    @PreAuthorize("hasAuthority('Admin')")
+    @PostMapping("/addAllRequirements")
+    public void addAllRequirements(@RequestBody List<RequestRequirement> requestRequirements){
+        for(RequestRequirement requestReq : requestRequirements) {
+            requestRequirementRepository.save(requestReq);
+        }
     }
 
     @PreAuthorize("hasAuthority('Admin')")

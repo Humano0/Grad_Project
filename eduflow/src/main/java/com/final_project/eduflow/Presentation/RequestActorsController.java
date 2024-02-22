@@ -1,8 +1,11 @@
 package com.final_project.eduflow.Presentation;
 
+import com.final_project.eduflow.Data.Entities.RequestRequirement;
+import com.final_project.eduflow.DataAccess.RequestRequirementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,10 +41,16 @@ public class RequestActorsController {
     @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<RequestActor> addNewRequestActor(@RequestBody RequestActor requestActor){
         RequestActor newActor = requestActorsRepository.save(requestActor);
-    
         return ResponseEntity.ok(newActor);
     }
 
+    @PreAuthorize("hasAuthority('Admin')")
+    @PostMapping("/addAllRequestActors")
+    public void addAllRequestActors(@RequestBody List<RequestActor> requestActors){
+        for(RequestActor requestActor : requestActors) {
+            requestActorsRepository.save(requestActor);
+        }
+    }
 
     @SuppressWarnings("null")
     @DeleteMapping("/DeleteRequestActor/{requestTypeId}/{staffId}/{index}")
@@ -56,6 +65,5 @@ public class RequestActorsController {
         }
 
         return ResponseEntity.notFound().build();
-
     }
 }
