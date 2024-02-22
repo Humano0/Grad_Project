@@ -73,9 +73,9 @@ public class RequestTypesController {
     }
     @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("/createNewRequestType")
-    public ResponseEntity<RequestType> addNewRequestType(@RequestBody RequestType requestType){
+    public ResponseEntity<Long> addNewRequestType(@RequestBody RequestType requestType){
         RequestType newRequestType = requestTypeRepository.save(requestType);
-        return ResponseEntity.ok(newRequestType);
+        return ResponseEntity.ok(newRequestType.getId());
     }
 
     @PreAuthorize("hasAuthority('Admin')")
