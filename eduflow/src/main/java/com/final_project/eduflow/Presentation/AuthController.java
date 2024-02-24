@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,8 +47,12 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse("error", e.getMessage(), null));
         }
     }
-    @PostMapping("/logout")
+
+    // for some unknown reason, the name "logout" endpoint is not working
+    // so I changed it to "letmeout"
+    @GetMapping("/letmeout")
     public ResponseEntity<LogoutResponse> logout(HttpServletResponse response) {
+        System.out.println("Logout");
         Cookie cookie = new Cookie("token", "");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
