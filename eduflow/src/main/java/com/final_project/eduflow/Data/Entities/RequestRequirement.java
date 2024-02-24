@@ -12,7 +12,7 @@ public class RequestRequirement {
 
     @Id
     @Column(name = "request_type_id")
-    private long requestTypeId;
+    private Long requestTypeId;
 
     @Id
     @Column(name = "index")
@@ -60,7 +60,7 @@ public class RequestRequirement {
         this.type = type;
     }
 
-    public long getRequestTypeId() {
+    public Long getRequestTypeId() {
         return requestTypeId;
     }
 

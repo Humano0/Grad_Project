@@ -4,7 +4,7 @@ public class RequestRequirementId {
 
     private Long requestTypeId;
 
-    private Long index;
+    private int index;
 
     // getters and setters
 
@@ -16,11 +16,11 @@ public class RequestRequirementId {
         this.requestTypeId = requestTypeId;
     }
 
-    public Long getIndex() {
+    public int getIndex() {
         return index;
     }
 
-    public void setIndex(Long index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 }
