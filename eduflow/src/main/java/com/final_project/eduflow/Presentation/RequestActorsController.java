@@ -82,6 +82,12 @@ public class RequestActorsController {
             if(requestActorWithSameIndex.isPresent() && requestActorWithSameIndex.get().getStaffId() != index){
                 return ResponseEntity.badRequest().build();
             }
+            if(index!=1){
+                Optional <RequestActor>  requestActorPrevIndex= requestActorsRepository.findByRequestTypeIdAndIndex(entity.getStaffId(),(int) entity.getIndex()-1);
+                if(!requestActorPrevIndex.isPresent()){
+                    return ResponseEntity.badRequest().body("Previous index does not exist");
+                }
+            }
             requestActorsRepository.delete(requestActor.get());
             requestActorsRepository.save(entity);
             return ResponseEntity.ok().build();
