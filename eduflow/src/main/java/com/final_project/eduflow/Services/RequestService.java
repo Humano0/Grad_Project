@@ -1,6 +1,7 @@
 package com.final_project.eduflow.Services;
 
 
+import com.final_project.eduflow.Data.Entities.IdClasses.RequestStatus;
 import com.final_project.eduflow.Data.Entities.RequestActor;
 import com.final_project.eduflow.Data.Entities.StudentRequests;
 import com.final_project.eduflow.Data.View.StudentRequestsListingView;
@@ -52,11 +53,13 @@ public class RequestService implements IRequestService {
                 studentRequests.getWhen()
         ).orElseThrow();
         request.setCurrentIndex(request.getCurrentIndex() + 1);
-        studentRequestRepository.save(request);
         Optional<RequestActor> requestActor = requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), studentRequests.getCurrentIndex() + 1);
         if(requestActor.isPresent()) {
+            studentRequestRepository.save(request);
             return requestActor.get().getStaffId();
         } else {
+            request.setStatus(RequestStatus.valueOf("accepted"));
+            studentRequestRepository.save(request);
             return studentRequests.getStudentId();
         }
     }
@@ -73,6 +76,7 @@ public class RequestService implements IRequestService {
                 studentRequests.getWhen()
         ).orElseThrow();
         request.setCurrentIndex(-1 * request.getCurrentIndex() - 1);
+        request.setStatus(RequestStatus.valueOf("rejected"));
         studentRequestRepository.save(request);
     }
 

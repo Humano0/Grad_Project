@@ -1,11 +1,13 @@
 package com.final_project.eduflow.Presentation;
 
 
+import com.final_project.eduflow.Data.Entities.RequestRequirement;
 import com.final_project.eduflow.Data.View.RequestRequirementView;
 import com.final_project.eduflow.Data.View.StudentRequestsListingView;
 
 import com.final_project.eduflow.DataAccess.*;
 import com.final_project.eduflow.Presentation.ResponseClasses.AcceptRequestResponseMessage;
+import com.final_project.eduflow.Services.NotificationService;
 import com.final_project.eduflow.Services.RequestService;
 
 import io.jsonwebtoken.Claims;
@@ -14,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import com.final_project.eduflow.Data.Entities.StudentRequests;
 
 import java.util.List;
@@ -25,16 +26,17 @@ import org.springframework.http.ResponseEntity;
 public class RequestController {
     
     private final StudentRequestRepository studentRequestRepository;
-    private final RequestRequirementViewRepository requestRequirementViewRepository;
+    private final RequestRequirementRepository requestRequirementRepository;
     private final RequestService requestService;
-    private final NotificationController notificationController;
+    private final NotificationService notificationService;
+
 
     @Autowired
-    public RequestController(StudentRequestRepository studentRequestRepository, RequestRequirementViewRepository requestRequirementViewRepository, RequestService requestService, NotificationController notificationController) {
+    public RequestController(StudentRequestRepository studentRequestRepository, RequestRequirementRepository requestRequirementRepository, RequestService requestService, NotificationService notificationService) {
         this.studentRequestRepository = studentRequestRepository;
-        this.requestRequirementViewRepository = requestRequirementViewRepository;
+        this.requestRequirementRepository = requestRequirementRepository;
         this.requestService = requestService;
-        this.notificationController = notificationController;
+        this.notificationService = notificationService;
     }
 
     // List student requests for student
@@ -52,15 +54,13 @@ public class RequestController {
 
     @PreAuthorize("hasAuthority('Student')")
     @GetMapping("/requestRequirements/{id}")
-    public ResponseEntity<List<RequestRequirementView>> getRequestRequirements(@PathVariable("id") Long id) {
-        List<RequestRequirementView> requestRequirementViews = requestRequirementViewRepository.findByRequestId(id);
-        if (requestRequirementViews.isEmpty()) {
+    public ResponseEntity<List<RequestRequirement>> getRequestRequirements(@PathVariable("id") Long id) {
+        List<RequestRequirement> requestRequirements = requestRequirementRepository.findByRequestTypeId(id);
+        if (requestRequirements.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(requestRequirementViews);
+        return ResponseEntity.ok(requestRequirements);
     }
-
-
 
     @PreAuthorize("hasAuthority('Student')")
     @PostMapping("/makeRequest")
@@ -76,7 +76,6 @@ public class RequestController {
         return ResponseEntity.ok("Request is made successfully");
     }
 
-
     @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
     @GetMapping("/acceptRequest")
     public ResponseEntity<AcceptRequestResponseMessage> acceptRequest(@RequestBody StudentRequests studentRequest, HttpServletRequest request){
@@ -87,16 +86,13 @@ public class RequestController {
         Long staffId = JwtUtil.getId(claims);
         if(requestService.checkIfRequestActorIsTrue(staffId, staffId, studentRequest.getCurrentIndex())){
             if(requestService.checkIfNextActorIsTheOneAcceptingTheRequest(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex())) {
-                // frontend
-                // TODO: some notification pops up to display the message if status == "back_to_back_same_actor"
-                // TODO: If they accept, then call /acceptRequestForBackToBackSameActors
                 return ResponseEntity.ok(new AcceptRequestResponseMessage("back_to_back_same_actor", "You are the next actor, do you want to accept the request?"));
             } else {
                 Long subId = requestService.acceptRequest(studentRequest);
                 if(subId == studentRequest.getStudentId()) {
-                    notificationController.sendNotification(subId, "your request has been accepted");
+                    notificationService.sendNotification(subId, "your request has been accepted");
                 } else {
-                    notificationController.sendNotification(subId, "new request waiting for your approval");
+                    notificationService.sendNotification(subId, "new request waiting for your approval");
                 }
                 return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted", "done and done"));
             }
@@ -110,9 +106,9 @@ public class RequestController {
     public ResponseEntity<AcceptRequestResponseMessage> acceptRequestForBackToBackSameActors(@RequestBody StudentRequests studentRequest, HttpServletRequest request){
         Long subId = requestService.acceptRequest(studentRequest);
         if(subId == studentRequest.getStudentId()) {
-            notificationController.sendNotification(subId, "your request has been accepted");
+            notificationService.sendNotification(subId, "your request has been accepted");
         } else {
-            notificationController.sendNotification(subId, "new request waiting for your approval");
+            notificationService.sendNotification(subId, "new request waiting for your approval");
         }
         return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted", "done and done"));
     }
@@ -121,7 +117,7 @@ public class RequestController {
     @GetMapping("/rejectRequest")
     public ResponseEntity<AcceptRequestResponseMessage> rejectRequest(@RequestBody StudentRequests studentRequest, @RequestBody String rejectionReason, HttpServletRequest request) {
         requestService.rejectRequest(studentRequest);
-        notificationController.sendNotification(studentRequest.getStudentId(), "your request has been rejected");
+        notificationService.sendNotification(studentRequest.getStudentId(), "your request has been rejected");
         return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted" ,"Request is rejected successfully"));
     }
 }

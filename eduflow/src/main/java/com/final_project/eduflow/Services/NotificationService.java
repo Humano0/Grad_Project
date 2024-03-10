@@ -1,17 +1,15 @@
-package com.final_project.eduflow.Presentation;
+package com.final_project.eduflow.Services;
 
+import com.final_project.eduflow.Services.Interfaces.INotificationService;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
+@Service
+public class NotificationService implements INotificationService {
 
-
-// todo
-// im dumb send this shit to service layer
-@Controller
-public class NotificationController {
     private final SimpMessagingTemplate messagingTemplate;
 
-    public NotificationController(SimpMessagingTemplate messagingTemplate) {
+    public NotificationService(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
 

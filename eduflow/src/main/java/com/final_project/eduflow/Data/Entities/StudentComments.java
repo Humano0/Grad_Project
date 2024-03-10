@@ -1,14 +1,14 @@
 package com.final_project.eduflow.Data.Entities;
 
-import com.final_project.eduflow.Data.Entities.IdClasses.StaffCommentsId;
+import com.final_project.eduflow.Data.Entities.IdClasses.StudentCommentsId;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "staff_comments")
-@IdClass(StaffCommentsId.class)
-public class StaffComments {
+@Table(name = "student_comments")
+@IdClass(StudentCommentsId.class)
+public class StudentComments {
 
     @Id
     @Column(name = "request_when_created")
@@ -16,7 +16,7 @@ public class StaffComments {
 
     @Id
     @Column(name = "request_student_id")
-    private int requestStudentId;
+    private long requestStudentId;
 
     @Id
     @Column(name = "request_type_id")
@@ -24,7 +24,7 @@ public class StaffComments {
 
     @Id
     @Column(name = "user_id")
-    private int userId;
+    private long userId;
 
     @Column(name = "user_comment")
     private String userComment;
@@ -33,7 +33,7 @@ public class StaffComments {
     @Column(name = "time_posted")
     private OffsetDateTime timePosted;
 
-    public StaffComments(OffsetDateTime requestWhenCreated, int requestStudentId, int requestTypeId, int userId, String userComment) {
+    public StudentComments(OffsetDateTime requestWhenCreated, int requestStudentId, int requestTypeId, int userId, String userComment) {
         this.requestWhenCreated = requestWhenCreated;
         this.requestStudentId = requestStudentId;
         this.requestTypeId = requestTypeId;
@@ -42,7 +42,7 @@ public class StaffComments {
         this.timePosted = OffsetDateTime.now();
     }
 
-    public StaffComments() {
+    public StudentComments() {
     }
 
     // getters and setters
@@ -55,11 +55,11 @@ public class StaffComments {
         this.requestWhenCreated = requestWhenCreated;
     }
 
-    public int getRequestStudentId() {
+    public long getRequestStudentId() {
         return requestStudentId;
     }
 
-    public void setRequestStudentId(int requestStudentId) {
+    public void setRequestStudentId(long requestStudentId) {
         this.requestStudentId = requestStudentId;
     }
 
@@ -71,11 +71,11 @@ public class StaffComments {
         this.requestTypeId = requestTypeId;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
