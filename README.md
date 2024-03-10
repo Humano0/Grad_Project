@@ -76,6 +76,19 @@ CREATE TABLE public.student_notification (
 );
 ```
 
+```
+DROP VIEW IF EXISTS student_requests_listing_view;
+CREATE VIEW student_requests_listing_view AS
+SELECT sr.student_id,
+       sr.current_index,
+       sr.information,
+       sr.when_created,
+       sr.status
+FROM student_requests sr
+JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
+GROUP BY sr.student_id, sr.current_index, sr.information, sr.when_created, sr.status;
+```
+
 ## 
 
 new views
