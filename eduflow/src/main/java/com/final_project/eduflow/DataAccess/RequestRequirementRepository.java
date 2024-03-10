@@ -5,6 +5,7 @@ import java.util.List;
 import com.final_project.eduflow.Data.Entities.RequestRequirement;
 import com.final_project.eduflow.Data.Entities.IdClasses.RequestRequirementId;
 
+import com.final_project.eduflow.Data.View.RequestRequirementView;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.*;
