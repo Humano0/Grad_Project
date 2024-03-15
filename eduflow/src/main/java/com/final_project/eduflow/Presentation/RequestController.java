@@ -77,7 +77,7 @@ public class RequestController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    @PreAuthorize("hasAnyAuthority('Advisor', 'Bolum', 'Dekanlik')")
     @GetMapping("/acceptRequest")
     public ResponseEntity<AcceptRequestResponseMessage> acceptRequest(@RequestBody StudentRequests studentRequest, HttpServletRequest request){
         Claims claims = JwtUtil.resolveClaims(request);
