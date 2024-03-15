@@ -3,8 +3,11 @@
 ```
 CREATE TYPE public.request_status AS ENUM (
 	'accepted',
+	'need affirmation',
 	'waiting',
 	'rejected');
+
+
  -- ENUM[”nrw” (new request waiting), “arwf” (accepted request waiting feedback)]
  CREATE TYPE public.staff_noti_type AS ENUM (
 	'nrw',
@@ -13,12 +16,7 @@ CREATE TYPE public.request_status AS ENUM (
  CREATE TYPE public.student_noti_type AS ENUM (
 	'sra',
 	'srd');
-```
-```
--- status
-CREATE TYPE request_status AS ENUM ('accepted', 'waiting', 'rejected');
-ALTER TABLE public.student_requests ADD COLUMN status request_status;
-ALTER TABLE public.student_requests DROP COLUMN student_comment;
+
 ```
 
 ```
@@ -120,6 +118,13 @@ JOIN teaching_staff ts ON s.adviser_id= ts.id
 JOIN request_types rt ON rt.id = sr.request_type_id
 WHERE sr.current_index=0
 ORDER BY sr.when_created;
+
+DROP VIEW IF EXISTS waiting_requests_unioned_view;
+SELECT * FROM staff_waiting_requests_view
+UNION 
+SELECT * FROM advisor_waiting_requests_view;
+
+
 ```
 
 ## 
