@@ -3,13 +3,13 @@ package com.final_project.eduflow.Data.Entities.IdClasses;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
-public class StaffCommentsId {
+public class StaffNotificationId {
 
     private OffsetDateTime requestWhenCreated;
 
     private long requestStudentId;
 
-    private int requestTypeId;
+    private long requestTypeId;
 
     private long userId;
 
@@ -33,11 +33,11 @@ public class StaffCommentsId {
         this.requestStudentId = requestStudentId;
     }
 
-    public int getRequestTypeId() {
+    public long getRequestTypeId() {
         return requestTypeId;
     }
 
-    public void setRequestTypeId(int requestTypeId) {
+    public void setRequestTypeId(long requestTypeId) {
         this.requestTypeId = requestTypeId;
     }
 

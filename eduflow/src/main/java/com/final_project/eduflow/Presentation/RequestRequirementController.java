@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.final_project.eduflow.DataAccess.RequestRequirementRepository;
+import com.final_project.eduflow.Data.Entities.RequestActor;
 import com.final_project.eduflow.Data.Entities.RequestRequirement;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -77,6 +78,12 @@ public class RequestRequirementController {
             Optional <RequestRequirement> requestRequirementWithSameIndex = requestRequirementRepository.findByRequestTypeIdAndIndex(requestTypeId,entity.getIndex());
             if(requestRequirementWithSameIndex.isPresent() && requestRequirementWithSameIndex.get().getIndex() != index){
                 return ResponseEntity.badRequest().body("Index already exists");
+            }
+            if(index!=1){
+                Optional <RequestRequirement>  requestRequirementPrevIndex= requestRequirementRepository.findByRequestTypeIdAndIndex(requestTypeId,(int) entity.getIndex()-1);
+                if(!requestRequirementPrevIndex.isPresent()){
+                    return ResponseEntity.badRequest().body("Previous index does not exist");
+                }
             }
             requestRequirementRepository.delete(requestRequirement.get());
             RequestRequirement result =requestRequirementRepository.save(entity);

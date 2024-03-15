@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -43,6 +44,12 @@ public class TeachingStaffController {
         return ResponseEntity.ok().body(result);
     }
     
+    @PutMapping("/updateStaff")
+    @PreAuthorize("hasAuthority('Admin')")
+    public ResponseEntity<?> updateStaff(@RequestBody TeachingStaff teachingStaff) {
+        var result = teachingStaffService.updateStaff(teachingStaff);
+        return ResponseEntity.ok().body(result);
+    }
     
     
 }

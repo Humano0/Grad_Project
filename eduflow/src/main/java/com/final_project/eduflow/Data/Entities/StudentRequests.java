@@ -1,9 +1,9 @@
 package com.final_project.eduflow.Data.Entities;
 
+import com.final_project.eduflow.Data.Entities.IdClasses.RequestStatus;
 import com.final_project.eduflow.Data.Entities.IdClasses.StudentRequestsId;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -32,27 +32,30 @@ public class StudentRequests {
     @Column(name = "current_index")
     private Integer currentIndex;
 
-    @Column(name = "student_comment")
-    private String studentComment;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private RequestStatus status;
 
     public StudentRequests(long studentId, long requestTypeId, String information, String addition) {
         this.studentId = studentId;
         this.requestTypeId = requestTypeId;
-        this.when = OffsetDateTime.from(LocalDateTime.now());
+        this.when = OffsetDateTime.now();
         this.information = information;
         this.addition = addition;
         this.currentIndex = 0;
+        this.status = RequestStatus.WAITING;
     }
 
     public StudentRequests() {
     }
+
     // getters and setters
 
     public long getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Integer studentId) {
+    public void setStudentId(long studentId) {
         this.studentId = studentId;
     }
 
@@ -60,8 +63,16 @@ public class StudentRequests {
         return requestTypeId;
     }
 
-    public void setRequestTypeId(Integer requestTypeId) {
+    public void setRequestTypeId(long requestTypeId) {
         this.requestTypeId = requestTypeId;
+    }
+
+    public OffsetDateTime getWhen() {
+        return when;
+    }
+
+    public void setWhen(OffsetDateTime when) {
+        this.when = when;
     }
 
     public String getInformation() {
@@ -88,20 +99,11 @@ public class StudentRequests {
         this.currentIndex = currentIndex;
     }
 
-    public OffsetDateTime getWhen() {
-        return when;
+    public RequestStatus getStatus() {
+        return status;
     }
 
-    public void setWhen(OffsetDateTime when) {
-        this.when = when;
-    }
-
-    public String getStudentComment() {
-        return studentComment;
-    }
-
-    public void setStudentComment(String studentComment) {
-        this.studentComment = studentComment;
+    public void setStatus(RequestStatus status) {
+        this.status = status;
     }
 }
-

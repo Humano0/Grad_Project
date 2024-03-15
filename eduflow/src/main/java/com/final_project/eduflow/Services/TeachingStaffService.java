@@ -55,4 +55,14 @@ public class TeachingStaffService implements ITeachingStaffService{
         var result= teachingStaffRepository.save(newTeachingStaff);
         return result;
     }
+
+    public TeachingStaff updateStaff(TeachingStaff teachingStaff) {
+        if (teachingStaff.getRole() == "Department" || teachingStaff.getRole() == "Faculty") {
+            if (isDuplicateRole(teachingStaff.getDepartmentId(), teachingStaff.getRole() )) {
+                return null;
+            }
+        }
+        var result= teachingStaffRepository.save(teachingStaff);
+        return result;
+    }
 }

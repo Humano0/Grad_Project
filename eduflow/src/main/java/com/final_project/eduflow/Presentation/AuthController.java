@@ -48,9 +48,7 @@ public class AuthController {
         }
     }
 
-    // for some unknown reason, the name "logout" endpoint is not working
-    // so I changed it to "letmeout"
-    @GetMapping("/letmeout")
+    @GetMapping("/logout")
     public ResponseEntity<LogoutResponse> logout(HttpServletResponse response) {
         System.out.println("Logout");
         Cookie cookie = new Cookie("token", "");

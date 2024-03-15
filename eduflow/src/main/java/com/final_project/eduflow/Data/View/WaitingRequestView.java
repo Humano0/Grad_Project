@@ -22,7 +22,7 @@ public class WaitingRequestView {
     private String requestTypeName;
 
     @Column(name = "current_index")
-    private long current_index;
+    private int current_index;
 
     @Column(name = "information")
     private String information;
@@ -30,9 +30,6 @@ public class WaitingRequestView {
     @Id
     @Column(name = "when_created")
     private LocalDateTime whenCreated;
-
-    @Column(name = "student_comment")
-    private String studentComment;
 
     @Id
     @Column(name = "current_actor_id")
@@ -52,7 +49,7 @@ public class WaitingRequestView {
         return requestTypeName;
     }
 
-    public long getCurrent_index() {
+    public int getCurrent_index() {
         return current_index;
     }
 
@@ -62,10 +59,6 @@ public class WaitingRequestView {
 
     public LocalDateTime getWhenCreated() {
         return whenCreated;
-    }
-
-    public String getStudentComment() {
-        return studentComment;
     }
 
     public long getCurrentActorId() {
@@ -84,7 +77,7 @@ public class WaitingRequestView {
         this.requestTypeName = requestTypeName;
     }
 
-    public void setCurrent_index(long current_index) {
+    public void setCurrent_index(int current_index) {
         this.current_index = current_index;
     }
 
@@ -94,10 +87,6 @@ public class WaitingRequestView {
 
     public void setWhenCreated(LocalDateTime whenCreated) {
         this.whenCreated = whenCreated;
-    }
-
-    public void setStudentComment(String studentComment) {
-        this.studentComment = studentComment;
     }
 
     public void setCurrentActorId(long currentActorId) {
