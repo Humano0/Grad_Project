@@ -3,7 +3,7 @@
 ```
 CREATE TYPE public.request_status AS ENUM (
 	'accepted',
-	'need affirmation',
+	'need_affirmation',
 	'waiting',
 	'rejected');
 
