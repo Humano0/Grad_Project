@@ -23,7 +23,7 @@ public class MailService implements IMailService {
     @Override
     public void sendMail(String mail) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("noreply@baeldung.com");
+        message.setFrom("oniraca.om00@gmail.com");
         message.setTo(mail);
         message.setSubject("mail subject");
         message.setText("mail text");
