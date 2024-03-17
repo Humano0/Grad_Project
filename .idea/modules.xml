@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/GradProject.iml" filepath="$PROJECT_DIR$/.idea/GradProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/eduflow.main.iml" filepath="$PROJECT_DIR$/.idea/modules/eduflow.main.iml" />
     </modules>
   </component>
 </project>

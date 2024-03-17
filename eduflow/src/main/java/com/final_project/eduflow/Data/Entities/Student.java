@@ -20,10 +20,10 @@ public class Student {
     private String email;
 
     @Column(name = "department_id")
-    private Integer departmentId;
+    private Long departmentId;
 
     @Column(name = "adviser_id")
-    private Integer adviserId;
+    private Long adviserId;
 
     @Column(name = "password")
     private String password;
@@ -50,19 +50,19 @@ public class Student {
         this.email = email;
     }
     
-    public Integer getDepartmentId() {
+    public Long getDepartmentId() {
         return departmentId;
     }
     
-    public void setDepartmentId(Integer departmentId) {
+    public void setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
     }
     
-    public Integer getAdviserId() {
+    public Long getAdviserId() {
         return adviserId;
     }
     
-    public void setAdviserId(Integer adviserId) {
+    public void setAdviserId(Long adviserId) {
         this.adviserId = adviserId;
     }
     
