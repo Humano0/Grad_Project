@@ -4,7 +4,7 @@ import com.final_project.eduflow.Data.DTO.MailEntity;
 
 
 public interface IMailService {
-     void sendMail(String mail, MailEntity mailEntity);
+     void sendMail(String mail);
 
       void sendRequestAcceptedMailtoStudent(String studentMail);
 

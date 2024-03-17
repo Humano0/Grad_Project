@@ -21,8 +21,13 @@ public class MailService implements IMailService {
     private String fromMail;
 
     @Override
-    public void sendMail(String mail, MailEntity mailEntity) {
-
+    public void sendMail(String mail) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("noreply@baeldung.com");
+        message.setTo(mail);
+        message.setSubject("mail subject");
+        message.setText("mail text");
+        mailSender.send(message);
     }
 
     @Override
