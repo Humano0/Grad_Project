@@ -76,7 +76,8 @@ public class RequestController {
         return ResponseEntity.ok("Request is made successfully");
     }
 
-    @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    //@PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    @PreAuthorize("hasAuthority('Danisman', 'Bolum', 'Dekanlik')")
     @GetMapping("/acceptRequest")
     public ResponseEntity<AcceptRequestResponseMessage> acceptRequest(@RequestBody StudentRequests studentRequest, HttpServletRequest request){
         Claims claims = JwtUtil.resolveClaims(request);
@@ -101,7 +102,8 @@ public class RequestController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    //@PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    @PreAuthorize("hasAuthority('Danisman', 'Bolum', 'Dekanlik')")
     @GetMapping("/acceptRequestForBackToBackSameActors")
     public ResponseEntity<AcceptRequestResponseMessage> acceptRequestForBackToBackSameActors(@RequestBody StudentRequests studentRequest, HttpServletRequest request){
         Long subId = requestService.acceptRequest(studentRequest);
@@ -113,7 +115,8 @@ public class RequestController {
         return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted", "done and done"));
     }
 
-    @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    //@PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    @PreAuthorize("hasAuthority('Danisman', 'Bolum', 'Dekanlik')")
     @GetMapping("/rejectRequest")
     public ResponseEntity<AcceptRequestResponseMessage> rejectRequest(@RequestBody StudentRequests studentRequest, @RequestBody String rejectionReason, HttpServletRequest request) {
         requestService.rejectRequest(studentRequest);
