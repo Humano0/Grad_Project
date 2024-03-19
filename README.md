@@ -120,6 +120,7 @@ WHERE sr.current_index=0
 ORDER BY sr.when_created;
 
 DROP VIEW IF EXISTS waiting_requests_unioned_view;
+CREATE OR REPLACE VIEW waiting_requests_unioned_view as
 SELECT * FROM staff_waiting_requests_view
 UNION 
 SELECT * FROM advisor_waiting_requests_view;
