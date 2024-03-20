@@ -58,6 +58,7 @@ public class WaitingRequestsViewController {
             staffRequest.setStudentName(student.getName() + " " + student.getSurname());
             staffRequest.setStudentMail(student.getEmail());
             staffRequest.setStudentDepartment(department.getName());
+            staffRequest.setStatus(requestView.getStatus());
             return staffRequest;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(mappedRequests);

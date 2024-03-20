@@ -53,20 +53,20 @@ public class RequestService implements IRequestService {
                 studentRequests.getWhen()
         ).orElseThrow();
         
-        if(request.getStatus() == RequestStatus.WAITING) {
+        if(request.getStatus() == RequestStatus.waiting.toString()) {
             Optional<RequestActor> requestActor = requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), studentRequests.getCurrentIndex() + 1);
             if(requestActor.isPresent()) {
                 request.setCurrentIndex(request.getCurrentIndex() + 1);
                 studentRequestRepository.save(request);
                 return requestActor.get().getStaffId();
             } else {
-                request.setStatus(RequestStatus.NEED_AFFIRMATION);
+                request.setStatus(RequestStatus.need_affirmation);
                 studentRequestRepository.save(request);
                 return studentRequests.getStudentId();
             }
-        }else if(request.getStatus() == RequestStatus.NEED_AFFIRMATION){
+        }else if(request.getStatus() == RequestStatus.need_affirmation.toString()){
             if(request.getCurrentIndex() == 0){
-                request.setStatus(RequestStatus.ACCEPTED);
+                request.setStatus(RequestStatus.accepted);
                 studentRequestRepository.save(request);
                 return studentRequests.getStudentId();
             }
@@ -90,7 +90,7 @@ public class RequestService implements IRequestService {
                 studentRequests.getWhen()
         ).orElseThrow();
         request.setCurrentIndex(-1 * request.getCurrentIndex() - 1);
-        request.setStatus(RequestStatus.REJECTED);
+        request.setStatus(RequestStatus.rejected);
         studentRequestRepository.save(request);
     }
 
