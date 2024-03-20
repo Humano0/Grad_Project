@@ -43,7 +43,7 @@ public class StudentRequests {
         this.information = information;
         this.addition = addition;
         this.currentIndex = 0;
-        this.status = RequestStatus.waiting;
+        this.status = RequestStatus.WAITING;
     }
 
     public StudentRequests() {
