@@ -32,12 +32,11 @@ public class StudentRequests {
     @Column(name = "current_index")
     private Integer currentIndex;
 
-/*     @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private RequestStatus status; */
+    private RequestStatus status;
 
-    @Column(name = "status")
-    private String status;
+
 
     public StudentRequests(long studentId, long requestTypeId, String information, String addition) {
         this.studentId = studentId;
@@ -46,7 +45,7 @@ public class StudentRequests {
         this.information = information;
         this.addition = addition;
         this.currentIndex = 0;
-        this.status = "waiting";
+        this.status = RequestStatus.WAITING;
     }
 
     public StudentRequests() {
@@ -102,11 +101,11 @@ public class StudentRequests {
         this.currentIndex = currentIndex;
     }
 
-    public String getStatus() {
+    public RequestStatus getStatus() {
         return status;
     }
 
     public void setStatus(RequestStatus status) {
-        this.status = status.toString();
+        this.status = status;
     }
 }
