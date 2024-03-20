@@ -95,7 +95,8 @@ SELECT sr.student_id,
        sr.current_index,
        sr.information,
        sr.when_created,
-       ra.staff_id as current_actor_id
+       ra.staff_id as current_actor_id,
+	sr.status
 FROM student_requests sr
 JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
 JOIN request_types rt ON rt.id = sr.request_type_id
@@ -111,7 +112,8 @@ SELECT sr.student_id,
        sr.current_index,
        sr.information,
        sr.when_created,
-       ts.id as current_actor_id
+       ts.id as current_actor_id,
+	sr.status
 FROM student_requests sr
 JOIN student s ON s.id = sr.student_id
 JOIN teaching_staff ts ON s.adviser_id= ts.id 
@@ -120,6 +122,7 @@ WHERE sr.current_index=0
 ORDER BY sr.when_created;
 
 DROP VIEW IF EXISTS waiting_requests_unioned_view;
+CREATE OR REPLACE VIEW waiting_requests_unioned_view as
 SELECT * FROM staff_waiting_requests_view
 UNION 
 SELECT * FROM advisor_waiting_requests_view;
