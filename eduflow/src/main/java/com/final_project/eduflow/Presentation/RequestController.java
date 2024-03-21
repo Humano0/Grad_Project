@@ -77,7 +77,7 @@ public class RequestController {
     }
 
     //@PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
-    @PreAuthorize("hasAuthority('Danisman', 'Bolum', 'Dekanlik')")
+    @PreAuthorize("hasAnyAuthority('Danisman', 'Bolum', 'Dekanlik','Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
     @GetMapping("/acceptRequest")
     public ResponseEntity<AcceptRequestResponseMessage> acceptRequest(@RequestBody StudentRequests studentRequest, HttpServletRequest request){
         Claims claims = JwtUtil.resolveClaims(request);
@@ -85,7 +85,7 @@ public class RequestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long staffId = JwtUtil.getId(claims);
-        if(requestService.checkIfRequestActorIsTrue(staffId, staffId, studentRequest.getCurrentIndex())){
+        if(requestService.checkIfRequestActorIsTrue(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex())){
             if(requestService.checkIfNextActorIsTheOneAcceptingTheRequest(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex())) {
                 return ResponseEntity.ok(new AcceptRequestResponseMessage("back_to_back_same_actor", "You are the next actor, do you want to accept the request?"));
             } else {
@@ -103,7 +103,7 @@ public class RequestController {
     }
 
     //@PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
-    @PreAuthorize("hasAuthority('Danisman', 'Bolum', 'Dekanlik')")
+    @PreAuthorize("hasAnyAuthority('Danisman', 'Bolum', 'Dekanlik')")
     @GetMapping("/acceptRequestForBackToBackSameActors")
     public ResponseEntity<AcceptRequestResponseMessage> acceptRequestForBackToBackSameActors(@RequestBody StudentRequests studentRequest, HttpServletRequest request){
         Long subId = requestService.acceptRequest(studentRequest);
@@ -116,7 +116,7 @@ public class RequestController {
     }
 
     //@PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
-    @PreAuthorize("hasAuthority('Danisman', 'Bolum', 'Dekanlik')")
+    @PreAuthorize("hasAnyAuthority('Danisman', 'Bolum', 'Dekanlik')")
     @GetMapping("/rejectRequest")
     public ResponseEntity<AcceptRequestResponseMessage> rejectRequest(@RequestBody StudentRequests studentRequest, @RequestBody String rejectionReason, HttpServletRequest request) {
         requestService.rejectRequest(studentRequest);

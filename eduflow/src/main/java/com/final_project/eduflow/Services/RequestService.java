@@ -108,7 +108,10 @@ public class RequestService implements IRequestService {
         Optional<RequestActor> requestActor = requestActorRepository.findByRequestTypeIdAndIndex(requestTypeId, index);
         if(requestActor.isPresent()) {
             return requestActor.get().getStaffId() == staffId;
-        } else {
+        } else if(index==0){
+            return true;
+        } 
+        else {
             return false;
         }
     }
