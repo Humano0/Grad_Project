@@ -29,7 +29,6 @@ public class AuthController {
     public AuthController(UserService userService) {
         this.userService = userService;
     }
-
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody UserLoginEntity entity, HttpServletResponse response) {
         try {
@@ -48,7 +47,8 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/logout")
+    @PreAuthorize("permitAll")
+    @PostMapping("/letmeout")
     public ResponseEntity<LogoutResponse> logout(HttpServletResponse response) {
         System.out.println("Logout");
         Cookie cookie = new Cookie("token", "");
@@ -56,4 +56,6 @@ public class AuthController {
         response.addCookie(cookie);
         return ResponseEntity.ok(new LogoutResponse("success", "Logout successful"));
     }
+
+
 }
