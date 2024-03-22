@@ -90,7 +90,7 @@ public class JwtUtil {
     }
 
     // Gets the role from the claims
-    public String getRole(Claims claims) {
+    public static String getRole(Claims claims) {
         return claims.getSubject();
     }
 }

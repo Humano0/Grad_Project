@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.final_project.eduflow.Data.DTO.UserLoginEntity;
+import com.final_project.eduflow.Data.Entities.Student;
+import com.final_project.eduflow.Data.Entities.TeachingStaff;
 import com.final_project.eduflow.Data.View.UsersView;
 import com.final_project.eduflow.Data.DTO.User;
 import com.final_project.eduflow.DataAccess.StudentRepository;
@@ -69,6 +71,20 @@ public class UserService implements IUserService{
         return studentRepository.findById(studentId)
                 .map(s -> new StudentSideBarInfoEntity(s.getFirstname(), s.getLastname(), s.getId()))
                 .orElse(null);
+    }
+
+    @Override
+    public Student getStudent(long studentId) {
+        if( studentRepository.findById(studentId).isPresent()){
+            return studentRepository.findById(studentId).get();
+        }else {
+            return null;
+        }
+    }
+
+    @Override
+    public TeachingStaff getTeachingStaff(long staffId) {
+        return teachingRepository.findById(staffId);
     }
 
 }

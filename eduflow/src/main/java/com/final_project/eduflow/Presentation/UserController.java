@@ -31,7 +31,7 @@ public class UserController {
     private final AdvisorInfoService advisorInfoService;
     private final UserService userService;
 
-    @Autowired
+    
     public UserController(StudentRepository studentRepository, TeachingStaffRepository teachingStaffRepository, DepartmentRepository departmentRepository, AdvisorInfoViewRepository advisorInfoViewRepository, AdvisorInfoService advisorInfoService, UserService userService) {
         this.studentRepository = studentRepository;
         this.teachingStaffRepository = teachingStaffRepository;
@@ -62,5 +62,23 @@ public class UserController {
         }
         Long id = JwtUtil.getId(claims);
         return ResponseEntity.ok(advisorInfoService.getAdvisorDashboardInfoByStudentId(id));
+    }
+
+    @PreAuthorize("hasAnyAuthority('Student', 'Advisor', 'Bolum','Danisman','Dekanlik','Head_of_Department', 'Dean_of_Faculty')")
+    @GetMapping("/userInformation")
+    public ResponseEntity<?> getUserInformation(HttpServletRequest request){
+        Claims claims = JwtUtil.resolveClaims(request);
+        if (claims == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String role = JwtUtil.getRole(claims);
+        long id = JwtUtil.getId(claims);
+        System.out.println(role);
+        
+        if(role == "Student"){
+            return ResponseEntity.ok(userService.getStudent(id));
+        }else{
+            return ResponseEntity.ok(userService.getTeachingStaff(id));
+        }
     }
 }
