@@ -39,6 +39,14 @@ public class RequestActorsController {
         return ResponseEntity.ok(requestActors);
     }
 
+    @PreAuthorize("hasAuthority('Admin')")
+    @PostMapping("/updateActors")
+    public ResponseEntity<String> updateRequestRequirement(@RequestBody Long requestTypeId, @RequestBody List<RequestActor> requestActor){
+        requestActorsRepository.deleteByRequestTypeId(requestTypeId);
+        requestActor.forEach(requestActorsRepository::save);
+        return ResponseEntity.ok("Request actors added successfully");
+    }
+
     @PostMapping("/AddNewRequestActor")
     @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<RequestActor> addNewRequestActor(@RequestBody RequestActor requestActor){
