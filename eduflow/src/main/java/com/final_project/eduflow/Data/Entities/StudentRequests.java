@@ -5,6 +5,7 @@ import com.final_project.eduflow.Data.Entities.IdClasses.StudentRequestsId;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "student_requests")
@@ -36,14 +37,16 @@ public class StudentRequests {
     @Column(name = "status")
     private RequestStatus status;
 
+
+
     public StudentRequests(long studentId, long requestTypeId, String information, String addition) {
         this.studentId = studentId;
         this.requestTypeId = requestTypeId;
-        this.when = OffsetDateTime.now();
+        this.when = OffsetDateTime.now().truncatedTo(ChronoUnit.MINUTES);
         this.information = information;
         this.addition = addition;
         this.currentIndex = 0;
-        this.status = RequestStatus.waiting;
+        this.status = RequestStatus.WAITING;
     }
 
     public StudentRequests() {

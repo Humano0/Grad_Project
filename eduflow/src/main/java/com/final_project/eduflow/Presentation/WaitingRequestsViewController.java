@@ -35,7 +35,7 @@ public class WaitingRequestsViewController {
     }
 
     // List waiting requests for staff
-    @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
+    @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty', 'Adviser', 'Bolum', 'Dekanlik', 'Danisman')")
     @GetMapping("/listWaitingRequestsForStaff")
     public ResponseEntity<List<WaitingRequestsForStaff>> getWaitingRequestsForStaff(HttpServletRequest request) {
         Claims claims = JwtUtil.resolveClaims(request);
@@ -58,6 +58,7 @@ public class WaitingRequestsViewController {
             staffRequest.setStudentName(student.getName() + " " + student.getSurname());
             staffRequest.setStudentMail(student.getEmail());
             staffRequest.setStudentDepartment(department.getName());
+            staffRequest.setStatus(requestView.getStatus());
             return staffRequest;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(mappedRequests);

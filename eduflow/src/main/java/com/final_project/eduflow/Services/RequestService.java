@@ -53,20 +53,20 @@ public class RequestService implements IRequestService {
                 studentRequests.getWhen()
         ).orElseThrow();
         
-        if(request.getStatus() == RequestStatus.waiting) {
+        if(request.getStatus() == RequestStatus.WAITING) {
             Optional<RequestActor> requestActor = requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), studentRequests.getCurrentIndex() + 1);
             if(requestActor.isPresent()) {
                 request.setCurrentIndex(request.getCurrentIndex() + 1);
                 studentRequestRepository.save(request);
                 return requestActor.get().getStaffId();
             } else {
-                request.setStatus(RequestStatus.need_affirmation);
+                request.setStatus(RequestStatus.NEED_AFFIRMATION);
                 studentRequestRepository.save(request);
                 return studentRequests.getStudentId();
             }
-        }else if(request.getStatus() == RequestStatus.need_affirmation){
+        }else if(request.getStatus() == RequestStatus.NEED_AFFIRMATION){
             if(request.getCurrentIndex() == 0){
-                request.setStatus(RequestStatus.accepted);
+                request.setStatus(RequestStatus.ACCEPTED);
                 studentRequestRepository.save(request);
                 return studentRequests.getStudentId();
             }
@@ -90,7 +90,7 @@ public class RequestService implements IRequestService {
                 studentRequests.getWhen()
         ).orElseThrow();
         request.setCurrentIndex(-1 * request.getCurrentIndex() - 1);
-        request.setStatus(RequestStatus.rejected);
+        request.setStatus(RequestStatus.REJECTED);
         studentRequestRepository.save(request);
     }
 
@@ -108,7 +108,10 @@ public class RequestService implements IRequestService {
         Optional<RequestActor> requestActor = requestActorRepository.findByRequestTypeIdAndIndex(requestTypeId, index);
         if(requestActor.isPresent()) {
             return requestActor.get().getStaffId() == staffId;
-        } else {
+        } else if(index==0){
+            return true;
+        } 
+        else {
             return false;
         }
     }

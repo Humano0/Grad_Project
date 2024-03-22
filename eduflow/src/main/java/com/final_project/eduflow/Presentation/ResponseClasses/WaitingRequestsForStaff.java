@@ -16,6 +16,7 @@ public class WaitingRequestsForStaff {
     private String information;
     private LocalDateTime whenCreated;
     private long currentActorId;
+    private String status;
     // getters and setters
 
     public void setStudentName(String studentName) {
@@ -90,6 +91,14 @@ public class WaitingRequestsForStaff {
 
     public void setCurrentActorId(long currentActorId) {
         this.currentActorId = currentActorId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }
