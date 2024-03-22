@@ -56,6 +56,4 @@ public class AuthController {
         response.addCookie(cookie);
         return ResponseEntity.ok(new LogoutResponse("success", "Logout successful"));
     }
-
-
 }
