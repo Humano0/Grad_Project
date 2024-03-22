@@ -75,7 +75,7 @@ public class UserController {
         long id = JwtUtil.getId(claims);
         System.out.println(role);
         
-        if(role == "Student"){
+        if( role.equals("Student") ){
             return ResponseEntity.ok(userService.getStudent(id));
         }else{
             return ResponseEntity.ok(userService.getTeachingStaff(id));

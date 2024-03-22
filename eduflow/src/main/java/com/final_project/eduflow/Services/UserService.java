@@ -75,8 +75,10 @@ public class UserService implements IUserService{
 
     @Override
     public Student getStudent(long studentId) {
-        if( studentRepository.findById(studentId).isPresent()){
-            return studentRepository.findById(studentId).get();
+        var student = studentRepository.findById(studentId);
+        if( student.isPresent()){
+            System.out.println(student.get().getFirstname());
+            return student.get();
         }else {
             return null;
         }
@@ -84,6 +86,7 @@ public class UserService implements IUserService{
 
     @Override
     public TeachingStaff getTeachingStaff(long staffId) {
+        System.out.println(staffId);
         return teachingRepository.findById(staffId);
     }
 
