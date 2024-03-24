@@ -45,6 +45,7 @@ public class RequestController {
     @GetMapping("/studentRequests")
     public ResponseEntity<List<StudentRequests>> getStudentRequest(HttpServletRequest request){
         Claims claims = JwtUtil.resolveClaims(request);
+        System.out.println(claims);
         if (claims == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
