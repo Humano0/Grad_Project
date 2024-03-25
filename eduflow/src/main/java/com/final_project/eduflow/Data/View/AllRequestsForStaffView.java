@@ -1,13 +1,15 @@
 package com.final_project.eduflow.Data.View;
 
 import java.time.LocalDateTime;
+
+import com.final_project.eduflow.Data.View.IdClasses.AllRequestsId;
 import com.final_project.eduflow.Data.View.IdClasses.WaitinRequestsViewId;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "all_requests_with_actors_view")
-@IdClass(WaitinRequestsViewId.class)
+@IdClass(AllRequestsId.class)
 public class AllRequestsForStaffView {
     
     @Id
@@ -31,8 +33,8 @@ public class AllRequestsForStaffView {
     private LocalDateTime whenCreated;
 
     @Id
-    @Column(name = "current_actor_id")
-    private long currentActorId;
+    @Column(name = "actor_id")
+    private long actorId;
 
     @Column(name = "status")
     private String status;
@@ -63,7 +65,7 @@ public class AllRequestsForStaffView {
     }
 
     public long getCurrentActorId() {
-        return currentActorId;
+        return actorId;
     }
 
     public void setStudentId(long studentId) {
@@ -91,7 +93,7 @@ public class AllRequestsForStaffView {
     }
 
     public void setCurrentActorId(long currentActorId) {
-        this.currentActorId = currentActorId;
+        this.actorId = currentActorId;
     }
 
     public String getStatus() {

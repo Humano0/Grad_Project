@@ -3,7 +3,9 @@ package com.final_project.eduflow.Presentation;
 import com.final_project.eduflow.Config.JwtUtil;
 import com.final_project.eduflow.Data.Entities.Department;
 import com.final_project.eduflow.Data.Entities.Student;
+import com.final_project.eduflow.Data.View.AllRequestsForStaffView;
 import com.final_project.eduflow.Data.View.WaitingRequestView;
+import com.final_project.eduflow.DataAccess.AllRequestForStaffRepository;
 import com.final_project.eduflow.DataAccess.DepartmentRepository;
 import com.final_project.eduflow.DataAccess.StudentRepository;
 import com.final_project.eduflow.DataAccess.WaitingRequestsViewRepository;
@@ -25,13 +27,15 @@ public class WaitingRequestsViewController {
     private final WaitingRequestsViewRepository waitingRequestsViewRepository;
     private final StudentRepository studentRepository;
     private final DepartmentRepository departmentRepository;
+    private final AllRequestForStaffRepository allRequestForStaffRepository;
 
     @Autowired
     public WaitingRequestsViewController(WaitingRequestsViewRepository waitingRequestsViewRepository,
-                                         StudentRepository studentRepository, DepartmentRepository departmentRepository) {
+                                         StudentRepository studentRepository, DepartmentRepository departmentRepository, AllRequestForStaffRepository allRequestForStaffRepository) {
         this.waitingRequestsViewRepository = waitingRequestsViewRepository;
         this.studentRepository = studentRepository;
         this.departmentRepository = departmentRepository;
+        this.allRequestForStaffRepository = allRequestForStaffRepository;
     }
 
     // List waiting requests for staff
@@ -62,5 +66,18 @@ public class WaitingRequestsViewController {
             return staffRequest;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(mappedRequests);
+    }
+
+    @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty', 'Adviser', 'Bolum', 'Dekanlik', 'Danisman')")
+    @GetMapping("/requestsForStaff")
+    public ResponseEntity<List<AllRequestsForStaffView>> getRequestsForStaff(HttpServletRequest request) {
+        Claims claims = JwtUtil.resolveClaims(request);
+        if (claims == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Long staffId = JwtUtil.getId(claims);
+        return ResponseEntity.ok(allRequestForStaffRepository.findByActorId(staffId));
+        
+
     }
 }
