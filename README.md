@@ -1,3 +1,42 @@
+# 25.03.2024
+```
+	CREATE OR REPLACE VIEW all_requests_with_actors_view AS
+	SELECT sr.student_id,
+		   s.name || ' ' || s.surname as student_name,
+		   s.email,
+		   d.name as department_name,
+		   sr.request_type_id,
+		   rt.request_name,
+	       sr.current_index,
+	       sr.information,
+	       sr.when_created,
+	       ra.staff_id as actor_id,
+		sr.status
+	FROM student_requests sr
+	JOIN student s ON s.id = sr.student_id
+	join department d on s.department_id = d.id
+	JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
+	JOIN request_types rt ON rt.id = sr.request_type_id
+	union
+	SELECT sr.student_id,
+		   s.name || ' ' || s.surname as student_name,
+		   s.email,
+		   d.name as department_name,
+		   sr.request_type_id,
+		   rt.request_name,
+	       sr.current_index,
+	       sr.information,
+	       sr.when_created,
+	       ts.id as actor_id,
+		sr.status
+	FROM student_requests sr
+	JOIN student s ON s.id = sr.student_id
+	join department d on s.department_id = d.id
+	JOIN teaching_staff ts ON s.adviser_id= ts.id 
+	JOIN request_types rt ON rt.id = sr.request_type_id
+	ORDER BY when_created;
+```
+
 # 10.03.2024
 # BABE WAKE UP NEW DDLs JUST DROPPED 
 ```
