@@ -16,6 +16,15 @@ public class AllRequestsForStaffView {
     @Column(name = "student_id")
     private long studentId;
 
+    @Column(name = "student_name")
+    private String studentName;
+
+    @Column(name = "email")
+    private String studentEmail;
+
+    @Column(name = "department_name")
+    private String studentDepartment;
+
     @Column(name = "request_type_id")
     private int requestTypeId;
 
@@ -103,4 +112,29 @@ public class AllRequestsForStaffView {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getStudentEmail() {
+        return studentEmail;
+    }
+
+    public void setStudentEmail(String studentEmail) {
+        this.studentEmail = studentEmail;
+    }
+
+    public String getStudentDepartment() {
+        return studentDepartment;
+    }
+
+    public void setStudentDepartment(String studentDepartment) {
+        this.studentDepartment = studentDepartment;
+    }
+    
 }

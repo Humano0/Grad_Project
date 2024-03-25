@@ -48,9 +48,12 @@ public class WaitingRequestsViewController {
         }
         Long staffId = JwtUtil.getId(claims);
         List<WaitingRequestView> allRequests = waitingRequestsViewRepository.findByCurrentActorId(staffId);
-        Student student = studentRepository.findById(allRequests.get(0).getStudentId()).orElse(null);
-        Department department = departmentRepository.findById(student.getDepartmentId()).orElse(null);
         List<WaitingRequestsForStaff> mappedRequests = allRequests.stream().map(requestView -> {
+            Student student = studentRepository.findById(requestView.getStudentId()).orElse(null);
+            Department department = null;
+            if (student != null) {
+                department = departmentRepository.findById(student.getDepartmentId()).orElse(null);
+            }
             WaitingRequestsForStaff staffRequest = new WaitingRequestsForStaff();
             staffRequest.setStudentId(requestView.getStudentId());
             staffRequest.setRequestTypeId(requestView.getRequestTypeId());
@@ -59,9 +62,13 @@ public class WaitingRequestsViewController {
             staffRequest.setInformation(requestView.getInformation());
             staffRequest.setWhenCreated(requestView.getWhenCreated());
             staffRequest.setCurrentActorId(requestView.getCurrentActorId());
-            staffRequest.setStudentName(student.getName() + " " + student.getSurname());
-            staffRequest.setStudentMail(student.getEmail());
-            staffRequest.setStudentDepartment(department.getName());
+            if (student != null) {
+                staffRequest.setStudentName(student.getName() + " " + student.getSurname());
+                staffRequest.setStudentMail(student.getEmail());
+            }
+            if (department != null) {
+                staffRequest.setStudentDepartment(department.getName());
+            }
             staffRequest.setStatus(requestView.getStatus());
             return staffRequest;
         }).collect(Collectors.toList());
@@ -76,8 +83,8 @@ public class WaitingRequestsViewController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long staffId = JwtUtil.getId(claims);
-        return ResponseEntity.ok(allRequestForStaffRepository.findByActorId(staffId));
-        
 
+
+        return ResponseEntity.ok(allRequestForStaffRepository.findByActorId(staffId));
     }
 }
