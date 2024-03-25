@@ -1,5 +1,5 @@
 # 25.03.2024
-```
+```sql
 	CREATE OR REPLACE VIEW all_requests_with_actors_view AS
 	SELECT sr.student_id,
 		   s.name || ' ' || s.surname as student_name,
