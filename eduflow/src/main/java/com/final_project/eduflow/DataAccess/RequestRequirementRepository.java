@@ -19,7 +19,7 @@ public interface RequestRequirementRepository  extends JpaRepository<RequestRequ
     @Modifying
     void deleteByRequestTypeId(@Param("requestTypeId") Long requestTypeId); */
 
-    void deledeleteByRequestTypeId(Long requestTypeId);
+    void deleteByRequestTypeId(Long requestTypeId);
 
     List<RequestRequirement> findByRequestTypeId(Long requestTypeId);
 
