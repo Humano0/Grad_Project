@@ -41,9 +41,9 @@ public class RequestActorsController {
 
     @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("/updateActors")
-    public ResponseEntity<String> updateRequestRequirement(@RequestBody Long requestTypeId, @RequestBody List<RequestActor> requestActor){
-        requestActorsRepository.deleteByRequestTypeId(requestTypeId);
-        requestActor.forEach(requestActorsRepository::save);
+    public ResponseEntity<String> updateRequestActort( @RequestBody List<RequestActor> requestActors){
+        requestActorsRepository.deleteByRequestTypeId(requestActors.get(0).getRequestTypeId());
+        requestActors.forEach(requestActorsRepository::save);
         return ResponseEntity.ok("Request actors added successfully");
     }
 
