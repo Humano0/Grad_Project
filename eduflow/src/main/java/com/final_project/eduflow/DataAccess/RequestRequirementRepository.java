@@ -15,9 +15,11 @@ import org.springframework.security.core.parameters.P;
 import java.util.*;
 
 public interface RequestRequirementRepository  extends JpaRepository<RequestRequirement, RequestRequirementId> {
-    @Query(value = "DELETE FROM request_requirements WHERE requestTypeId = :requestTypeId", nativeQuery = true)
+/*     @Query(value = "DELETE FROM request_requirements WHERE requestTypeId = :requestTypeId", nativeQuery = true)
     @Modifying
-    void deleteByRequestTypeId(@Param("requestTypeId") Long requestTypeId);
+    void deleteByRequestTypeId(@Param("requestTypeId") Long requestTypeId); */
+
+    void deledeleteByRequestTypeId(Long requestTypeId);
 
     List<RequestRequirement> findByRequestTypeId(Long requestTypeId);
 
