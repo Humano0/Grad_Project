@@ -14,6 +14,7 @@ public class WaitingRequestsForStaff {
     private String requestTypeName;
     private int current_index;
     private String information;
+    private String addition;
     private LocalDateTime whenCreated;
     private long currentActorId;
     private String status;
@@ -99,6 +100,14 @@ public class WaitingRequestsForStaff {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getAddition() {
+        return addition;
+    }
+
+    public void setAddition(String addition) {
+        this.addition = addition;
     }
 
 }

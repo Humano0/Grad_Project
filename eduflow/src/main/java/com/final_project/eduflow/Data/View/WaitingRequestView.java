@@ -27,6 +27,9 @@ public class WaitingRequestView {
     @Column(name = "information")
     private String information;
 
+    @Column(name = "addition")
+    private String addition;
+
     @Id
     @Column(name = "when_created")
     private LocalDateTime whenCreated;
@@ -39,6 +42,16 @@ public class WaitingRequestView {
     private String status;
     // getters and setters
     
+    
+    public String getAddition() {
+        return addition;
+    }
+
+    public void setAddition(String addition) {
+        this.addition = addition;
+    }
+
+
     public long getStudentId() {
         return studentId;
     }

@@ -9,6 +9,7 @@ import com.final_project.eduflow.DataAccess.AllRequestForStaffRepository;
 import com.final_project.eduflow.DataAccess.DepartmentRepository;
 import com.final_project.eduflow.DataAccess.StudentRepository;
 import com.final_project.eduflow.DataAccess.WaitingRequestsViewRepository;
+import com.final_project.eduflow.Presentation.ResponseClasses.WaitingRequestBuilder;
 import com.final_project.eduflow.Presentation.ResponseClasses.WaitingRequestsForStaff;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -54,7 +55,23 @@ public class WaitingRequestsViewController {
             if (student != null) {
                 department = departmentRepository.findById(student.getDepartmentId()).orElse(null);
             }
-            WaitingRequestsForStaff staffRequest = new WaitingRequestsForStaff();
+            WaitingRequestBuilder builder = new WaitingRequestBuilder();
+
+            return builder.setStudentId(requestView.getStudentId())
+                    .setStudentName(student.getName() + " " + student.getSurname())
+                    .setStudentMail(student.getEmail())
+                    .setStudentDepartment(department.getName())
+                    .setRequestTypeId(requestView.getRequestTypeId())
+                    .setRequestTypeName(requestView.getRequestTypeName())
+                    .setCurrent_index(requestView.getCurrent_index())
+                    .setInformation(requestView.getInformation())
+                    .setWhenCreated(requestView.getWhenCreated())
+                    .setCurrentActorId(requestView.getCurrentActorId())
+                    .setAddition(requestView.getAddition())
+                    .setStatus(requestView.getStatus())
+                    .build();
+
+/*             WaitingRequestsForStaff staffRequest = new WaitingRequestsForStaff();
             staffRequest.setStudentId(requestView.getStudentId());
             staffRequest.setRequestTypeId(requestView.getRequestTypeId());
             staffRequest.setRequestTypeName(requestView.getRequestTypeName());
@@ -62,6 +79,7 @@ public class WaitingRequestsViewController {
             staffRequest.setInformation(requestView.getInformation());
             staffRequest.setWhenCreated(requestView.getWhenCreated());
             staffRequest.setCurrentActorId(requestView.getCurrentActorId());
+            staffRequest.setAddition(requestView.getAddition());
             if (student != null) {
                 staffRequest.setStudentName(student.getName() + " " + student.getSurname());
                 staffRequest.setStudentMail(student.getEmail());
@@ -70,7 +88,7 @@ public class WaitingRequestsViewController {
                 staffRequest.setStudentDepartment(department.getName());
             }
             staffRequest.setStatus(requestView.getStatus());
-            return staffRequest;
+            return staffRequest; */
         }).collect(Collectors.toList());
         return ResponseEntity.ok(mappedRequests);
     }
