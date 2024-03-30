@@ -2,18 +2,28 @@ package com.final_project.eduflow.Data.View;
 
 import java.time.LocalDateTime;
 
+import com.final_project.eduflow.Data.View.IdClasses.AllRequestsId;
 import com.final_project.eduflow.Data.View.IdClasses.WaitinRequestsViewId;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "waiting_requests_unioned_view")
-@IdClass(WaitinRequestsViewId.class)
-public class WaitingRequestView {
+@Table(name = "all_requests_with_actors_view")
+@IdClass(AllRequestsId.class)
+public class AllRequestsForStaffView {
     
     @Id
     @Column(name = "student_id")
     private long studentId;
+
+    @Column(name = "student_name")
+    private String studentName;
+
+    @Column(name = "email")
+    private String studentEmail;
+
+    @Column(name = "department_name")
+    private String studentDepartment;
 
     @Column(name = "request_type_id")
     private int requestTypeId;
@@ -27,31 +37,18 @@ public class WaitingRequestView {
     @Column(name = "information")
     private String information;
 
-    @Column(name = "addition")
-    private String addition;
-
     @Id
     @Column(name = "when_created")
     private LocalDateTime whenCreated;
 
     @Id
-    @Column(name = "current_actor_id")
-    private long currentActorId;
+    @Column(name = "actor_id")
+    private long actorId;
 
     @Column(name = "status")
     private String status;
     // getters and setters
     
-    
-    public String getAddition() {
-        return addition;
-    }
-
-    public void setAddition(String addition) {
-        this.addition = addition;
-    }
-
-
     public long getStudentId() {
         return studentId;
     }
@@ -77,7 +74,7 @@ public class WaitingRequestView {
     }
 
     public long getCurrentActorId() {
-        return currentActorId;
+        return actorId;
     }
 
     public void setStudentId(long studentId) {
@@ -105,7 +102,7 @@ public class WaitingRequestView {
     }
 
     public void setCurrentActorId(long currentActorId) {
-        this.currentActorId = currentActorId;
+        this.actorId = currentActorId;
     }
 
     public String getStatus() {
@@ -114,6 +111,30 @@ public class WaitingRequestView {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+    
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getStudentEmail() {
+        return studentEmail;
+    }
+
+    public void setStudentEmail(String studentEmail) {
+        this.studentEmail = studentEmail;
+    }
+
+    public String getStudentDepartment() {
+        return studentDepartment;
+    }
+
+    public void setStudentDepartment(String studentDepartment) {
+        this.studentDepartment = studentDepartment;
     }
     
 }

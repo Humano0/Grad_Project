@@ -13,9 +13,11 @@ import java.util.List;
 
 public interface RequestActorRepository extends JpaRepository<RequestActor, RequestActorId> {
 
-    @Query(value = "DELETE FROM request_actors WHERE requestTypeId = :requestTypeId", nativeQuery = true)
+/*     @Query(value = "DELETE FROM request_actors WHERE requestTypeId = :requestTypeId", nativeQuery = true)
     @Modifying
-    void deleteByRequestTypeId(@Param("requestTypeId") Long requestTypeId);
+    void deleteByRequestTypeId(@Param("requestTypeId") Long requestTypeId); */
+
+    void deleteByRequestTypeId(Long requestTypeId);
     Optional<RequestActor> findByRequestTypeIdAndIndex(Long requestTypeId, int index);
     List <RequestActor> findByRequestTypeId(Long requestTypeId);
     RequestActor findByRequestTypeIdAndStaffId(Long requestTypeId, Long staffId);

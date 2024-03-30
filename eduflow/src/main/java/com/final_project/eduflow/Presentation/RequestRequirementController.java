@@ -38,12 +38,22 @@ public class RequestRequirementController {
         return ResponseEntity.ok("Request Requirements added successfully");
     }
 
-    @PreAuthorize("hasAuthority('Admin')")
+/*     @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("/updateRequirements")
     public ResponseEntity<RequestRequirement> updateRequestRequirement(@RequestBody RequestRequirement requestRequirement){
         RequestRequirement newRequestRequirement = requestRequirementRepository.save(requestRequirement);
         return ResponseEntity.ok(newRequestRequirement);
+    } */
+
+    @PreAuthorize("hasAuthority('Admin')")
+    @PostMapping("/updateRequirements")
+    public ResponseEntity<RequestRequirement> updateRequestRequirement(@RequestBody List<RequestRequirement> requestRequirement){
+        requestRequirementRepository.deleteByRequestTypeId(requestRequirement.get(0).getRequestTypeId());
+        requestRequirement.forEach(requestRequirementRepository::save);
+
+        return ResponseEntity.ok(requestRequirement.get(0));
     }
+
 
     @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("/addAllRequirements")
