@@ -33,7 +33,7 @@ public class RequestActorsController {
 
     @GetMapping("/GetRequestActors/{requestTypeId}")
     @PreAuthorize("hasAuthority('Admin')")
-    public ResponseEntity<List<RequestActor>> getRequestActors(@PathVariable("requestTypeId") Long requestTypeId){
+    public ResponseEntity<List<?>> getRequestActors(@PathVariable("requestTypeId") Long requestTypeId){
         List<RequestActor> requestActors = requestActorsRepository.findByRequestTypeId(requestTypeId);
 
         return ResponseEntity.ok(requestActors);
