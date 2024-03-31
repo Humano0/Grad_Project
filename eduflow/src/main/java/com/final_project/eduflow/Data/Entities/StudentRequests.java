@@ -14,11 +14,11 @@ public class StudentRequests {
 
     @Id
     @Column(name = "student_id")
-    private long studentId;
+    private Long studentId;
 
     @Id
     @Column(name = "request_type_id")
-    private long requestTypeId;
+    private Long requestTypeId;
 
     @Id
     @Column(name = "when_created")
@@ -39,7 +39,7 @@ public class StudentRequests {
 
 
 
-    public StudentRequests(long studentId, long requestTypeId, String information, String addition) {
+    public StudentRequests(Long studentId, Long requestTypeId, String information, String addition) {
         this.studentId = studentId;
         this.requestTypeId = requestTypeId;
         this.when = OffsetDateTime.now().truncatedTo(ChronoUnit.MINUTES);
@@ -54,19 +54,19 @@ public class StudentRequests {
 
     // getters and setters
 
-    public long getStudentId() {
+    public Long getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(long studentId) {
+    public void setStudentId(Long studentId) {
         this.studentId = studentId;
     }
 
-    public long getRequestTypeId() {
+    public Long getRequestTypeId() {
         return requestTypeId;
     }
 
-    public void setRequestTypeId(long requestTypeId) {
+    public void setRequestTypeId(Long requestTypeId) {
         this.requestTypeId = requestTypeId;
     }
 
