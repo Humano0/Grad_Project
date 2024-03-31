@@ -22,5 +22,5 @@ public interface RequestActorRepository extends JpaRepository<RequestActor, Requ
     List <RequestActor> findByRequestTypeId(Long requestTypeId);
     RequestActor findByRequestTypeIdAndStaffId(Long requestTypeId, Long staffId);
     Optional<RequestActor> findByRequestTypeIdAndStaffIdAndIndex(Long requestTypeId, Long staffId, int index);
-    Optional <RequestActor> findByRequestTypeIdAndIndex(long requestTypeId, int index);
+//    Optional <RequestActor> findByRequestTypeIdAndIndex(long requestTypeId, int index);
 }
