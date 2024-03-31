@@ -9,6 +9,7 @@ import com.final_project.eduflow.Data.View.StudentRequestsListingView;
 import com.final_project.eduflow.DataAccess.*;
 import com.final_project.eduflow.Presentation.ResponseClasses.ListRequestTypes;
 import com.final_project.eduflow.Services.Interfaces.IRequestService;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 
@@ -19,22 +20,26 @@ import java.util.stream.Collectors;
 
 @Service
 public class RequestService implements IRequestService {
-
+    private final SimpMessagingTemplate messagingTemplate;
     private final StudentRequestsListingViewRepository studentRequestsListingViewRepository;
     private final StudentRequestRepository studentRequestRepository;
     private final RequestActorRepository requestActorRepository;
     private final RequestTypeRepository requestTypeRepository;
     private final WaitingRequestsViewRepository waitingRequestsViewRepository;
+    private final StudentRepository studentRepository;
 
-    public RequestService(StudentRequestsListingViewRepository studentRequestsListingViewRepository,
+    public RequestService(SimpMessagingTemplate messagingTemplate, StudentRequestsListingViewRepository studentRequestsListingViewRepository,
                           StudentRequestRepository studentRequestRepository,
-                          RequestActorRepository requestActorRepository, WaitingRequestsViewRepository waitingRequestsViewRepository,
-                          RequestTypeRepository requestTypeRepository) {
+                          RequestActorRepository requestActorRepository,
+                          WaitingRequestsViewRepository waitingRequestsViewRepository,
+                          RequestTypeRepository requestTypeRepository, StudentRepository studentRepository) {
+        this.messagingTemplate = messagingTemplate;
         this.studentRequestsListingViewRepository = studentRequestsListingViewRepository;
         this.studentRequestRepository = studentRequestRepository;
         this.requestActorRepository = requestActorRepository;
         this.requestTypeRepository = requestTypeRepository;
         this.waitingRequestsViewRepository = waitingRequestsViewRepository;
+        this.studentRepository = studentRepository;
     }
 
     @Override
@@ -58,21 +63,45 @@ public class RequestService implements IRequestService {
             if(requestActor.isPresent()) {
                 request.setCurrentIndex(request.getCurrentIndex() + 1);
                 studentRequestRepository.save(request);
+                this.messagingTemplate.convertAndSendToUser(requestActor.get().getStaffId().toString(),
+                        "/request/notification",
+                        "newrequest");
                 return requestActor.get().getStaffId();
             } else {
                 request.setStatus(RequestStatus.NEED_AFFIRMATION);
-                studentRequestRepository.save(request);
-                return studentRequests.getStudentId();
+                request.setCurrentIndex(request.getCurrentIndex() - 1);
+                Optional<RequestActor> reqActor = requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), request.getCurrentIndex());
+                if(request.getCurrentIndex() == 0) {
+                    Long danismanId = studentRepository.findById(request.getStudentId()).orElseThrow().getAdvisorId();
+                    this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
+                            "/request/notification",
+                            "newrequest");
+                    return danismanId;
+                }
+                this.messagingTemplate.convertAndSendToUser(reqActor.get().getStaffId().toString(),
+                        "/request/notification",
+                        "needaffirmation");
+                return requestActor.get().getStaffId();
             }
-        }else if(request.getStatus() == RequestStatus.NEED_AFFIRMATION){
+        } else if(request.getStatus() == RequestStatus.NEED_AFFIRMATION){
             if(request.getCurrentIndex() == 0){
                 request.setStatus(RequestStatus.ACCEPTED);
                 studentRequestRepository.save(request);
+                this.messagingTemplate.convertAndSendToUser(request.getStudentId().toString(),
+                        "/request/notification",
+                        "accepted");
                 return studentRequests.getStudentId();
             }
             request.setCurrentIndex(request.getCurrentIndex() - 1);
+            if(request.getCurrentIndex() == 0) {
+                Long danismanId = studentRepository.findById(request.getStudentId()).orElseThrow().getAdvisorId();
+                this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
+                        "/request/notification",
+                        "newrequest");
+                return danismanId;
+            }
             studentRequestRepository.save(request);
-            return request.getStudentId();
+            return requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), request.getCurrentIndex()).orElseThrow().getStaffId();
         }else {
             throw new RuntimeException("Request is already accepted or rejected");
         }
@@ -91,6 +120,9 @@ public class RequestService implements IRequestService {
         ).orElseThrow();
         request.setCurrentIndex(-1 * request.getCurrentIndex() - 1);
         request.setStatus(RequestStatus.REJECTED);
+        this.messagingTemplate.convertAndSendToUser(request.getStudentId().toString(),
+                "/request/notification",
+                "rejected");
         studentRequestRepository.save(request);
     }
 
