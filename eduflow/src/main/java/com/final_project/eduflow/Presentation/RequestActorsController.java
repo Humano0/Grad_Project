@@ -1,11 +1,8 @@
 package com.final_project.eduflow.Presentation;
 
-import com.final_project.eduflow.Data.Entities.RequestRequirement;
-import com.final_project.eduflow.DataAccess.RequestRequirementRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,10 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.final_project.eduflow.Data.Entities.RequestActor;
+import com.final_project.eduflow.Data.Entities.TeachingStaff;
 import com.final_project.eduflow.DataAccess.RequestActorRepository;
-
+import com.final_project.eduflow.DataAccess.TeachingStaffRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 import org.springframework.web.bind.annotation.PutMapping;
 
 
@@ -25,10 +25,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class RequestActorsController {
     
     private final RequestActorRepository requestActorsRepository;
+    private final TeachingStaffRepository teachinhgStaffRepository;
 
-    @Autowired
-    public RequestActorsController(RequestActorRepository requestActorsRepository) {
+    public RequestActorsController(RequestActorRepository requestActorsRepository, TeachingStaffRepository teachinhgStaffRepository) {
         this.requestActorsRepository = requestActorsRepository;
+        this.teachinhgStaffRepository = teachinhgStaffRepository;
     }
 
     @GetMapping("/GetRequestActors/{requestTypeId}")
@@ -36,7 +37,18 @@ public class RequestActorsController {
     public ResponseEntity<List<?>> getRequestActors(@PathVariable("requestTypeId") Long requestTypeId){
         List<RequestActor> requestActors = requestActorsRepository.findByRequestTypeId(requestTypeId);
 
-        return ResponseEntity.ok(requestActors);
+        List<?> actors = requestActors.stream().map(requestActor->{
+            TeachingStaff staff = teachinhgStaffRepository.findById(requestActor.getStaffId()).get();
+            var actor = new Object(){
+                public Long requestTypeId = requestActor.getRequestTypeId();
+                public Long staffId = requestActor.getStaffId();
+                public int index = requestActor.getIndex();
+                public String staffName = staff.getName();
+                public String staffRole = staff.getRole();
+            };
+            return actor;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(actors);
     }
 
     @PreAuthorize("hasAuthority('Admin')")
