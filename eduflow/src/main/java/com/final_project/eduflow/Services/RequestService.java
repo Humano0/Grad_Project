@@ -76,12 +76,14 @@ public class RequestService implements IRequestService {
                     this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
                             "/request/notification",
                             "newrequest");
+                            studentRequestRepository.save(request);
                     return danismanId;
                 }
-                this.messagingTemplate.convertAndSendToUser(reqActor.get().getStaffId().toString(),
+/*                 this.messagingTemplate.convertAndSendToUser(reqActor.get().getStaffId().toString(),
                         "/request/notification",
-                        "needaffirmation");
-                return requestActor.get().getStaffId();
+                        "needaffirmation"); */
+                studentRequestRepository.save(request);
+                return reqActor.get().getStaffId();
             }
         } else if(request.getStatus() == RequestStatus.NEED_AFFIRMATION){
             if(request.getCurrentIndex() == 0){
@@ -98,6 +100,7 @@ public class RequestService implements IRequestService {
                 this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
                         "/request/notification",
                         "newrequest");
+                studentRequestRepository.save(request);
                 return danismanId;
             }
             studentRequestRepository.save(request);
