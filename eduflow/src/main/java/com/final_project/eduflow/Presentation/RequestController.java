@@ -121,6 +121,7 @@ public class RequestController {
     @PostMapping("/rejectRequest")
     public ResponseEntity<AcceptRequestResponseMessage> rejectRequest(@RequestBody StudentRequests studentRequest, HttpServletRequest request) {
         requestService.rejectRequest(studentRequest);
+        System.out.println("Request is rejected successfully");
         notificationService.sendNotification(studentRequest.getStudentId(), "your request has been rejected");
         return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted" ,"Request is rejected successfully"));
     }
