@@ -18,6 +18,8 @@ public class WaitingRequestsForStaff {
     private LocalDateTime whenCreated;
     private long currentActorId;
     private String status;
+    private long adviserId;
+    private String adviserName;
     // getters and setters
 
     public void setStudentName(String studentName) {
@@ -109,5 +111,23 @@ public class WaitingRequestsForStaff {
     public void setAddition(String addition) {
         this.addition = addition;
     }
+
+    public long getAdviserId() {
+        return adviserId;
+    }
+
+    public void setAdviserId(long adviserId) {
+        this.adviserId = adviserId;
+    }
+
+    public String getAdviserName() {
+        return adviserName;
+    }
+
+    public void setAdviserName(String adviserName) {
+        this.adviserName = adviserName;
+    }
+
+
 
 }
