@@ -66,11 +66,24 @@ public class WaitingRequestBuilder {
         return this;
     }
 
+    public WaitingRequestBuilder setAdviserId(long adviserId) {
+        waitingRequestsForStaff.setAdviserId(adviserId);
+        return this;
+    }
+
+    public WaitingRequestBuilder setAdviserName(String adviserName) {
+        waitingRequestsForStaff.setAdviserName(adviserName);
+        return this;
+    }
+    
+
     public WaitingRequestsForStaff build() {
         return waitingRequestsForStaff;
     }
 
     public WaitingRequestBuilder() {
     }
+
+
 
 }
