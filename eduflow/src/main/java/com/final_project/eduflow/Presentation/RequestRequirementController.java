@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.final_project.eduflow.DataAccess.RequestRequirementRepository;
+
+import jakarta.transaction.Transactional;
+
 import com.final_project.eduflow.Data.Entities.RequestActor;
 import com.final_project.eduflow.Data.Entities.RequestRequirement;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,7 +35,8 @@ public class RequestRequirementController {
 
     @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("/updateRequestRequirements")
-    public ResponseEntity<String> addNewRequestRequirement(@RequestBody Long requestTypeId, @RequestBody List<RequestRequirement> requestRequirement) {
+    public ResponseEntity<String> addNewRequestRequirement( @RequestBody List<RequestRequirement> requestRequirement) {
+        var requestTypeId = requestRequirement.get(0).getRequestTypeId();
         requestRequirementRepository.deleteByRequestTypeId(requestTypeId);
         requestRequirement.forEach(requestRequirementRepository::save);
         return ResponseEntity.ok("Request Requirements added successfully");
@@ -45,6 +49,7 @@ public class RequestRequirementController {
         return ResponseEntity.ok(newRequestRequirement);
     } */
 
+    @Transactional
     @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("/updateRequirements")
     public ResponseEntity<RequestRequirement> updateRequestRequirement(@RequestBody List<RequestRequirement> requestRequirement){

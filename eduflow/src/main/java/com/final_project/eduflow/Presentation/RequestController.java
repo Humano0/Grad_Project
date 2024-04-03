@@ -91,11 +91,11 @@ public class RequestController {
                 return ResponseEntity.ok(new AcceptRequestResponseMessage("back_to_back_same_actor", "You are the next actor, do you want to accept the request?"));
             } else {
                 Long subId = requestService.acceptRequest(studentRequest);
-                if(subId == studentRequest.getStudentId()) {
-                    notificationService.sendNotification(subId, "your request has been accepted");
-                } else {
-                    notificationService.sendNotification(subId, "new request waiting for your approval");
-                }
+//                if(subId == studentRequest.getStudentId()) {
+//                    notificationService.sendNotification(subId, "your request has been accepted");
+//                } else {
+//                    notificationService.sendNotification(subId, "new request waiting for your approval");
+//                }
                 return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted", "done and done"));
             }
         }else{
