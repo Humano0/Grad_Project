@@ -40,10 +40,9 @@ out/
 
 .fake
 
-/application.properties
+
 
 
 eduflow/src/main/resources/application.properties
-src/main/resources/*
-./src/main/resources/*
-/src/main/resources/*
+
+

@@ -3,7 +3,7 @@ package com.final_project.eduflow.Presentation;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.catalina.connector.Request;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +18,7 @@ import com.final_project.eduflow.DataAccess.RequestRequirementRepository;
 
 import jakarta.transaction.Transactional;
 
-import com.final_project.eduflow.Data.Entities.RequestActor;
+
 import com.final_project.eduflow.Data.Entities.RequestRequirement;
 import org.springframework.web.bind.annotation.PutMapping;
 
