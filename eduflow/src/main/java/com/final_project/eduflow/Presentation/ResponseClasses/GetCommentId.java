@@ -1,21 +1,17 @@
-package com.final_project.eduflow.Data.Entities.IdClasses;
+package com.final_project.eduflow.Presentation.ResponseClasses;
 
-import java.io.Serializable;
 import java.time.OffsetDateTime;
 
-public class StaffCommentsId {
-
+public class GetCommentId {
     private OffsetDateTime requestWhenCreated;
-
     private Long requestStudentId;
-
     private Long requestTypeId;
 
-    private Long userId;
-
-    private OffsetDateTime timePosted;
-
-    // getters and setters
+    public GetCommentId(OffsetDateTime requestWhenCreated, Long requestStudentId, Long requestTypeId) {
+        this.requestWhenCreated = requestWhenCreated;
+        this.requestStudentId = requestStudentId;
+        this.requestTypeId = requestTypeId;
+    }
 
     public OffsetDateTime getRequestWhenCreated() {
         return requestWhenCreated;
@@ -25,11 +21,11 @@ public class StaffCommentsId {
         this.requestWhenCreated = requestWhenCreated;
     }
 
-    public long getRequestStudentId() {
+    public Long getRequestStudentId() {
         return requestStudentId;
     }
 
-    public void setRequestStudentId(long requestStudentId) {
+    public void setRequestStudentId(Long requestStudentId) {
         this.requestStudentId = requestStudentId;
     }
 
@@ -39,21 +35,5 @@ public class StaffCommentsId {
 
     public void setRequestTypeId(Long requestTypeId) {
         this.requestTypeId = requestTypeId;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public OffsetDateTime getTimePosted() {
-        return timePosted;
-    }
-
-    public void setTimePosted(OffsetDateTime timePosted) {
-        this.timePosted = timePosted;
     }
 }
