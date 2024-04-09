@@ -3,6 +3,7 @@ package com.final_project.eduflow.Presentation;
 import com.final_project.eduflow.Config.JwtUtil;
 import com.final_project.eduflow.Data.Entities.Department;
 import com.final_project.eduflow.Data.Entities.Student;
+import com.final_project.eduflow.Data.Entities.TeachingStaff;
 import com.final_project.eduflow.Data.View.AllRequestsForStaffView;
 import com.final_project.eduflow.Data.View.WaitingRequestView;
 import com.final_project.eduflow.DataAccess.AllRequestForStaffRepository;
@@ -11,6 +12,7 @@ import com.final_project.eduflow.DataAccess.StudentRepository;
 import com.final_project.eduflow.DataAccess.WaitingRequestsViewRepository;
 import com.final_project.eduflow.Presentation.ResponseClasses.WaitingRequestBuilder;
 import com.final_project.eduflow.Presentation.ResponseClasses.WaitingRequestsForStaff;
+import com.final_project.eduflow.DataAccess.TeachingStaffRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +31,16 @@ public class WaitingRequestsViewController {
     private final StudentRepository studentRepository;
     private final DepartmentRepository departmentRepository;
     private final AllRequestForStaffRepository allRequestForStaffRepository;
+    private final TeachingStaffRepository teachingStaffRepository;
 
     @Autowired
     public WaitingRequestsViewController(WaitingRequestsViewRepository waitingRequestsViewRepository,
-                                         StudentRepository studentRepository, DepartmentRepository departmentRepository, AllRequestForStaffRepository allRequestForStaffRepository) {
+                                         StudentRepository studentRepository, DepartmentRepository departmentRepository, AllRequestForStaffRepository allRequestForStaffRepository, TeachingStaffRepository teachingStaffRepository) {
         this.waitingRequestsViewRepository = waitingRequestsViewRepository;
         this.studentRepository = studentRepository;
         this.departmentRepository = departmentRepository;
         this.allRequestForStaffRepository = allRequestForStaffRepository;
+        this.teachingStaffRepository = teachingStaffRepository;
     }
 
     // List waiting requests for staff
@@ -55,6 +59,7 @@ public class WaitingRequestsViewController {
             if (student != null) {
                 department = departmentRepository.findById(student.getDepartmentId()).orElse(null);
             }
+            TeachingStaff teachingStaff = teachingStaffRepository.findById(student.getAdvisorId()).orElse(null);
             WaitingRequestBuilder builder = new WaitingRequestBuilder();
 
             return builder.setStudentId(requestView.getStudentId())
@@ -69,26 +74,9 @@ public class WaitingRequestsViewController {
                     .setCurrentActorId(requestView.getCurrentActorId())
                     .setAddition(requestView.getAddition())
                     .setStatus(requestView.getStatus())
+                    .setAdviserId(teachingStaff.getId())
+                    .setAdviserName(teachingStaff.getName() + " " + teachingStaff.getSurname())
                     .build();
-
-/*             WaitingRequestsForStaff staffRequest = new WaitingRequestsForStaff();
-            staffRequest.setStudentId(requestView.getStudentId());
-            staffRequest.setRequestTypeId(requestView.getRequestTypeId());
-            staffRequest.setRequestTypeName(requestView.getRequestTypeName());
-            staffRequest.setCurrent_index(requestView.getCurrent_index());
-            staffRequest.setInformation(requestView.getInformation());
-            staffRequest.setWhenCreated(requestView.getWhenCreated());
-            staffRequest.setCurrentActorId(requestView.getCurrentActorId());
-            staffRequest.setAddition(requestView.getAddition());
-            if (student != null) {
-                staffRequest.setStudentName(student.getName() + " " + student.getSurname());
-                staffRequest.setStudentMail(student.getEmail());
-            }
-            if (department != null) {
-                staffRequest.setStudentDepartment(department.getName());
-            }
-            staffRequest.setStatus(requestView.getStatus());
-            return staffRequest; */
         }).collect(Collectors.toList());
         return ResponseEntity.ok(mappedRequests);
     }

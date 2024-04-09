@@ -3,7 +3,7 @@ package com.final_project.eduflow.Data.Entities;
 import jakarta.persistence.*;
 
 @Entity
-@javax.persistence.Table(name = "faculty")
+@Table(name = "faculty")
 public class Faculty {
 
     @Id

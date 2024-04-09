@@ -15,6 +15,8 @@ import com.final_project.eduflow.Data.Entities.TeachingStaff;
 import com.final_project.eduflow.DataAccess.RequestActorRepository;
 import com.final_project.eduflow.DataAccess.TeachingStaffRepository;
 
+import jakarta.transaction.Transactional;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -51,6 +53,7 @@ public class RequestActorsController {
         return ResponseEntity.ok(actors);
     }
 
+    @Transactional
     @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("/updateActors")
     public ResponseEntity<String> updateRequestActort( @RequestBody List<RequestActor> requestActors){
