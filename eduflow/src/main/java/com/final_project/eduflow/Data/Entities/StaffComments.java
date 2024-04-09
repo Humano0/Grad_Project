@@ -1,9 +1,11 @@
 package com.final_project.eduflow.Data.Entities;
 
 import com.final_project.eduflow.Data.Entities.IdClasses.StaffCommentsId;
+import com.final_project.eduflow.Presentation.ResponseClasses.CommentRequest;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "staff_comments")
@@ -16,15 +18,15 @@ public class StaffComments {
 
     @Id
     @Column(name = "request_student_id")
-    private int requestStudentId;
+    private Long requestStudentId;
 
     @Id
     @Column(name = "request_type_id")
-    private int requestTypeId;
+    private Long requestTypeId;
 
     @Id
     @Column(name = "user_id")
-    private int userId;
+    private Long userId;
 
     @Column(name = "user_comment")
     private String userComment;
@@ -33,7 +35,7 @@ public class StaffComments {
     @Column(name = "time_posted")
     private OffsetDateTime timePosted;
 
-    public StaffComments(OffsetDateTime requestWhenCreated, int requestStudentId, int requestTypeId, int userId, String userComment) {
+    public StaffComments(OffsetDateTime requestWhenCreated, Long requestStudentId, Long requestTypeId, Long userId, String userComment) {
         this.requestWhenCreated = requestWhenCreated;
         this.requestStudentId = requestStudentId;
         this.requestTypeId = requestTypeId;
@@ -43,6 +45,15 @@ public class StaffComments {
     }
 
     public StaffComments() {
+    }
+
+    public StaffComments(CommentRequest commentRequest, Long userId) {
+        this.requestWhenCreated = commentRequest.getRequestWhenCreated();
+        this.requestStudentId = commentRequest.getRequestStudentId();
+        this.requestTypeId = commentRequest.getRequestTypeId();
+        this.userId = userId;
+        this.userComment = commentRequest.getCommentMessage();
+        this.timePosted = OffsetDateTime.now();
     }
 
     // getters and setters
@@ -55,27 +66,27 @@ public class StaffComments {
         this.requestWhenCreated = requestWhenCreated;
     }
 
-    public int getRequestStudentId() {
+    public Long getRequestStudentId() {
         return requestStudentId;
     }
 
-    public void setRequestStudentId(int requestStudentId) {
+    public void setRequestStudentId(Long requestStudentId) {
         this.requestStudentId = requestStudentId;
     }
 
-    public int getRequestTypeId() {
+    public Long getRequestTypeId() {
         return requestTypeId;
     }
 
-    public void setRequestTypeId(int requestTypeId) {
+    public void setRequestTypeId(Long requestTypeId) {
         this.requestTypeId = requestTypeId;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
