@@ -57,8 +57,7 @@ public class CommentController {
         }
         Long staffId = JwtUtil.getId(claims);
 
-        StaffComments comment = new StaffComments(commentRequest, staffId);
-        staffCommentsRepository.save(comment);
+        staffCommentsRepository.save(new StaffComments(commentRequest, staffId));
 
         return ResponseEntity.ok().body("Comment saved successfully");
     }
