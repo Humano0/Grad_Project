@@ -44,7 +44,7 @@ public class AuthController {
 
                 // Log the user's ip address
                 //System.out.println("Users ip address: " + request.getRemoteAddr());
-                entryLogsRepository.save(new EntryLogs(0, request.getRemoteAddr(), user.getId()));
+                entryLogsRepository.save(new EntryLogs( request.getRemoteAddr(), user.getId()));
 
                 return ResponseEntity.ok(new LoginResponse("success", "Login successful", user.getRole()));
             } else {

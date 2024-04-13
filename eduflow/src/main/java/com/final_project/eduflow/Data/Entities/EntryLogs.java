@@ -13,7 +13,8 @@ import java.time.temporal.ChronoUnit;
 public class EntryLogs {
     
     @Id
-    @Setter @Getter private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter @Getter private Long id;
 
     @Column(name = "entry_time")
     @Getter private OffsetDateTime entryTime;
@@ -25,8 +26,7 @@ public class EntryLogs {
     @Getter @Setter private long userId;
 
 
-    public EntryLogs(long id, String userIp, long userId) {
-        this.id = id;
+    public EntryLogs( String userIp, long userId) {
         this.entryTime = OffsetDateTime.now().truncatedTo(ChronoUnit.MINUTES);
         this.userIp = userIp;
         this.userId = userId;
