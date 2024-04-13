@@ -14,35 +14,55 @@ import org.springframework.stereotype.Service;
 @Service
 public class MailService implements IMailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
-    @Value("$(spring.mail.username)")
-    private String fromMail;
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
+    public MailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
     @Override
-    public void sendMail(String mail) {
+    public void sendAcceptedRequestToStudent(String studentMail) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("oniraca.om00@gmail.com");
-        message.setTo(mail);
-        message.setSubject("mail subject");
-        message.setText("mail text");
+        message.setFrom(fromEmail);
+        message.setTo(studentMail);
+        message.setSubject("Request Accepted");
+        message.setText("Your request has been accepted.");
         mailSender.send(message);
     }
 
     @Override
-    public void sendRequestAcceptedMailtoStudent(String studentMail) {
-
+    public void sendRejectedRequestToStudent(String studentMail) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
+        message.setTo(studentMail);
+        message.setSubject("Request Rejected");
+        message.setText("Your request has been rejected.");
+        mailSender.send(message);
     }
 
     @Override
-    public void sendRequestRejectedMailtoStudent(String studentMail) {
-
+    public void sendWaitingRequestToStaff(String staffMail) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
+        message.setTo(staffMail);
+        message.setSubject("New Request");
+        message.setText("New request waiting for approval.");
+        mailSender.send(message);
     }
 
-    @Override
-    public void sendRequestWaitingMailtoStaff(String staffMail) {
 
-    }
+//    @Override
+//    public void sendMail(String mail) {
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        message.setFrom(fromEmail);
+//        message.setTo(mail);
+//        message.setSubject("test xd");
+//        message.setText("selam xd");
+//        mailSender.send(message);
+//    }
+
 }
 
