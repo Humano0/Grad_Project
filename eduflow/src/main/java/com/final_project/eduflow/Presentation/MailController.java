@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class MailController {
 
     @Autowired
-    private MailService mailService;
+    private final MailService mailService;
 
     MailController(MailService mailService)
     {
@@ -21,10 +21,9 @@ public class MailController {
     }
 
     @PreAuthorize("hasAuthority('Student')")
-    @GetMapping("/testmail")
+    @PostMapping("/testmail")
     public void sendMail()
     {
-        System.out.println("mail sent");
-        mailService.sendMail("oniraca.om00@gmail.com");
+        mailService.sendMail("huseyinborankuscu@gmail.com");
     }
 }
