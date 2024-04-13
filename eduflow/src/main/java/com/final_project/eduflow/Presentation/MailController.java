@@ -24,6 +24,6 @@ public class MailController {
     @PostMapping("/testmail")
     public void sendMail()
     {
-        mailService.sendMail("huseyinborankuscu@gmail.com");
+        //mailService.sendMail("huseyinborankuscu@gmail.com");
     }
 }
