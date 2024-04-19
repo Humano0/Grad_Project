@@ -7,6 +7,7 @@ import com.final_project.eduflow.Data.View.StudentRequestsListingView;
 
 import com.final_project.eduflow.DataAccess.*;
 import com.final_project.eduflow.Presentation.ResponseClasses.AcceptRequestResponseMessage;
+import com.final_project.eduflow.Services.CreateRequestPdf;
 import com.final_project.eduflow.Services.NotificationService;
 import com.final_project.eduflow.Services.RequestService;
 
@@ -18,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.final_project.eduflow.Data.Entities.StudentRequests;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,14 +31,16 @@ public class RequestController {
     private final RequestRequirementRepository requestRequirementRepository;
     private final RequestService requestService;
     private final NotificationService notificationService;
+    private final CreateRequestPdf createRequestPdf;
 
 
     @Autowired
-    public RequestController(StudentRequestRepository studentRequestRepository, RequestRequirementRepository requestRequirementRepository, RequestService requestService, NotificationService notificationService) {
+    public RequestController(StudentRequestRepository studentRequestRepository, RequestRequirementRepository requestRequirementRepository, RequestService requestService, NotificationService notificationService, CreateRequestPdf createRequestPdf) {
         this.studentRequestRepository = studentRequestRepository;
         this.requestRequirementRepository = requestRequirementRepository;
         this.requestService = requestService;
         this.notificationService = notificationService;
+        this.createRequestPdf = createRequestPdf;
     }
 
     // List student requests for student
@@ -50,6 +54,7 @@ public class RequestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long id = JwtUtil.getId(claims);
+        
         return ResponseEntity.ok(studentRequestRepository.findByStudentId(id));
     }
 
@@ -73,7 +78,7 @@ public class RequestController {
         Long id = JwtUtil.getId(claims);
         
         studentRequestRepository.save(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
-
+        createRequestPdf.createRequestPdf(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
         return ResponseEntity.ok("Request is made successfully");
     }
 
@@ -125,4 +130,14 @@ public class RequestController {
         notificationService.sendNotification(studentRequest.getStudentId(), "your request has been rejected");
         return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted" ,"Request is rejected successfully"));
     }
+
+    @PreAuthorize("hasAnyAuthority('Danisman', 'Bolum', 'Dekanlik')")
+    @GetMapping("/getRequestPdf/{studentId}/{requestTypeId}/{when}")
+    public ResponseEntity<?> getRequestPdf(@PathVariable("studentId") Long studentId, @PathVariable("requestId") Long requestId, @PathVariable("requestTypeId") OffsetDateTime when) {
+
+        System.out.println("studentId: " + studentId + " requestId: " + requestId + " when: " + when);
+        //StudentRequest request = studentRequestRepository.findByStudentIdAndRequestTypeIdAndWhe(studentId,requestId,).get();
+
+        return ResponseEntity.ok("Request is made successfully");
+    }   
 }

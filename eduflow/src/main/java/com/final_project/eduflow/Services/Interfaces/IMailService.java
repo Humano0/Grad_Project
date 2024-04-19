@@ -4,11 +4,9 @@ import com.final_project.eduflow.Data.DTO.MailEntity;
 
 
 public interface IMailService {
-     void sendMail(String mail);
+     void sendAcceptedRequestToStudent(String studentMail);
 
-      void sendRequestAcceptedMailtoStudent(String studentMail);
+     void sendRejectedRequestToStudent(String studentMail);
 
-     void sendRequestRejectedMailtoStudent(String studentMail);
-
-     void sendRequestWaitingMailtoStaff(String staffMail);
+     void sendWaitingRequestToStaff(String staffMail);
 }
