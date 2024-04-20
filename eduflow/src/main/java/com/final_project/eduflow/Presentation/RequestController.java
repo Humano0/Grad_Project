@@ -2,6 +2,7 @@ package com.final_project.eduflow.Presentation;
 
 
 import com.final_project.eduflow.Data.Entities.RequestRequirement;
+import com.final_project.eduflow.Data.Entities.Student;
 import com.final_project.eduflow.Data.View.RequestRequirementView;
 import com.final_project.eduflow.Data.View.StudentRequestsListingView;
 
@@ -34,17 +35,19 @@ public class RequestController {
     private final NotificationService notificationService;
     private final CreateRequestPdf createRequestPdf;
     private final SimpMessagingTemplate messagingTemplate;
+    private final StudentRepository studentRepository;
 
 
     @Autowired
     public RequestController(StudentRequestRepository studentRequestRepository, RequestRequirementRepository requestRequirementRepository,
-     RequestService requestService, NotificationService notificationService, CreateRequestPdf createRequestPdf, SimpMessagingTemplate messagingTemplate) {
+     RequestService requestService, NotificationService notificationService, CreateRequestPdf createRequestPdf, SimpMessagingTemplate messagingTemplate, StudentRepository studentRepository) {
         this.studentRequestRepository = studentRequestRepository;
         this.requestRequirementRepository = requestRequirementRepository;
         this.requestService = requestService;
         this.notificationService = notificationService;
         this.createRequestPdf = createRequestPdf;
         this.messagingTemplate = messagingTemplate;
+        this.studentRepository = studentRepository;
     }
 
     // List student requests for student
@@ -80,10 +83,11 @@ public class RequestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long id = JwtUtil.getId(claims);
+        Student student = studentRepository.findById(id).orElseThrow();
         
         studentRequestRepository.save(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
         createRequestPdf.createRequestPdf(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
-        messagingTemplate.convertAndSendToUser(id.toString(), "queue/created" , "new request");
+        messagingTemplate.convertAndSendToUser(student.getAdvisorId().toString(), "queue/newRequest" , "refresh");
         return ResponseEntity.ok("Request is made successfully");
     }
 
@@ -96,7 +100,7 @@ public class RequestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long staffId = JwtUtil.getId(claims);
-        if(requestService.checkIfRequestActorIsTrue(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex())){
+        if(requestService.checkIfRequestActorIsTrue(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex()) ){
             if(requestService.checkIfNextActorIsTheOneAcceptingTheRequest(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex())) {
                 return ResponseEntity.ok(new AcceptRequestResponseMessage("back_to_back_same_actor", "You are the next actor, do you want to accept the request?"));
             } else {

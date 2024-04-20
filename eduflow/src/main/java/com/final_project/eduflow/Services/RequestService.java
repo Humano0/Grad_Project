@@ -64,8 +64,8 @@ public class RequestService implements IRequestService {
                 request.setCurrentIndex(request.getCurrentIndex() + 1);
                 studentRequestRepository.save(request);
                 this.messagingTemplate.convertAndSendToUser(requestActor.get().getStaffId().toString(),
-                        "/request/notification",
-                        "newrequest");
+                        "/request/newRequest",
+                        "refresh");
                 return requestActor.get().getStaffId();
             } else {
                 request.setStatus(RequestStatus.NEED_AFFIRMATION);
@@ -74,8 +74,8 @@ public class RequestService implements IRequestService {
                 if(request.getCurrentIndex() == 0) {
                     Long danismanId = studentRepository.findById(request.getStudentId()).orElseThrow().getAdvisorId();
                     this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
-                            "/request/notification",
-                            "newrequest");
+                            "/request/newRequest",
+                            "refresh");
                             studentRequestRepository.save(request);
                     return danismanId;
                 }
