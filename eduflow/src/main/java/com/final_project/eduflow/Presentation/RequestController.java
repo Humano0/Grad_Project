@@ -23,6 +23,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 @RestController
 public class RequestController {
@@ -32,15 +33,18 @@ public class RequestController {
     private final RequestService requestService;
     private final NotificationService notificationService;
     private final CreateRequestPdf createRequestPdf;
+    private final SimpMessagingTemplate messagingTemplate;
 
 
     @Autowired
-    public RequestController(StudentRequestRepository studentRequestRepository, RequestRequirementRepository requestRequirementRepository, RequestService requestService, NotificationService notificationService, CreateRequestPdf createRequestPdf) {
+    public RequestController(StudentRequestRepository studentRequestRepository, RequestRequirementRepository requestRequirementRepository,
+     RequestService requestService, NotificationService notificationService, CreateRequestPdf createRequestPdf, SimpMessagingTemplate messagingTemplate) {
         this.studentRequestRepository = studentRequestRepository;
         this.requestRequirementRepository = requestRequirementRepository;
         this.requestService = requestService;
         this.notificationService = notificationService;
         this.createRequestPdf = createRequestPdf;
+        this.messagingTemplate = messagingTemplate;
     }
 
     // List student requests for student
@@ -79,6 +83,7 @@ public class RequestController {
         
         studentRequestRepository.save(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
         createRequestPdf.createRequestPdf(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
+        messagingTemplate.convertAndSendToUser(id.toString(), "queue/created" , "new request");
         return ResponseEntity.ok("Request is made successfully");
     }
 
