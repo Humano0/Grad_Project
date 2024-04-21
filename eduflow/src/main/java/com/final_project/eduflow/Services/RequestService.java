@@ -86,7 +86,26 @@ public class RequestService implements IRequestService {
                 return reqActor.get().getStaffId();
             }
         } else if(request.getStatus() == RequestStatus.NEED_AFFIRMATION){
-            if(request.getCurrentIndex() == 0){
+            request.setStatus(RequestStatus.ACCEPTED);
+            studentRequestRepository.save(request);
+            this.messagingTemplate.convertAndSendToUser(request.getStudentId().toString(),
+                    "/request/notification",
+                    "accepted");
+            Long danismanId = studentRepository.findById(request.getStudentId()).orElseThrow().getAdvisorId();
+            this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
+                    "/request/newRequest",
+                    "refresh");
+            List <RequestActor> requestActors = requestActorRepository.findByRequestTypeId(request.getRequestTypeId());
+
+            requestActors.stream().forEach( requestActor -> {
+                this.messagingTemplate.convertAndSendToUser(requestActor.getStaffId().toString(),
+                        "/request/newRequest",
+                        "refresh");
+            });
+            
+            return request.getStudentId();
+            
+/*             if(request.getCurrentIndex() == 0){
                 request.setStatus(RequestStatus.ACCEPTED);
                 studentRequestRepository.save(request);
                 this.messagingTemplate.convertAndSendToUser(request.getStudentId().toString(),
@@ -104,7 +123,7 @@ public class RequestService implements IRequestService {
                 return danismanId;
             }
             studentRequestRepository.save(request);
-            return requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), request.getCurrentIndex()).orElseThrow().getStaffId();
+            return requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), request.getCurrentIndex()).orElseThrow().getStaffId(); */
         }else {
             throw new RuntimeException("Request is already accepted or rejected");
         }

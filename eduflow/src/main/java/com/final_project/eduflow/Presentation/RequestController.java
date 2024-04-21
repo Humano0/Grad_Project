@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.final_project.eduflow.Data.Entities.StudentRequests;
+import com.final_project.eduflow.Data.Entities.IdClasses.RequestStatus;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -100,18 +101,16 @@ public class RequestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long staffId = JwtUtil.getId(claims);
-        if(requestService.checkIfRequestActorIsTrue(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex()) ){
-            if(requestService.checkIfNextActorIsTheOneAcceptingTheRequest(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex())) {
-                return ResponseEntity.ok(new AcceptRequestResponseMessage("back_to_back_same_actor", "You are the next actor, do you want to accept the request?"));
-            } else {
-                Long subId = requestService.acceptRequest(studentRequest);
+        if(requestService.checkIfRequestActorIsTrue(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex())
+            | studentRequest.getStatus() == RequestStatus.NEED_AFFIRMATION){
+            Long subId = requestService.acceptRequest(studentRequest);
 //                if(subId == studentRequest.getStudentId()) {
 //                    notificationService.sendNotification(subId, "your request has been accepted");
 //                } else {
 //                    notificationService.sendNotification(subId, "new request waiting for your approval");
 //                }
-                return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted", "done and done"));
-            }
+            return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted", "done and done"));
+            
         }else{
             return ResponseEntity.ok(new AcceptRequestResponseMessage("not_authorized", "You are not authorized to accept this request"));
         }
