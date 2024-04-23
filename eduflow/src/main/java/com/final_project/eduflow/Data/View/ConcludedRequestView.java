@@ -42,6 +42,9 @@ public class ConcludedRequestView {
     @Column(name = "current_index")
     private int currentIndex;
 
+    @Column(name = "actor_id")
+    private long actorId;
+
     @Column(name = "information")
     private String information;
 
@@ -140,7 +143,13 @@ public class ConcludedRequestView {
         this.addition = addition;
     }
 
+    public long getActorId() {
+        return actorId;
+    }
 
+    public void setActorId(long actorId) {
+        this.actorId = actorId;
+    }
     
    
 }
