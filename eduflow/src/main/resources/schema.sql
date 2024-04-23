@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS entry_logs (
     entry_time TIMESTAMPTZ
 );
 
-DROP VIEW if exists all_requests_with_actors_view CASCADE;
+DROP VIEW IF EXISTS all_requests_with_actors_view CASCADE;
 
 CREATE OR REPLACE VIEW all_requests_with_actors_view AS
     SELECT sr.student_id,
