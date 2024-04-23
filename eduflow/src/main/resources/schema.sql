@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS entry_logs (
     entry_time TIMESTAMPTZ
 );
 
-DROP VIEW all_requests_with_actors_view CASCADE;
+DROP VIEW if exists all_requests_with_actors_view CASCADE;
 
 CREATE OR REPLACE VIEW all_requests_with_actors_view AS
     SELECT sr.student_id,
@@ -26,7 +26,7 @@ CREATE OR REPLACE VIEW all_requests_with_actors_view AS
     JOIN department d on s.department_id = d.id
     JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
     JOIN request_types rt ON rt.id = sr.request_type_id
-    WHERE sr.status <> 'REJECTED' AND sr.status <> 'ACCEPTED' AND sr.status <> 'CANCELED'
+    WHERE sr.status <> 'rejected' AND sr.status <> 'accepted' AND sr.status <> 'cancelled'
 UNION
     SELECT sr.student_id,
         s.name || ' ' || s.surname as student_name,
@@ -42,9 +42,9 @@ UNION
     FROM student_requests sr
     JOIN student s ON s.id = sr.student_id
     JOIN department d on s.department_id = d.id
-    JOIN teaching_staff ts ON s.adviser_id= ts.id 
+    JOIN teaching_staff ts ON s.adviser_id= ts.id
     JOIN request_types rt ON rt.id = sr.request_type_id
-    WHERE sr.status <> 'REJECTED' AND sr.status <> 'ACCEPTED' AND sr.status <> 'CANCELED'
+    WHERE sr.status <> 'rejected' AND sr.status <> 'accepted' AND sr.status <> 'cancelled'
 ORDER BY when_created;
 
 
@@ -68,7 +68,7 @@ CREATE OR REPLACE VIEW concluded_requests_with_actors_view AS
     join department d on s.department_id = d.id
     JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
     JOIN request_types rt ON rt.id = sr.request_type_id
-    WHERE sr.status = 'REJECTED' or sr.status = 'ACCEPTED' or sr.status = 'CANCELED'
+    WHERE sr.status = 'rejected' or sr.status = 'accepted' or sr.status = 'cancelled'
 UNION
     SELECT sr.student_id,
         s.name || ' ' || s.surname as student_name,
@@ -85,9 +85,9 @@ UNION
     FROM student_requests sr
     JOIN student s ON s.id = sr.student_id
     JOIN department d on s.department_id = d.id
-    JOIN teaching_staff ts ON s.adviser_id= ts.id 
+    JOIN teaching_staff ts ON s.adviser_id= ts.id
     JOIN request_types rt ON rt.id = sr.request_type_id
-    where sr.status = 'REJECTED' or sr.status = 'ACCEPTED' or sr.status = 'CANCELED'
+    where sr.status = 'rejected' or sr.status = 'accepted' or sr.status = 'cancelled'
 ORDER BY when_created;
 
 
@@ -112,7 +112,7 @@ SELECT sr.student_id,
 FROM student_requests sr
 JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
 JOIN request_types rt ON rt.id = sr.request_type_id
-WHERE ra.index = sr.current_index AND sr.status = 'WAITING' 
+WHERE ra.index = sr.current_index AND sr.status = 'waiting'
 ORDER BY sr.when_created;
 
 
@@ -128,13 +128,13 @@ SELECT sr.student_id,
 	sr.status
 FROM student_requests sr
 JOIN student s ON s.id = sr.student_id
-JOIN teaching_staff ts ON s.adviser_id= ts.id 
+JOIN teaching_staff ts ON s.adviser_id= ts.id
 JOIN request_types rt ON rt.id = sr.request_type_id
-WHERE sr.current_index=0 AND sr.status = 'WAITING'
+WHERE sr.current_index=0 AND sr.status = 'waiting'
 ORDER BY sr.when_created;
 
 
 CREATE OR REPLACE VIEW waiting_requests_unioned_view as
 SELECT * FROM staff_waiting_requests_view
-UNION 
+UNION
 SELECT * FROM advisor_waiting_requests_view;
