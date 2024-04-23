@@ -13,6 +13,7 @@ public interface IRequestService {
     List<StudentRequestsListingView> getStudentRequestsById(Long id);
     Long acceptRequest(StudentRequests studentRequests);
     void rejectRequest(StudentRequests studentRequests);
+    void cancelRequest(StudentRequests studentRequests);
     boolean checkIfNextActorIsTheOneAcceptingTheRequest(Long staffId, Long request_type_id, Integer current_index);
     boolean checkIfRequestActorIsTrue(Long staffId, Long requestTypeId, int index);
     List<ListRequestTypes> getAllRequestTypes();

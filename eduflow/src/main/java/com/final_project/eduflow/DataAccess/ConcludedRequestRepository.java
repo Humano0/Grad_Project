@@ -14,5 +14,5 @@ public interface ConcludedRequestRepository extends JpaRepository<ConcludedReque
 
     ArrayList<ConcludedRequestView> findByStudentIdAndRequestTypeId(long studentId, int requestTypeId);
 
-    ArrayList<ConcludedRequestView> findByActorId(long actorId);
+    //ArrayList<ConcludedRequestView> findByActorId(long actorId);
 }
