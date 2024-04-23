@@ -8,6 +8,7 @@ import com.final_project.eduflow.Data.View.StudentRequestsListingView;
 
 import com.final_project.eduflow.DataAccess.*;
 import com.final_project.eduflow.Presentation.ResponseClasses.AcceptRequestResponseMessage;
+import com.final_project.eduflow.Presentation.ResponseClasses.GetCommentId;
 import com.final_project.eduflow.Services.CreateRequestPdf;
 import com.final_project.eduflow.Services.NotificationService;
 import com.final_project.eduflow.Services.RequestService;
@@ -15,6 +16,7 @@ import com.final_project.eduflow.Services.RequestService;
 import io.jsonwebtoken.Claims;
 import com.final_project.eduflow.Config.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -134,7 +136,6 @@ public class RequestController {
     @PostMapping("/rejectRequest")
     public ResponseEntity<AcceptRequestResponseMessage> rejectRequest(@RequestBody StudentRequests studentRequest, HttpServletRequest request) {
         requestService.rejectRequest(studentRequest);
-        notificationService.sendNotification(studentRequest.getStudentId(), "your request has been rejected");
         return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted" ,"Request is rejected successfully"));
     }
 
@@ -146,5 +147,28 @@ public class RequestController {
         //StudentRequest request = studentRequestRepository.findByStudentIdAndRequestTypeIdAndWhe(studentId,requestId,).get();
 
         return ResponseEntity.ok("Request is made successfully");
-    }   
+    }
+
+    // Cancels a request
+    // needs
+    // @BODY: {requestWhenCreated, requestStudentId, requestTypeId}
+    // @RETURN: String
+    //    Example request:
+    //    {
+    //        "requestWhenCreated": "2024-03-10T19:48:20.693+0300",
+    //        "requestStudentId": "21896680",
+    //        "requestTypeId": "1"
+    //    }
+    @PreAuthorize("hasAnyAuthority('Danisman', 'Bolum', 'Dekanlik', 'Student')")
+    @PostMapping("/cancelRequest")
+    public ResponseEntity<?> cancelRequest(@RequestBody GetCommentId requestInfo, HttpServletRequest request) {
+        Claims claims = JwtUtil.resolveClaims(request);
+        if (claims == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Long id = JwtUtil.getId(claims);
+        StudentRequests cancelledRequest = studentRequestRepository.findByStudentIdAndRequestTypeIdAndWhen(requestInfo.getRequestStudentId(), requestInfo.getRequestTypeId(), requestInfo.getRequestWhenCreated()).orElseThrow();
+        requestService.cancelRequest(cancelledRequest);
+        return ResponseEntity.ok("Request is cancelled successfully");
+    }
 }

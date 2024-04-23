@@ -27,12 +27,14 @@ public class RequestService implements IRequestService {
     private final RequestTypeRepository requestTypeRepository;
     private final WaitingRequestsViewRepository waitingRequestsViewRepository;
     private final StudentRepository studentRepository;
+    private final TeachingStaffRepository teachingStaffRepository;
 
     public RequestService(SimpMessagingTemplate messagingTemplate, StudentRequestsListingViewRepository studentRequestsListingViewRepository,
                           StudentRequestRepository studentRequestRepository,
                           RequestActorRepository requestActorRepository,
                           WaitingRequestsViewRepository waitingRequestsViewRepository,
-                          RequestTypeRepository requestTypeRepository, StudentRepository studentRepository) {
+                          RequestTypeRepository requestTypeRepository, StudentRepository studentRepository,
+                          TeachingStaffRepository teachingStaffRepository) {
         this.messagingTemplate = messagingTemplate;
         this.studentRequestsListingViewRepository = studentRequestsListingViewRepository;
         this.studentRequestRepository = studentRequestRepository;
@@ -40,6 +42,7 @@ public class RequestService implements IRequestService {
         this.requestTypeRepository = requestTypeRepository;
         this.waitingRequestsViewRepository = waitingRequestsViewRepository;
         this.studentRepository = studentRepository;
+        this.teachingStaffRepository = teachingStaffRepository;
     }
 
     @Override
@@ -143,11 +146,20 @@ public class RequestService implements IRequestService {
         request.setCurrentIndex(-1 * request.getCurrentIndex() - 1);
         request.setStatus(RequestStatus.REJECTED);
         this.messagingTemplate.convertAndSendToUser(request.getStudentId().toString(),
-                "/request/notification",
+                "queue/newRequest",
                 "rejected");
         studentRequestRepository.save(request);
     }
 
+    @Override
+    public void cancelRequest(StudentRequests studentRequests) {
+        studentRequests.setStatus(RequestStatus.CANCELLED);
+        Long currentActorId = requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), studentRequests.getCurrentIndex()).orElseThrow().getStaffId();
+        this.messagingTemplate.convertAndSendToUser(currentActorId.toString(),
+                "queue/newRequest",
+                "refresh");
+        studentRequestRepository.save(studentRequests);
+    }
     // Checks if the next actor is the one accepting the request
     // returns true if it is, false otherwise
     @Override
