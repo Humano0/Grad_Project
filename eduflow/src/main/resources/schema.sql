@@ -20,7 +20,8 @@ CREATE OR REPLACE VIEW all_requests_with_actors_view AS
         sr.information,
         sr.when_created,
         ra.staff_id as actor_id,
-        sr.status
+        sr.status,
+        sr.addition
     FROM student_requests sr
     JOIN student s ON s.id = sr.student_id
     JOIN department d on s.department_id = d.id
@@ -38,7 +39,8 @@ UNION
         sr.information,
         sr.when_created,
         ts.id as actor_id,
-        sr.status
+        sr.status,
+        sr.addition
     FROM student_requests sr
     JOIN student s ON s.id = sr.student_id
     JOIN department d on s.department_id = d.id
