@@ -27,12 +27,14 @@ public class RequestService implements IRequestService {
     private final RequestTypeRepository requestTypeRepository;
     private final WaitingRequestsViewRepository waitingRequestsViewRepository;
     private final StudentRepository studentRepository;
+    private final TeachingStaffRepository teachingStaffRepository;
 
     public RequestService(SimpMessagingTemplate messagingTemplate, StudentRequestsListingViewRepository studentRequestsListingViewRepository,
                           StudentRequestRepository studentRequestRepository,
                           RequestActorRepository requestActorRepository,
                           WaitingRequestsViewRepository waitingRequestsViewRepository,
-                          RequestTypeRepository requestTypeRepository, StudentRepository studentRepository) {
+                          RequestTypeRepository requestTypeRepository, StudentRepository studentRepository,
+                          TeachingStaffRepository teachingStaffRepository) {
         this.messagingTemplate = messagingTemplate;
         this.studentRequestsListingViewRepository = studentRequestsListingViewRepository;
         this.studentRequestRepository = studentRequestRepository;
@@ -40,6 +42,7 @@ public class RequestService implements IRequestService {
         this.requestTypeRepository = requestTypeRepository;
         this.waitingRequestsViewRepository = waitingRequestsViewRepository;
         this.studentRepository = studentRepository;
+        this.teachingStaffRepository = teachingStaffRepository;
     }
 
     @Override
@@ -64,8 +67,8 @@ public class RequestService implements IRequestService {
                 request.setCurrentIndex(request.getCurrentIndex() + 1);
                 studentRequestRepository.save(request);
                 this.messagingTemplate.convertAndSendToUser(requestActor.get().getStaffId().toString(),
-                        "/request/notification",
-                        "newrequest");
+                        "/request/newRequest",
+                        "refresh");
                 return requestActor.get().getStaffId();
             } else {
                 request.setStatus(RequestStatus.NEED_AFFIRMATION);
@@ -74,8 +77,8 @@ public class RequestService implements IRequestService {
                 if(request.getCurrentIndex() == 0) {
                     Long danismanId = studentRepository.findById(request.getStudentId()).orElseThrow().getAdvisorId();
                     this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
-                            "/request/notification",
-                            "newrequest");
+                            "/request/newRequest",
+                            "refresh");
                             studentRequestRepository.save(request);
                     return danismanId;
                 }
@@ -86,7 +89,26 @@ public class RequestService implements IRequestService {
                 return reqActor.get().getStaffId();
             }
         } else if(request.getStatus() == RequestStatus.NEED_AFFIRMATION){
-            if(request.getCurrentIndex() == 0){
+            request.setStatus(RequestStatus.ACCEPTED);
+            studentRequestRepository.save(request);
+            this.messagingTemplate.convertAndSendToUser(request.getStudentId().toString(),
+                    "/request/notification",
+                    "accepted");
+            Long danismanId = studentRepository.findById(request.getStudentId()).orElseThrow().getAdvisorId();
+            this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
+                    "/request/newRequest",
+                    "refresh");
+            List <RequestActor> requestActors = requestActorRepository.findByRequestTypeId(request.getRequestTypeId());
+
+            requestActors.stream().forEach( requestActor -> {
+                this.messagingTemplate.convertAndSendToUser(requestActor.getStaffId().toString(),
+                        "/request/newRequest",
+                        "refresh");
+            });
+            
+            return request.getStudentId();
+            
+/*             if(request.getCurrentIndex() == 0){
                 request.setStatus(RequestStatus.ACCEPTED);
                 studentRequestRepository.save(request);
                 this.messagingTemplate.convertAndSendToUser(request.getStudentId().toString(),
@@ -104,7 +126,7 @@ public class RequestService implements IRequestService {
                 return danismanId;
             }
             studentRequestRepository.save(request);
-            return requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), request.getCurrentIndex()).orElseThrow().getStaffId();
+            return requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), request.getCurrentIndex()).orElseThrow().getStaffId(); */
         }else {
             throw new RuntimeException("Request is already accepted or rejected");
         }
@@ -124,11 +146,20 @@ public class RequestService implements IRequestService {
         request.setCurrentIndex(-1 * request.getCurrentIndex() - 1);
         request.setStatus(RequestStatus.REJECTED);
         this.messagingTemplate.convertAndSendToUser(request.getStudentId().toString(),
-                "/request/notification",
+                "queue/newRequest",
                 "rejected");
         studentRequestRepository.save(request);
     }
 
+    @Override
+    public void cancelRequest(StudentRequests studentRequests) {
+        studentRequests.setStatus(RequestStatus.CANCELLED);
+        Long currentActorId = requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), studentRequests.getCurrentIndex()).orElseThrow().getStaffId();
+        this.messagingTemplate.convertAndSendToUser(currentActorId.toString(),
+                "queue/newRequest",
+                "refresh");
+        studentRequestRepository.save(studentRequests);
+    }
     // Checks if the next actor is the one accepting the request
     // returns true if it is, false otherwise
     @Override

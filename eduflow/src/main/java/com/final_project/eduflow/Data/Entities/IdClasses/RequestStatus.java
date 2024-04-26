@@ -4,5 +4,11 @@ public enum RequestStatus {
     ACCEPTED,
     WAITING,
     REJECTED,
-    NEED_AFFIRMATION
+    CANCELLED,
+    NEED_AFFIRMATION,
+    accepted,
+    waiting,
+    rejected,
+    cancelled,
+    need_affirmation
 }

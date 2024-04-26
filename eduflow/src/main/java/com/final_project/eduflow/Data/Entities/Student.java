@@ -79,7 +79,7 @@ public class Student {
     }
 
     public Long getAdvisorId() {
-        return adviserId.longValue();
+        return adviserId;
     }
 
     public String getFirstname() {

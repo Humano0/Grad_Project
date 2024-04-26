@@ -5,8 +5,10 @@ import com.final_project.eduflow.Data.Entities.Department;
 import com.final_project.eduflow.Data.Entities.Student;
 import com.final_project.eduflow.Data.Entities.TeachingStaff;
 import com.final_project.eduflow.Data.View.AllRequestsForStaffView;
+import com.final_project.eduflow.Data.View.ConcludedRequestView;
 import com.final_project.eduflow.Data.View.WaitingRequestView;
 import com.final_project.eduflow.DataAccess.AllRequestForStaffRepository;
+import com.final_project.eduflow.DataAccess.ConcludedRequestRepository;
 import com.final_project.eduflow.DataAccess.DepartmentRepository;
 import com.final_project.eduflow.DataAccess.StudentRepository;
 import com.final_project.eduflow.DataAccess.WaitingRequestsViewRepository;
@@ -32,15 +34,17 @@ public class WaitingRequestsViewController {
     private final DepartmentRepository departmentRepository;
     private final AllRequestForStaffRepository allRequestForStaffRepository;
     private final TeachingStaffRepository teachingStaffRepository;
+    private final ConcludedRequestRepository concludedRequestRepository;
 
     @Autowired
     public WaitingRequestsViewController(WaitingRequestsViewRepository waitingRequestsViewRepository,
-                                         StudentRepository studentRepository, DepartmentRepository departmentRepository, AllRequestForStaffRepository allRequestForStaffRepository, TeachingStaffRepository teachingStaffRepository) {
+                                         StudentRepository studentRepository, DepartmentRepository departmentRepository, AllRequestForStaffRepository allRequestForStaffRepository, TeachingStaffRepository teachingStaffRepository, ConcludedRequestRepository concludedRequestRepository) {
         this.waitingRequestsViewRepository = waitingRequestsViewRepository;
         this.studentRepository = studentRepository;
         this.departmentRepository = departmentRepository;
         this.allRequestForStaffRepository = allRequestForStaffRepository;
         this.teachingStaffRepository = teachingStaffRepository;
+        this.concludedRequestRepository = concludedRequestRepository;
     }
 
     // List waiting requests for staff
@@ -92,5 +96,17 @@ public class WaitingRequestsViewController {
 
 
         return ResponseEntity.ok(allRequestForStaffRepository.findByActorId(staffId));
+    }
+
+    @PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty', 'Adviser', 'Bolum', 'Dekanlik', 'Danisman')")
+    @GetMapping("/concludedRequests")
+    public ResponseEntity<List<ConcludedRequestView>> getConcludedRequests(HttpServletRequest request) {
+        Claims claims = JwtUtil.resolveClaims(request);
+        if (claims == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Long staffId = JwtUtil.getId(claims);
+
+        return ResponseEntity.ok(concludedRequestRepository.findAllByActorId(staffId));
     }
 }
