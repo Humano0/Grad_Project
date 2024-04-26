@@ -1,6 +1,5 @@
 package com.final_project.eduflow.Data.Entities.IdClasses;
 
-import java.io.Serializable;
 import java.time.OffsetDateTime;
 
 public class StaffCommentsId {

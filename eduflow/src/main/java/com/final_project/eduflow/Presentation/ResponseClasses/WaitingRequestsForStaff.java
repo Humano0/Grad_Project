@@ -1,7 +1,5 @@
 package com.final_project.eduflow.Presentation.ResponseClasses;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
 

@@ -67,7 +67,7 @@ public class RequestService implements IRequestService {
                 request.setCurrentIndex(request.getCurrentIndex() + 1);
                 studentRequestRepository.save(request);
                 this.messagingTemplate.convertAndSendToUser(requestActor.get().getStaffId().toString(),
-                        "/request/newRequest",
+                        "/request/notification",
                         "refresh");
                 return requestActor.get().getStaffId();
             } else {
@@ -77,7 +77,7 @@ public class RequestService implements IRequestService {
                 if(request.getCurrentIndex() == 0) {
                     Long danismanId = studentRepository.findById(request.getStudentId()).orElseThrow().getAdvisorId();
                     this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
-                            "/request/newRequest",
+                            "/request/notification",
                             "refresh");
                             studentRequestRepository.save(request);
                     return danismanId;
@@ -92,17 +92,20 @@ public class RequestService implements IRequestService {
             request.setStatus(RequestStatus.ACCEPTED);
             studentRequestRepository.save(request);
             this.messagingTemplate.convertAndSendToUser(request.getStudentId().toString(),
-                    "/request/notification",
+                    "/queue/notification",
                     "accepted");
             Long danismanId = studentRepository.findById(request.getStudentId()).orElseThrow().getAdvisorId();
             this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
-                    "/request/newRequest",
+                    "/queue/notification",
+                    "refresh");
+            this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
+                    "/queue/natification",
                     "refresh");
             List <RequestActor> requestActors = requestActorRepository.findByRequestTypeId(request.getRequestTypeId());
 
             requestActors.stream().forEach( requestActor -> {
                 this.messagingTemplate.convertAndSendToUser(requestActor.getStaffId().toString(),
-                        "/request/newRequest",
+                        "/queue/notification",
                         "refresh");
             });
             

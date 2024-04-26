@@ -3,8 +3,6 @@ package com.final_project.eduflow.Presentation;
 
 import com.final_project.eduflow.Data.Entities.RequestRequirement;
 import com.final_project.eduflow.Data.Entities.Student;
-import com.final_project.eduflow.Data.View.RequestRequirementView;
-import com.final_project.eduflow.Data.View.StudentRequestsListingView;
 
 import com.final_project.eduflow.DataAccess.*;
 import com.final_project.eduflow.Presentation.ResponseClasses.AcceptRequestResponseMessage;
@@ -16,7 +14,6 @@ import com.final_project.eduflow.Services.RequestService;
 import io.jsonwebtoken.Claims;
 import com.final_project.eduflow.Config.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -90,7 +87,7 @@ public class RequestController {
         
         studentRequestRepository.save(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
         createRequestPdf.createRequestPdf(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
-        messagingTemplate.convertAndSendToUser(student.getAdvisorId().toString(), "queue/newRequest" , "refresh");
+        messagingTemplate.convertAndSendToUser(student.getAdvisorId().toString(), "queue/notification" , "refresh");
         return ResponseEntity.ok("Request is made successfully");
     }
 

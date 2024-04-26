@@ -1,6 +1,5 @@
 package com.final_project.eduflow.Presentation.ResponseClasses;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class WaitingRequestBuilder {

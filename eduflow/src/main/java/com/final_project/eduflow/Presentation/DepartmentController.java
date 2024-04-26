@@ -1,6 +1,5 @@
 package com.final_project.eduflow.Presentation;
 
-import com.final_project.eduflow.DataAccess.DepartmentRepository;
 import com.final_project.eduflow.Services.DepartmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
