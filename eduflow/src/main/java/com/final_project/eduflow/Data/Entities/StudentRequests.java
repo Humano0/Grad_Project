@@ -37,6 +37,8 @@ public class StudentRequests {
     @Column(name = "status")
     private RequestStatus status;
 
+    @Column(name = "unique_request_id")
+    private String uniqueRequestId;
 
 
     public StudentRequests(Long studentId, Long requestTypeId, String information, String addition) {
@@ -108,5 +110,13 @@ public class StudentRequests {
 
     public void setStatus(RequestStatus status) {
         this.status = status;
+    }
+
+    public String getUniqueRequestId() {
+        return uniqueRequestId;
+    }
+
+    public void setUniqueRequestId(String uniqueRequestId) {
+        this.uniqueRequestId = uniqueRequestId;
     }
 }

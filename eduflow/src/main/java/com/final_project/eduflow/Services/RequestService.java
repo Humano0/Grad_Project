@@ -68,7 +68,7 @@ public class RequestService implements IRequestService {
                 studentRequestRepository.save(request);
                 this.messagingTemplate.convertAndSendToUser(requestActor.get().getStaffId().toString(),
                         "/request/notification",
-                        "refresh");
+                        "new request");
                 return requestActor.get().getStaffId();
             } else {
                 request.setStatus(RequestStatus.NEED_AFFIRMATION);
@@ -78,7 +78,7 @@ public class RequestService implements IRequestService {
                     Long danismanId = studentRepository.findById(request.getStudentId()).orElseThrow().getAdvisorId();
                     this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
                             "/request/notification",
-                            "refresh");
+                            "need approval");
                             studentRequestRepository.save(request);
                     return danismanId;
                 }
@@ -93,20 +93,17 @@ public class RequestService implements IRequestService {
             studentRequestRepository.save(request);
             this.messagingTemplate.convertAndSendToUser(request.getStudentId().toString(),
                     "/queue/notification",
-                    "accepted");
+                    "concluded");
             Long danismanId = studentRepository.findById(request.getStudentId()).orElseThrow().getAdvisorId();
             this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
                     "/queue/notification",
-                    "refresh");
-            this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
-                    "/queue/natification",
-                    "refresh");
+                    "concluded");
             List <RequestActor> requestActors = requestActorRepository.findByRequestTypeId(request.getRequestTypeId());
 
             requestActors.stream().forEach( requestActor -> {
                 this.messagingTemplate.convertAndSendToUser(requestActor.getStaffId().toString(),
                         "/queue/notification",
-                        "refresh");
+                        "concluded");
             });
             
             return request.getStudentId();
@@ -149,8 +146,8 @@ public class RequestService implements IRequestService {
         request.setCurrentIndex(-1 * request.getCurrentIndex() - 1);
         request.setStatus(RequestStatus.REJECTED);
         this.messagingTemplate.convertAndSendToUser(request.getStudentId().toString(),
-                "queue/newRequest",
-                "rejected");
+                "queue/notification",
+                "concluded");
         studentRequestRepository.save(request);
     }
 
@@ -159,8 +156,11 @@ public class RequestService implements IRequestService {
         studentRequests.setStatus(RequestStatus.CANCELLED);
         Long currentActorId = requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), studentRequests.getCurrentIndex()).orElseThrow().getStaffId();
         this.messagingTemplate.convertAndSendToUser(currentActorId.toString(),
-                "queue/newRequest",
-                "refresh");
+                "queue/notification",
+                "concluded");
+        this.messagingTemplate.convertAndSendToUser(studentRequests.getStudentId().toString(),
+                "queue/notification",
+                "concluded");
         studentRequestRepository.save(studentRequests);
     }
     // Checks if the next actor is the one accepting the request

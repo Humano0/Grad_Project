@@ -87,7 +87,7 @@ public class RequestController {
         
         studentRequestRepository.save(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
         createRequestPdf.createRequestPdf(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
-        messagingTemplate.convertAndSendToUser(student.getAdvisorId().toString(), "queue/notification" , "refresh");
+        messagingTemplate.convertAndSendToUser(student.getAdvisorId().toString(), "queue/notification" , "new requests");
         return ResponseEntity.ok("Request is made successfully");
     }
 

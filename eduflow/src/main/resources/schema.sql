@@ -7,6 +7,32 @@ CREATE TABLE IF NOT EXISTS entry_logs (
     entry_time TIMESTAMPTZ
 );
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+/* DROP TABLE IF EXISTS student_requests CASCADE; */
+
+CREATE TABLE IF NOT EXISTS public.student_requests (
+	student_id int4 NOT NULL,
+	request_type_id int4 NOT NULL,
+	information text NULL,
+	addition text NULL,
+	current_index int4 NULL,
+	when_created timestamptz NOT NULL,
+	status varchar,
+    unique_request_id UUID DEFAULT uuid_generate_v4() UNIQUE,
+	CONSTRAINT student_requests_pk PRIMARY KEY (when_created, student_id, request_type_id),
+    CONSTRAINT fk_studentid FOREIGN KEY (student_id) REFERENCES public.student(id),
+    CONSTRAINT fk_type FOREIGN KEY (request_type_id) REFERENCES public.request_types(id)
+);
+
+CREATE TABLE IF NOT EXISTS cancel_reject_reasons (
+    request_uuid UUID PRIMARY KEY,
+    reason TEXT,
+    status VARCHAR,
+    CONSTRAINT fk_request_uuid FOREIGN KEY (request_uuid) REFERENCES student_requests(unique_request_id),
+    CONSTRAINT fk_status FOREIGN KEY (status) REFERENCES student_requests(status)
+);
+
 DROP VIEW IF EXISTS all_requests_with_actors_view CASCADE;
 
 CREATE OR REPLACE VIEW all_requests_with_actors_view AS
@@ -140,3 +166,6 @@ CREATE OR REPLACE VIEW waiting_requests_unioned_view as
 SELECT * FROM staff_waiting_requests_view
 UNION
 SELECT * FROM advisor_waiting_requests_view;
+
+
+
