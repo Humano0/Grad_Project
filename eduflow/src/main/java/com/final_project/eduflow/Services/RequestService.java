@@ -60,14 +60,13 @@ public class RequestService implements IRequestService {
                 studentRequests.getRequestTypeId(),
                 studentRequests.getWhen()
         ).orElseThrow();
-        
         if(request.getStatus() == RequestStatus.WAITING) {
             Optional<RequestActor> requestActor = requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), studentRequests.getCurrentIndex() + 1);
             if(requestActor.isPresent()) {
                 request.setCurrentIndex(request.getCurrentIndex() + 1);
                 studentRequestRepository.save(request);
                 this.messagingTemplate.convertAndSendToUser(requestActor.get().getStaffId().toString(),
-                        "/request/notification",
+                        "/queue/notification",
                         "new request");
                 return requestActor.get().getStaffId();
             } else {
@@ -77,7 +76,7 @@ public class RequestService implements IRequestService {
                 if(request.getCurrentIndex() == 0) {
                     Long danismanId = studentRepository.findById(request.getStudentId()).orElseThrow().getAdvisorId();
                     this.messagingTemplate.convertAndSendToUser(danismanId.toString(),
-                            "/request/notification",
+                            "/queue/notification",
                             "need approval");
                             studentRequestRepository.save(request);
                     return danismanId;

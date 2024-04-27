@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Entity
 @Table(name = "student_requests")
@@ -37,8 +38,9 @@ public class StudentRequests {
     @Column(name = "status")
     private RequestStatus status;
 
-    @Column(name = "unique_request_id")
-    private String uniqueRequestId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "unique_request_id", updatable = false, insertable = false)
+    private UUID uniqueRequestId;
 
 
     public StudentRequests(Long studentId, Long requestTypeId, String information, String addition) {
@@ -112,11 +114,12 @@ public class StudentRequests {
         this.status = status;
     }
 
-    public String getUniqueRequestId() {
+    public UUID getUniqueRequestId() {
         return uniqueRequestId;
     }
 
-    public void setUniqueRequestId(String uniqueRequestId) {
+    public void setUniqueRequestId(UUID uniqueRequestId) {
         this.uniqueRequestId = uniqueRequestId;
     }
+
 }

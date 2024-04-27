@@ -7,4 +7,5 @@ public class AllRequestsId {
     private long studentId;
     private LocalDateTime whenCreated;
     private long actorId;
+    private int requestTypeId;
 }

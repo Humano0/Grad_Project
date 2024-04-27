@@ -86,8 +86,7 @@ public class RequestController {
         Student student = studentRepository.findById(id).orElseThrow();
         
         studentRequestRepository.save(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
-        createRequestPdf.createRequestPdf(new StudentRequests(id, newRequests.getRequestTypeId(), newRequests.getInformation(), newRequests.getAddition()));
-        messagingTemplate.convertAndSendToUser(student.getAdvisorId().toString(), "queue/notification" , "new requests");
+        messagingTemplate.convertAndSendToUser(student.getAdvisorId().toString(), "queue/notification" , "new request");
         return ResponseEntity.ok("Request is made successfully");
     }
 
@@ -102,6 +101,7 @@ public class RequestController {
         Long staffId = JwtUtil.getId(claims);
         if(requestService.checkIfRequestActorIsTrue(staffId, studentRequest.getRequestTypeId(), studentRequest.getCurrentIndex())
             | studentRequest.getStatus() == RequestStatus.NEED_AFFIRMATION){
+            System.out.println("here");
             Long subId = requestService.acceptRequest(studentRequest);
 //                if(subId == studentRequest.getStudentId()) {
 //                    notificationService.sendNotification(subId, "your request has been accepted");

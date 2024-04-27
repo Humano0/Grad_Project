@@ -25,6 +25,7 @@ public class AllRequestsForStaffView {
     @Column(name = "department_name")
     private String studentDepartment;
 
+    @Id
     @Column(name = "request_type_id")
     private int requestTypeId;
 
