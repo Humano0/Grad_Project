@@ -138,7 +138,6 @@ public class RequestService implements IRequestService {
     // if current_index > 0, then search in request_actors table for current_index == index && request_type_id == request_type_id
     @Override
     public void rejectRequest(CancelRequestObject studentRequests) {
-        System.out.println(studentRequests.getRequestWhenCreated().toString() + studentRequests.getRequestStudentId() + studentRequests.getRequestTypeId());
         StudentRequests request = studentRequestRepository.findByStudentIdAndRequestTypeIdAndWhen(
                 studentRequests.getRequestStudentId(),
                 studentRequests.getRequestTypeId(),

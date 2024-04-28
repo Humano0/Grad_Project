@@ -133,7 +133,6 @@ public class RequestController {
     @PreAuthorize("hasAnyAuthority('Danisman', 'Bolum', 'Dekanlik','Advisor','Head_of_Department', 'Dean_of_Faculty')")
     @PostMapping("/rejectRequest")
     public ResponseEntity<AcceptRequestResponseMessage> rejectRequest(@RequestBody CancelRequestObject studentRequest) {
-        System.out.println("Ulan: " +studentRequest.getRequestWhenCreated());
         requestService.rejectRequest(studentRequest);
         return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted" ,"Request is rejected successfully"));
     }
