@@ -10,5 +10,6 @@ import com.final_project.eduflow.Data.Entities.IdClasses.StudentRequestsId;
 
 public interface StudentRequestRepository  extends JpaRepository<StudentRequests, StudentRequestsId>{
     List<StudentRequests> findByStudentId(long studentId);
-    Optional<StudentRequests> findByStudentIdAndRequestTypeIdAndWhen(long studentId, long requestTypeId, OffsetDateTime when);
+
+    Optional<StudentRequests> findByStudentIdAndRequestTypeIdAndWhen(Long requestStudentId, Long requestTypeId, OffsetDateTime requestWhenCreated);
 }

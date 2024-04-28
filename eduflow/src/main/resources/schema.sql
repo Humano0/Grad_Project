@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS entry_logs (
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-/* DROP TABLE IF EXISTS student_requests CASCADE; */
+DROP TABLE IF EXISTS student_requests CASCADE;
 
 CREATE TABLE IF NOT EXISTS public.student_requests (
 	student_id int4 NOT NULL,
