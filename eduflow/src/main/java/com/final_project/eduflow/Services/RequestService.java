@@ -3,10 +3,12 @@ package com.final_project.eduflow.Services;
 
 import com.final_project.eduflow.Data.Entities.IdClasses.RequestStatus;
 import com.final_project.eduflow.Data.Entities.RequestActor;
+import com.final_project.eduflow.Data.Entities.RequestRejectionReason;
 import com.final_project.eduflow.Data.Entities.StudentRequests;
 import com.final_project.eduflow.Data.View.StudentRequestsListingView;
 
 import com.final_project.eduflow.DataAccess.*;
+import com.final_project.eduflow.Presentation.RequestBodyParams.CancelRequestObject;
 import com.final_project.eduflow.Presentation.ResponseClasses.ListRequestTypes;
 import com.final_project.eduflow.Services.Interfaces.IRequestService;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -25,24 +27,23 @@ public class RequestService implements IRequestService {
     private final StudentRequestRepository studentRequestRepository;
     private final RequestActorRepository requestActorRepository;
     private final RequestTypeRepository requestTypeRepository;
-    private final WaitingRequestsViewRepository waitingRequestsViewRepository;
     private final StudentRepository studentRepository;
-    private final TeachingStaffRepository teachingStaffRepository;
+    private final RequestRejectionReasonRepository requestrejectionreasonRepository;
 
     public RequestService(SimpMessagingTemplate messagingTemplate, StudentRequestsListingViewRepository studentRequestsListingViewRepository,
                           StudentRequestRepository studentRequestRepository,
                           RequestActorRepository requestActorRepository,
-                          WaitingRequestsViewRepository waitingRequestsViewRepository,
-                          RequestTypeRepository requestTypeRepository, StudentRepository studentRepository,
-                          TeachingStaffRepository teachingStaffRepository) {
+                          RequestTypeRepository requestTypeRepository,
+                          StudentRepository studentRepository,
+                          RequestRejectionReasonRepository requestrejectionreasonRepository
+    ) {
         this.messagingTemplate = messagingTemplate;
         this.studentRequestsListingViewRepository = studentRequestsListingViewRepository;
         this.studentRequestRepository = studentRequestRepository;
         this.requestActorRepository = requestActorRepository;
         this.requestTypeRepository = requestTypeRepository;
-        this.waitingRequestsViewRepository = waitingRequestsViewRepository;
         this.studentRepository = studentRepository;
-        this.teachingStaffRepository = teachingStaffRepository;
+        this.requestrejectionreasonRepository = requestrejectionreasonRepository;
     }
 
     @Override
@@ -136,23 +137,26 @@ public class RequestService implements IRequestService {
     // If current_index = 0, then the request is rejected by the advisor
     // if current_index > 0, then search in request_actors table for current_index == index && request_type_id == request_type_id
     @Override
-    public void rejectRequest(StudentRequests studentRequests) {
+    public void rejectRequest(CancelRequestObject studentRequests) {
         StudentRequests request = studentRequestRepository.findByStudentIdAndRequestTypeIdAndWhen(
-                studentRequests.getStudentId(),
+                studentRequests.getRequestStudentId(),
                 studentRequests.getRequestTypeId(),
-                studentRequests.getWhen()
+                studentRequests.getRequestWhenCreated()
         ).orElseThrow();
-        request.setCurrentIndex(-1 * request.getCurrentIndex() - 1);
+        //request.setCurrentIndex(-1 * request.getCurrentIndex() - 1);
         request.setStatus(RequestStatus.REJECTED);
+        RequestRejectionReason requestRejectionReason = new RequestRejectionReason(request.getUniqueRequestId(), studentRequests.getCancellationReason(), request.getStatus().toString());
         this.messagingTemplate.convertAndSendToUser(request.getStudentId().toString(),
                 "queue/notification",
                 "concluded");
+        requestrejectionreasonRepository.save(requestRejectionReason);
         studentRequestRepository.save(request);
     }
 
     @Override
-    public void cancelRequest(StudentRequests studentRequests) {
+    public void cancelRequest(StudentRequests studentRequests, String CancellationReason) {
         studentRequests.setStatus(RequestStatus.CANCELLED);
+        RequestRejectionReason requestRejectionReason = new RequestRejectionReason(studentRequests.getUniqueRequestId(), CancellationReason, studentRequests.getStatus().toString());
         Long currentActorId = requestActorRepository.findByRequestTypeIdAndIndex(studentRequests.getRequestTypeId(), studentRequests.getCurrentIndex()).orElseThrow().getStaffId();
         this.messagingTemplate.convertAndSendToUser(currentActorId.toString(),
                 "queue/notification",
@@ -160,6 +164,7 @@ public class RequestService implements IRequestService {
         this.messagingTemplate.convertAndSendToUser(studentRequests.getStudentId().toString(),
                 "queue/notification",
                 "concluded");
+        requestrejectionreasonRepository.save(requestRejectionReason);
         studentRequestRepository.save(studentRequests);
     }
     // Checks if the next actor is the one accepting the request

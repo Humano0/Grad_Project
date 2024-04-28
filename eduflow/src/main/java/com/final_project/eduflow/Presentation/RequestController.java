@@ -5,6 +5,7 @@ import com.final_project.eduflow.Data.Entities.RequestRequirement;
 import com.final_project.eduflow.Data.Entities.Student;
 
 import com.final_project.eduflow.DataAccess.*;
+import com.final_project.eduflow.Presentation.RequestBodyParams.CancelRequestObject;
 import com.final_project.eduflow.Presentation.ResponseClasses.AcceptRequestResponseMessage;
 import com.final_project.eduflow.Presentation.ResponseClasses.GetCommentId;
 import com.final_project.eduflow.Services.CreateRequestPdf;
@@ -131,7 +132,7 @@ public class RequestController {
     //@PreAuthorize("hasAnyAuthority('Advisor', 'Head_of_Department', 'Dean_of_Faculty')")
     @PreAuthorize("hasAnyAuthority('Danisman', 'Bolum', 'Dekanlik','Advisor','Head_of_Department', 'Dean_of_Faculty')")
     @PostMapping("/rejectRequest")
-    public ResponseEntity<AcceptRequestResponseMessage> rejectRequest(@RequestBody StudentRequests studentRequest, HttpServletRequest request) {
+    public ResponseEntity<AcceptRequestResponseMessage> rejectRequest(@RequestBody CancelRequestObject studentRequest) {
         requestService.rejectRequest(studentRequest);
         return ResponseEntity.ok(new AcceptRequestResponseMessage("accepted" ,"Request is rejected successfully"));
     }
@@ -156,16 +157,11 @@ public class RequestController {
     //        "requestStudentId": "21896680",
     //        "requestTypeId": "1"
     //    }
-    @PreAuthorize("hasAnyAuthority('Danisman', 'Bolum', 'Dekanlik', 'Student')")
+    @PreAuthorize("hasAnyAuthority('Danisman', 'Bolum', 'Dekanlik','Advisor','Head_of_Department', 'Dean_of_Faculty')")
     @PostMapping("/cancelRequest")
-    public ResponseEntity<?> cancelRequest(@RequestBody GetCommentId requestInfo, HttpServletRequest request) {
-        Claims claims = JwtUtil.resolveClaims(request);
-        if (claims == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        Long id = JwtUtil.getId(claims);
+    public ResponseEntity<?> cancelRequest(@RequestBody CancelRequestObject requestInfo) {
         StudentRequests cancelledRequest = studentRequestRepository.findByStudentIdAndRequestTypeIdAndWhen(requestInfo.getRequestStudentId(), requestInfo.getRequestTypeId(), requestInfo.getRequestWhenCreated()).orElseThrow();
-        requestService.cancelRequest(cancelledRequest);
+        requestService.cancelRequest(cancelledRequest, requestInfo.getCancellationReason());
         return ResponseEntity.ok("Request is cancelled successfully");
     }
 }
