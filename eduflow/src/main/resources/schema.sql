@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS entry_logs (
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-DROP TABLE IF EXISTS student_requests CASCADE;
+/* DROP TABLE IF EXISTS student_requests CASCADE; */
 
 CREATE TABLE IF NOT EXISTS public.student_requests (
 	student_id int4 NOT NULL,
@@ -25,12 +25,13 @@ CREATE TABLE IF NOT EXISTS public.student_requests (
     CONSTRAINT fk_type FOREIGN KEY (request_type_id) REFERENCES public.request_types(id)
 );
 
+DROP TABLE IF EXISTS cancel_reject_reasons CASCADE;
+
 CREATE TABLE IF NOT EXISTS cancel_reject_reasons (
     request_uuid UUID PRIMARY KEY,
     reason TEXT,
     status VARCHAR,
-    CONSTRAINT fk_request_uuid FOREIGN KEY (request_uuid) REFERENCES student_requests(unique_request_id),
-    CONSTRAINT fk_status FOREIGN KEY (status) REFERENCES student_requests(status)
+    CONSTRAINT fk_request_uuid FOREIGN KEY (request_uuid) REFERENCES student_requests(unique_request_id)
 );
 
 DROP VIEW IF EXISTS all_requests_with_actors_view CASCADE;
