@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS entry_logs CASCADE;
+
 
 CREATE TABLE IF NOT EXISTS entry_logs (
     id SERIAL PRIMARY KEY,
@@ -40,6 +40,7 @@ CREATE OR REPLACE VIEW all_requests_with_actors_view AS
     SELECT sr.student_id,
         s.name || ' ' || s.surname as student_name,
         s.email,
+        ts.name || ' ' || ts.surname as advisor,
         d.name as department_name,
         sr.request_type_id,
         rt.request_name,
@@ -51,6 +52,7 @@ CREATE OR REPLACE VIEW all_requests_with_actors_view AS
         sr.addition
     FROM student_requests sr
     JOIN student s ON s.id = sr.student_id
+    JOIN teaching_staff ts ON s.adviser_id= ts.id
     JOIN department d on s.department_id = d.id
     JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
     JOIN request_types rt ON rt.id = sr.request_type_id
@@ -59,6 +61,7 @@ UNION
     SELECT sr.student_id,
         s.name || ' ' || s.surname as student_name,
         s.email,
+        ts.name || ' ' || ts.surname as advisor,
         d.name as department_name,
         sr.request_type_id,
         rt.request_name,
@@ -77,12 +80,13 @@ UNION
 ORDER BY when_created;
 
 
-
+DROP VIEW IF EXISTS concluded_requests_with_actors_view CASCADE;
 
 CREATE OR REPLACE VIEW concluded_requests_with_actors_view AS
     SELECT sr.student_id,
         s.name || ' ' || s.surname as student_name,
         s.email,
+        ts.name || ' ' || ts.surname as advisor,
         d.name as department_name,
         sr.request_type_id,
         rt.request_name,
@@ -94,7 +98,8 @@ CREATE OR REPLACE VIEW concluded_requests_with_actors_view AS
         sr.addition
     FROM student_requests sr
     JOIN student s ON s.id = sr.student_id
-    join department d on s.department_id = d.id
+    JOIN teaching_staff ts ON s.adviser_id= ts.id
+    JOIN department d on s.department_id = d.id
     JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
     JOIN request_types rt ON rt.id = sr.request_type_id
     WHERE sr.status = 'REJECTED' or sr.status = 'ACCEPTED' or sr.status = 'CANCELLED'
@@ -102,6 +107,7 @@ UNION
     SELECT sr.student_id,
         s.name || ' ' || s.surname as student_name,
         s.email,
+        ts.name || ' ' || ts.surname as advisor,
         d.name as department_name,
         sr.request_type_id,
         rt.request_name,

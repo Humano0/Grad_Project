@@ -3,7 +3,6 @@ package com.final_project.eduflow.Data.View;
 import java.time.LocalDateTime;
 
 import com.final_project.eduflow.Data.View.IdClasses.AllRequestsId;
-import com.final_project.eduflow.Data.View.IdClasses.WaitinRequestsViewId;
 
 import jakarta.persistence.*;
 
@@ -21,6 +20,9 @@ public class AllRequestsForStaffView {
 
     @Column(name = "email")
     private String studentEmail;
+
+    @Column(name = "advisor")
+    private String advisor;
 
     @Column(name = "department_name")
     private String studentDepartment;
@@ -136,6 +138,14 @@ public class AllRequestsForStaffView {
 
     public void setStudentDepartment(String studentDepartment) {
         this.studentDepartment = studentDepartment;
+    }
+
+    public String getAdvisor() {
+        return advisor;
+    }
+
+    public void setAdvisor(String advisor) {
+        this.advisor = advisor;
     }
     
 }
