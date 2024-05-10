@@ -50,6 +50,9 @@ public class AllRequestsForStaffView {
 
     @Column(name = "status")
     private String status;
+
+    @Column(name = "addition")
+    private String addition;
     // getters and setters
     
     public long getStudentId() {
@@ -146,6 +149,14 @@ public class AllRequestsForStaffView {
 
     public void setAdvisor(String advisor) {
         this.advisor = advisor;
+    }
+
+    public String getAddition() {
+        return addition;
+    }
+
+    public void setAddition(String addition) {
+        this.addition = addition;
     }
     
 }
