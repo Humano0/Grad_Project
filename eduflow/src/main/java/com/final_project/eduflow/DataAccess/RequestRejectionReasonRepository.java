@@ -6,7 +6,7 @@ import com.final_project.eduflow.Data.Entities.RequestRejectionReason;
 
 import java.util.UUID;
 
-public interface RequestRejectionReasonRepository extends JpaRepository<RequestRejectionReason, String>{
+public interface RequestRejectionReasonRepository extends JpaRepository<RequestRejectionReason, UUID>{
     
     RequestRejectionReason findByRequestUUID(UUID requestUUID);
 }

@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS entry_logs CASCADE;
+
 
 CREATE TABLE IF NOT EXISTS entry_logs (
     id SERIAL PRIMARY KEY,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS entry_logs (
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-DROP TABLE IF EXISTS student_requests CASCADE;
+/* DROP TABLE IF EXISTS student_requests CASCADE; */
 
 CREATE TABLE IF NOT EXISTS public.student_requests (
 	student_id int4 NOT NULL,
@@ -25,12 +25,13 @@ CREATE TABLE IF NOT EXISTS public.student_requests (
     CONSTRAINT fk_type FOREIGN KEY (request_type_id) REFERENCES public.request_types(id)
 );
 
+DROP TABLE IF EXISTS cancel_reject_reasons CASCADE;
+
 CREATE TABLE IF NOT EXISTS cancel_reject_reasons (
     request_uuid UUID PRIMARY KEY,
     reason TEXT,
     status VARCHAR,
-    CONSTRAINT fk_request_uuid FOREIGN KEY (request_uuid) REFERENCES student_requests(unique_request_id),
-    CONSTRAINT fk_status FOREIGN KEY (status) REFERENCES student_requests(status)
+    CONSTRAINT fk_request_uuid FOREIGN KEY (request_uuid) REFERENCES student_requests(unique_request_id)
 );
 
 DROP VIEW IF EXISTS all_requests_with_actors_view CASCADE;
@@ -39,6 +40,7 @@ CREATE OR REPLACE VIEW all_requests_with_actors_view AS
     SELECT sr.student_id,
         s.name || ' ' || s.surname as student_name,
         s.email,
+        ts.name || ' ' || ts.surname as advisor,
         d.name as department_name,
         sr.request_type_id,
         rt.request_name,
@@ -50,6 +52,7 @@ CREATE OR REPLACE VIEW all_requests_with_actors_view AS
         sr.addition
     FROM student_requests sr
     JOIN student s ON s.id = sr.student_id
+    JOIN teaching_staff ts ON s.adviser_id= ts.id
     JOIN department d on s.department_id = d.id
     JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
     JOIN request_types rt ON rt.id = sr.request_type_id
@@ -58,6 +61,7 @@ UNION
     SELECT sr.student_id,
         s.name || ' ' || s.surname as student_name,
         s.email,
+        ts.name || ' ' || ts.surname as advisor,
         d.name as department_name,
         sr.request_type_id,
         rt.request_name,
@@ -76,12 +80,13 @@ UNION
 ORDER BY when_created;
 
 
-
+DROP VIEW IF EXISTS concluded_requests_with_actors_view CASCADE;
 
 CREATE OR REPLACE VIEW concluded_requests_with_actors_view AS
     SELECT sr.student_id,
         s.name || ' ' || s.surname as student_name,
         s.email,
+        ts.name || ' ' || ts.surname as advisor,
         d.name as department_name,
         sr.request_type_id,
         rt.request_name,
@@ -93,7 +98,8 @@ CREATE OR REPLACE VIEW concluded_requests_with_actors_view AS
         sr.addition
     FROM student_requests sr
     JOIN student s ON s.id = sr.student_id
-    join department d on s.department_id = d.id
+    JOIN teaching_staff ts ON s.adviser_id= ts.id
+    JOIN department d on s.department_id = d.id
     JOIN request_actors ra ON sr.request_type_id = ra.request_type_id
     JOIN request_types rt ON rt.id = sr.request_type_id
     WHERE sr.status = 'REJECTED' or sr.status = 'ACCEPTED' or sr.status = 'CANCELLED'
@@ -101,6 +107,7 @@ UNION
     SELECT sr.student_id,
         s.name || ' ' || s.surname as student_name,
         s.email,
+        ts.name || ' ' || ts.surname as advisor,
         d.name as department_name,
         sr.request_type_id,
         rt.request_name,

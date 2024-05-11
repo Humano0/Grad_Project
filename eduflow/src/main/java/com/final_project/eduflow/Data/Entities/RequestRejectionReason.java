@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "cancel_rejection_reason")
+@Table(name = "cancel_reject_reasons")
 public class RequestRejectionReason {
     @Id
     @Column(name = "request_uuid")

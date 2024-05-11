@@ -29,6 +29,9 @@ public class ConcludedRequestView {
     @Column(name = "email")
     private String studentEmail;
 
+    @Column(name = "advisor")
+    private String advisor;
+
     @Column(name = "department_name")
     private String studentDepartment;
 
@@ -151,5 +154,11 @@ public class ConcludedRequestView {
         this.actorId = actorId;
     }
      
-   
+    public String getAdvisor() {
+        return advisor;
+    }
+
+    public void setAdvisor(String advisor) {
+        this.advisor = advisor;
+    }
 }
